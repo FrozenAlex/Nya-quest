@@ -20,19 +20,6 @@ inline std::map<std::string, SourceData> endpoint_data = {
             "url"
         }
     },
-    {"xSky",
-        {
-            "https://api.nekos.cc/",
-            DataMode::Json,
-            {
-                "neko", "catboy"
-            },
-            {
-                "hentai", "bdsm", "furry", "ff", "feet", "trap", "gif", "futa"
-            },
-            "url"
-        },   
-    },
     {"Anime-Images API",
         {
             "https://anime-api.hisoka17.repl.co/img/",

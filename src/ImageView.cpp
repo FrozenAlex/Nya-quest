@@ -90,8 +90,21 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
     #endif
     // Get value
     std::string currentAPI = getNyaConfig().API.GetValue();
-    // TODO: Make dynamic
-    SourceData* source =  NyaAPI::get_data_source(currentAPI);
+    
+    SourceData* source = nullptr;
+
+    // Catch for invalid apis
+    try
+    {
+        source = NyaAPI::get_data_source(currentAPI);
+    }
+    catch(...)
+    {
+        currentAPI = "waifu.pics";
+        getNyaConfig().API.SetValue(currentAPI);
+        source = NyaAPI::get_data_source(currentAPI);
+    }
+    
 
   // Local files
   if (source->Mode == DataMode::Local) {

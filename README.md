@@ -14,7 +14,6 @@ Nya features a floating screen, allowing Nya to be accessed outside of the gamep
 **Note: I don't own any of these sources so I can't guarantee the images will always be appropriate**
 * [Waifu.Pics](https://waifu.pics/)
 * [Nekos.Life](https://nekos.life/)
-* [xSky API](https://api.nekos.cc/)
 * [Anime-Images API](https://anime-api.hisoka17.repl.co/)
 * [Catboys](https://catboys.com/)
 * [Animals (some-random-api.ml)](https://some-random-api.ml/)
