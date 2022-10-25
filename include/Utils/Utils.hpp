@@ -17,13 +17,6 @@ namespace Nya::Utils {
 
     // Gets the next image
     void onNyaClick(UnityEngine::UI::Button * button, NyaUtils::ImageView * imageView);
-    void onSettingsClick(
-        HMUI::ModalView* settingsModal,
-        HMUI::SimpleTextDropdown* api_switch,
-        HMUI::SimpleTextDropdown* sfw_endpoint,
-        HMUI::SimpleTextDropdown* nsfw_endpoint,
-        UnityEngine::UI::Toggle* nsfw_toggle
-    );
     bool IsAnimated(StringW str);
 
     bool IsImage(StringW str);
