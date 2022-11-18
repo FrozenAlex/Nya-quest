@@ -33,6 +33,7 @@ DECLARE_CONFIG(NyaConfig,
     CONFIG_VALUE(FloatingScreenScale, float, "Scale", 1.0f);
     CONFIG_VALUE(ShowHandle, bool, "Show handle", true);
 
+    CONFIG_VALUE(NSFWUI, bool, "NSFWUI", false);
     CONFIG_VALUE(NSFWEnabled, bool, "NSFW Enabled", false);
     CONFIG_VALUE(SkipNSFWWarning, bool, "Skip NSFW warning", false);
     CONFIG_VALUE(RememberNSFW, bool, "Remember NSFW", false);    
@@ -64,7 +65,8 @@ DECLARE_CONFIG(NyaConfig,
         CONFIG_INIT_VALUE(AutoNyaDelay);
         CONFIG_INIT_VALUE(FloatingScreenScale);
         CONFIG_INIT_VALUE(ShowHandle);
-        
+
+        CONFIG_INIT_VALUE(NSFWUI);
         CONFIG_INIT_VALUE(NSFWEnabled);
         CONFIG_INIT_VALUE(SkipNSFWWarning);
         CONFIG_INIT_VALUE(RememberNSFW);

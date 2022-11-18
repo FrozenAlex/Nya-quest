@@ -54,11 +54,13 @@ void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedTo
 
 
         #ifdef NSFW
-            QuestUI::BeatSaberUI::CreateToggle(container->get_transform(), "Remember NSFW",
-                getNyaConfig().RememberNSFW.GetValue(), [](bool value) {
-                    getNyaConfig().RememberNSFW.SetValue(value);
-                }
-            );
+            if (getNyaConfig().NSFWUI.GetValue()) {
+                QuestUI::BeatSaberUI::CreateToggle(container->get_transform(), "Remember NSFW",
+                    getNyaConfig().RememberNSFW.GetValue(), [](bool value) {
+                        getNyaConfig().RememberNSFW.SetValue(value);
+                    }
+                );
+            }
         #endif
 
         // Buttons for settings

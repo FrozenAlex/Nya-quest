@@ -91,31 +91,32 @@ namespace Nya {
                 
 
                 #ifdef NSFW
-                    // Restore nsfw state
-                    if (source->NsfwEndpoints.size() == 0) {
-                        this->nsfw_endpoint->button->set_interactable(false);
-                        // Reset the view
-                        this->nsfw_endpoint->SetTexts(List<StringW>::New_ctor()->i_IReadOnlyList_1_T());
-                        this->nsfw_endpoint->SelectCellWithIdx(0); 
-                    } else {
-                        this->nsfw_endpoint->button->set_interactable(true);
-                        auto nsfwList = Nya::Utils::listStringToStringW(source->NsfwEndpoints);
+                    if (getNyaConfig().NSFWUI.GetValue()) {
+                        // Restore nsfw state
+                        if (source->NsfwEndpoints.size() == 0) {
+                            this->nsfw_endpoint->button->set_interactable(false);
+                            // Reset the view
+                            this->nsfw_endpoint->SetTexts(List<StringW>::New_ctor()->i_IReadOnlyList_1_T());
+                            this->nsfw_endpoint->SelectCellWithIdx(0); 
+                        } else {
+                            this->nsfw_endpoint->button->set_interactable(true);
+                            auto nsfwList = Nya::Utils::listStringToStringW(source->NsfwEndpoints);
 
-                        this->nsfw_endpoint->SetTexts(nsfwList->i_IReadOnlyList_1_T());
+                            this->nsfw_endpoint->SetTexts(nsfwList->i_IReadOnlyList_1_T());
 
-                        std::string endpoint_nsfw = EndpointConfig::getEndpointValue(getNyaConfig().config, value, true);
-                        int nsfw_index = -1;
-                        if (endpoint_nsfw != "") {
-                            nsfw_index = Nya::Utils::findStrIndexInListC(source->NsfwEndpoints, endpoint_nsfw);
+                            std::string endpoint_nsfw = EndpointConfig::getEndpointValue(getNyaConfig().config, value, true);
+                            int nsfw_index = -1;
+                            if (endpoint_nsfw != "") {
+                                nsfw_index = Nya::Utils::findStrIndexInListC(source->NsfwEndpoints, endpoint_nsfw);
+                            }
+                            
+                            if (nsfw_index >= 0) {
+                                this->nsfw_endpoint->SelectCellWithIdx(nsfw_index); 
+                            }
                         }
-                        
-                        if (nsfw_index >= 0) {
-                            this->nsfw_endpoint->SelectCellWithIdx(nsfw_index); 
-                        }
+
+                        this->nsfw_toggle->set_isOn(getNyaConfig().NSFWEnabled.GetValue());
                     }
-
-                    this->nsfw_toggle->set_isOn(getNyaConfig().NSFWEnabled.GetValue());
-                
                 #endif
             });
 
@@ -127,18 +128,20 @@ namespace Nya {
             });
 
             #ifdef NSFW
-                // NSFW endpoint selector
-                this->nsfw_endpoint = QuestUI::BeatSaberUI::CreateDropdown(sourcesViewLayout->get_transform(), to_utf16("NSFW endpoint"), "Loading..", {"Loading.."}, [](StringW value){
-                    // Get current endpoint
-                    std::string API = getNyaConfig().API.GetValue();
-                    EndpointConfig::updateEndpointValue(getNyaConfig().config, API, true, value);
-                });
+                if (getNyaConfig().NSFWUI.GetValue()) {
+                    // NSFW endpoint selector
+                    this->nsfw_endpoint = QuestUI::BeatSaberUI::CreateDropdown(sourcesViewLayout->get_transform(), to_utf16("NSFW endpoint"), "Loading..", {"Loading.."}, [](StringW value){
+                        // Get current endpoint
+                        std::string API = getNyaConfig().API.GetValue();
+                        EndpointConfig::updateEndpointValue(getNyaConfig().config, API, true, value);
+                    });
 
-                // NSFW toggle
-                bool NSFWEnabled = getNyaConfig().NSFWEnabled.GetValue();
-                this->nsfw_toggle = QuestUI::BeatSaberUI::CreateToggle(sourcesViewLayout->get_transform(),  to_utf16("NSFW toggle"), NSFWEnabled,  [](bool isChecked){
-                    getNyaConfig().NSFWEnabled.SetValue(isChecked);
-                });
+                    // NSFW toggle
+                    bool NSFWEnabled = getNyaConfig().NSFWEnabled.GetValue();
+                    this->nsfw_toggle = QuestUI::BeatSaberUI::CreateToggle(sourcesViewLayout->get_transform(),  to_utf16("NSFW toggle"), NSFWEnabled,  [](bool isChecked){
+                        getNyaConfig().NSFWEnabled.SetValue(isChecked);
+                    });
+                }
             #endif
 
             UnityEngine::UI::HorizontalLayoutGroup* horz = QuestUI::BeatSaberUI::CreateHorizontalLayoutGroup(sourcesViewLayout->get_transform());
@@ -289,30 +292,33 @@ namespace Nya {
             
 
             #ifdef NSFW
-                // Restore nsfw state
-                if (source->NsfwEndpoints.size() == 0) {
-                    this->nsfw_endpoint->button->set_interactable(false);
-                    // Reset the view
-                    this->nsfw_endpoint->SetTexts(List<StringW>::New_ctor()->i_IReadOnlyList_1_T());
-                    this->nsfw_endpoint->SelectCellWithIdx(0); 
-                } else {
-                    this->nsfw_endpoint->button->set_interactable(true);
-                    auto nsfwList = Nya::Utils::listStringToStringW(source->NsfwEndpoints);
+                if (getNyaConfig().NSFWUI.GetValue()) {
 
-                    this->nsfw_endpoint->SetTexts(nsfwList->i_IReadOnlyList_1_T());
+                    // Restore nsfw state
+                    if (source->NsfwEndpoints.size() == 0) {
+                        this->nsfw_endpoint->button->set_interactable(false);
+                        // Reset the view
+                        this->nsfw_endpoint->SetTexts(List<StringW>::New_ctor()->i_IReadOnlyList_1_T());
+                        this->nsfw_endpoint->SelectCellWithIdx(0); 
+                    } else {
+                        this->nsfw_endpoint->button->set_interactable(true);
+                        auto nsfwList = Nya::Utils::listStringToStringW(source->NsfwEndpoints);
 
-                    std::string endpoint_nsfw = EndpointConfig::getEndpointValue(getNyaConfig().config, API, true);
-                    int nsfw_index = -1;
-                    if (endpoint_nsfw != "") {
-                        nsfw_index = Nya::Utils::findStrIndexInListC(source->NsfwEndpoints, endpoint_nsfw);
+                        this->nsfw_endpoint->SetTexts(nsfwList->i_IReadOnlyList_1_T());
+
+                        std::string endpoint_nsfw = EndpointConfig::getEndpointValue(getNyaConfig().config, API, true);
+                        int nsfw_index = -1;
+                        if (endpoint_nsfw != "") {
+                            nsfw_index = Nya::Utils::findStrIndexInListC(source->NsfwEndpoints, endpoint_nsfw);
+                        }
+                        
+                        if (nsfw_index != -1) {
+                            nsfw_endpoint->SelectCellWithIdx(nsfw_index); 
+                        }
                     }
-                    
-                    if (nsfw_index != -1) {
-                        nsfw_endpoint->SelectCellWithIdx(nsfw_index); 
-                    }
+
+                    this->nsfw_toggle->set_isOn(getNyaConfig().NSFWEnabled.GetValue());
                 }
-
-                this->nsfw_toggle->set_isOn(getNyaConfig().NSFWEnabled.GetValue());
             #endif
             
             this->SwitchTab(0);

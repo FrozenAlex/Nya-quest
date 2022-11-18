@@ -166,12 +166,14 @@ void makeFolder()
         }
     }
     #ifdef NSFW
-        if (!direxists(NyaGlobals::imagesPathNSFW.c_str()))
-        {
-            int makePath = mkpath(NyaGlobals::imagesPathNSFW.c_str());
-            if (makePath == -1)
+        if (getNyaConfig().NSFWUI.GetValue()) {
+            if (!direxists(NyaGlobals::imagesPathNSFW.c_str()))
             {
-                ERROR("Failed to make NSFW folder!");
+                int makePath = mkpath(NyaGlobals::imagesPathNSFW.c_str());
+                if (makePath == -1)
+                {
+                    ERROR("Failed to make NSFW folder!");
+                }
             }
         }
     #endif

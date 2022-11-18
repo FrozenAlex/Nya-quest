@@ -86,7 +86,9 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
     bool NSFWEnabled = false;
 
     #ifdef NSFW
-        NSFWEnabled = getNyaConfig().NSFWEnabled.GetValue();
+        if (getNyaConfig().NSFWUI.GetValue()) {
+            NSFWEnabled = getNyaConfig().NSFWEnabled.GetValue();
+        }
     #endif
     // Get value
     std::string currentAPI = getNyaConfig().API.GetValue();
