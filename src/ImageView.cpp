@@ -173,7 +173,7 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
                 StringW filePath = StringW(NyaGlobals::tempPath) + fileName  + fileExtension;
                 StringW fileFullName = fileName  + fileExtension;
 
-                BSML::Utilities::DownloadFile(url, filePath, [this, finished, url, NSFWEnabled, fileFullName](bool success, StringW path) {
+                Nya::Utils::DownloadFile(url, filePath, [this, finished, url, NSFWEnabled, fileFullName](bool success, StringW path) {
                     if (!success ) {
                         this->SetErrorImage();
                         if (finished != nullptr) finished(false);

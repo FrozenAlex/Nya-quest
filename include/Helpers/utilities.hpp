@@ -55,12 +55,6 @@ namespace BSML::Utilities {
     /// @param onFinished a callback to call when the image is finished loading, if any
     void SetImage(UnityEngine::UI::Image* image, StringW path, bool loadingAnimation, ScaleOptions scaleOptions, std::function<void()> onFinished = nullptr);
 
-    /// @brief function to get data at a URI and save it to a file
-    /// @param uri the URI to get data from
-    /// @param path path to the file
-    /// @param onFinished what to do with the downloaded bytes
-    void DownloadFile(StringW uri, StringW path, std::function<void(bool success, StringW path)> onFinished);
-
     /// @brief function to get data at a URI, this is not blocking as it dispatches a coroutine
     /// @param uri the URI to get data from
     /// @param onFinished what to do with the downloaded bytes

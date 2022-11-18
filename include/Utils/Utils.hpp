@@ -22,5 +22,11 @@ namespace Nya::Utils {
     bool IsImage(StringW str);
     std::string RandomString(const int len);
     VRUIControls::VRPointer* getAnyPointerWithController();
+
+    /// @brief function to get data at a URI and save it to a file
+    /// @param uri the URI to get data from
+    /// @param path path to the file
+    /// @param onFinished what to do with the downloaded bytes
+    void DownloadFile(StringW uri, StringW path, std::function<void(bool success, StringW path)> onFinished);
 }
 
