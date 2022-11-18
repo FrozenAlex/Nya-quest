@@ -174,12 +174,16 @@ namespace Nya::Utils {
         {
             auto pointer = pointers.get(i);
             
-            // VR conroller is sometimes null after leaving multiplayer?
-            auto vrController = pointer->get_vrController();
-            if (vrController  && vrController->m_CachedPtr.m_value) {
-                DEBUG("Found vr conroller on {}", i );
-                return pointer;
+            // Game clones the pointers all the time and disables the original pointer, so we need to only look at active pointers
+            if (pointer->get_isActiveAndEnabled()) {
+                // VR conroller is sometimes null after leaving multiplayer?
+                auto vrController = pointer->get_vrController();
+                if (vrController  && vrController->m_CachedPtr.m_value) {
+                    DEBUG("Found vr conroller on {}", i );
+                    return pointer;
+                }
             }
+            
         }   
 
         return nullptr;
