@@ -268,6 +268,9 @@ namespace BSML::Utilities {
             Object::DestroyImmediate(oldStateUpdater);
         }
 
+        // Get old sprite to remove later
+        auto oldSprite = image->get_sprite();
+
         INFO("Setting image {}", (std::string) path);
         if (path->get_Length() > 1 && path[0] == '#') { // it's a base game sprite that is requested
             auto imgName = path->Substring(1);
@@ -337,7 +340,7 @@ namespace BSML::Utilities {
                 }
             }
         } else { // not animated
-            auto onDataFinished = [path, onFinished, image, scaleOptions](bool success, ArrayW<uint8_t> data) {
+            auto onDataFinished = [path, onFinished, image, scaleOptions, oldSprite](bool success, ArrayW<uint8_t> data) {
                 if (success == false ) {
                     if (onFinished) onFinished();
                     return;
@@ -345,6 +348,7 @@ namespace BSML::Utilities {
                 DEBUG("Data was gotten");
                 if (data.Length() > 0) {
                     auto texture = LoadTextureRaw(data);
+
                     if (scaleOptions.shouldScale) {
                         auto scaledTexture = DownScaleTexture(texture, scaleOptions);
                         if (scaledTexture != texture) {
@@ -355,6 +359,16 @@ namespace BSML::Utilities {
                     auto sprite = LoadSpriteFromTexture(texture);
                     sprite->get_texture()->set_wrapMode(TextureWrapMode::Clamp);
                     image->set_sprite(sprite);
+
+                    // Remove old sprite (should clean the memory at least for simple images)
+                    if (oldSprite &&  oldSprite->m_CachedPtr.m_value) {
+                        UnityEngine::Texture2D *oldTexture =  oldSprite->get_texture();    
+                        if (oldTexture && oldSprite->m_CachedPtr.m_value)
+                        {
+                            UnityEngine::Object::Destroy(oldTexture);
+                        }
+                        UnityEngine::Object::Destroy(oldSprite);
+                    }
                 }
 
                 if (onFinished)
