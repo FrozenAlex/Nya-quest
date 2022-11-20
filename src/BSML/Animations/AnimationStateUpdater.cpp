@@ -21,6 +21,9 @@ namespace BSML {
         if (controllerData && image) {
             controllerData->get_activeImages()->Add(image);
         }
+        if (controllerData) {
+            controllerData->updatersCount++;
+        }
     }
 
     void AnimationStateUpdater::OnDisable() {
@@ -32,6 +35,9 @@ namespace BSML {
     void AnimationStateUpdater::OnDestroy() {
         if (controllerData && image) {
             controllerData->get_activeImages()->Remove(image);
+        }
+        if (controllerData) {
+            controllerData->updatersCount--;
         }
     }
 }

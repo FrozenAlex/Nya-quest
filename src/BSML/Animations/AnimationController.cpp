@@ -35,6 +35,28 @@ namespace BSML {
         return reinterpret_cast<AnimationControllerData*>(animationData);
     }
 
+    void AnimationController::RemoveUnusedAnimationData() {
+        auto enumerator = registeredAnimations->GetEnumerator();
+
+        std::vector<StringW> keysToRemove = std::vector<StringW>();
+
+        while (enumerator.MoveNext()) {
+            auto current = reinterpret_cast<AnimationControllerData*>(enumerator.get_Current().get_Value());
+            
+            /**
+             * Runs before 
+            */
+            if (!current->isUsed()) {
+                auto key = enumerator.get_Current().get_Key();
+                keysToRemove.push_back(key);
+            }
+        }
+
+        for (StringW key: keysToRemove) {
+            registeredAnimations->Remove(key);
+        }
+    }
+
     void AnimationController::InitializeLoadingAnimation() {
         // /shrug
     }

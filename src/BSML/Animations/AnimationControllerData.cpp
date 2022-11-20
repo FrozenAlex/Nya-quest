@@ -12,6 +12,9 @@ DEFINE_TYPE(BSML, AnimationControllerData);
 namespace BSML {
     AnimationControllerData* AnimationControllerData::Make_new(UnityEngine::Texture2D* tex, ArrayW<UnityEngine::Rect> uvs, ArrayW<float> delays) {
         auto self = AnimationControllerData::New_ctor();
+        // Init uvIndex to 0 for force frame drawing thing
+        self->uvIndex = 0; 
+        self->updatersCount = 0;
         self->_isPlaying = true;
         self->isDelayConsistent = true;
         auto time = std::chrono::system_clock::now();
@@ -65,6 +68,22 @@ namespace BSML {
 
     bool AnimationControllerData::get_isPlaying() {
         return _isPlaying;
+    }
+
+    /**
+     * Has any updaters connected to it (safe to delete)
+    */
+    bool AnimationControllerData::isUsed() {
+        return updatersCount > 0;
+    }
+
+    /**
+     * Draws first frame, useful for deleting old frames safely
+    */
+    void AnimationControllerData::ForceDrawFrame(){
+        for (auto image : get_activeImages()) {
+            image->set_sprite(sprites[uvIndex]);
+        }
     }
 
     void AnimationControllerData::set_isPlaying(bool value) {

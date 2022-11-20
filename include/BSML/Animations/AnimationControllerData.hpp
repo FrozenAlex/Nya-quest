@@ -9,6 +9,9 @@
 DECLARE_CLASS_CODEGEN(BSML, AnimationControllerData, Il2CppObject,
     DECLARE_INSTANCE_FIELD(UnityEngine::Sprite*, sprite);
     DECLARE_INSTANCE_FIELD(int, uvIndex);
+
+    // Track the state updaters tied to this controller data
+    DECLARE_INSTANCE_FIELD(int, updatersCount);
     DECLARE_INSTANCE_FIELD(ArrayW<UnityEngine::Rect>, uvs);
     DECLARE_INSTANCE_FIELD(ArrayW<float>, delays);
     DECLARE_INSTANCE_FIELD(ArrayW<UnityEngine::Sprite*>, sprites);
@@ -19,6 +22,8 @@ DECLARE_CLASS_CODEGEN(BSML, AnimationControllerData, Il2CppObject,
 
     DECLARE_INSTANCE_FIELD(bool, _isPlaying);
     DECLARE_INSTANCE_METHOD(bool, get_isPlaying);
+    DECLARE_INSTANCE_METHOD(void, ForceDrawFrame);
+    DECLARE_INSTANCE_METHOD(bool, isUsed);
     DECLARE_INSTANCE_METHOD(void, set_isPlaying, bool value);
 
     DECLARE_DEFAULT_CTOR();
