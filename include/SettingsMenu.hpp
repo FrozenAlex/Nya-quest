@@ -37,6 +37,7 @@ DECLARE_CLASS_CODEGEN(Nya, SettingsMenu, UnityEngine::MonoBehaviour,
 
         DECLARE_INSTANCE_FIELD(UnityEngine::UI::Button*, settingsButton);
         DECLARE_INSTANCE_FIELD(UnityEngine::UI::Button*, downloadButton);
+        DECLARE_INSTANCE_FIELD(UnityEngine::UI::Toggle*, autoNyaButton);
         DECLARE_INSTANCE_FIELD(HMUI::SimpleTextDropdown*, api_switch);
         DECLARE_INSTANCE_FIELD(HMUI::SimpleTextDropdown*, sfw_endpoint);
         

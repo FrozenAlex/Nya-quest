@@ -22,10 +22,15 @@ DECLARE_CLASS_CODEGEN(NyaUtils, ImageView, UnityEngine::MonoBehaviour,
     DECLARE_INSTANCE_FIELD(HMUI::ImageView*, imageView);
     DECLARE_INSTANCE_FIELD(StringW, lastImageURL);
     DECLARE_INSTANCE_FIELD(StringW, tempName);
+    DECLARE_INSTANCE_FIELD(bool, autoNyaRunning);
+    DECLARE_INSTANCE_FIELD(bool, autoNyaNewImage);
+    DECLARE_INSTANCE_METHOD(void, OnEnable);
+    DECLARE_INSTANCE_METHOD(void, OnDisable);
     DECLARE_INSTANCE_FIELD(bool, isNSFW);
     
     void GetImage(std::function<void(bool success)> finished);
     void SaveImage();
     bool HasImageToSave();
     void SetErrorImage();
+    custom_types::Helpers::Coroutine AutoNyaCoro();
 )

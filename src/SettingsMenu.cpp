@@ -148,20 +148,39 @@ namespace Nya {
             horz->GetComponent<UnityEngine::UI::ContentSizeFitter*>()->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
             horz->GetComponent<UnityEngine::UI::ContentSizeFitter*>()->set_horizontalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
             horz->set_spacing(10);
+            {
+                this->downloadButton = QuestUI::BeatSaberUI::CreateUIButton(horz->get_transform(), to_utf16("Download Nya"), "PracticeButton",
+                    [this](){
+                        auto imageView = this->get_gameObject()->GetComponent<NyaUtils::ImageView *>();
+                        imageView->SaveImage();
+                        this->downloadButton->set_interactable(false);
+                        this->settingsModal->Hide(true, nullptr);
+                });
 
-            this->downloadButton = QuestUI::BeatSaberUI::CreateUIButton(horz->get_transform(), to_utf16("Download Nya"), "PracticeButton",
-            [this]() {
-                auto imageView = this->get_gameObject()->GetComponent<NyaUtils::ImageView*>();
-                imageView->SaveImage();
-                this->downloadButton->set_interactable(false);
-                this->settingsModal->Hide(true, nullptr);
-            });
+                UnityEngine::UI::Button* closeButton = QuestUI::BeatSaberUI::CreateUIButton(horz->get_transform(), to_utf16("Close"), "PracticeButton",
+                    [this]() {
+                        this->settingsModal->Hide(true, nullptr);
+                    }
+                );
+            }
+            UnityEngine::UI::HorizontalLayoutGroup *horz2 = QuestUI::BeatSaberUI::CreateHorizontalLayoutGroup(sourcesViewLayout->get_transform());
+            horz->GetComponent<UnityEngine::UI::ContentSizeFitter *>()->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
+            horz->GetComponent<UnityEngine::UI::ContentSizeFitter *>()->set_horizontalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
+            horz->set_spacing(10);
 
-            UnityEngine::UI::Button* closeButton = QuestUI::BeatSaberUI::CreateUIButton(horz->get_transform(), to_utf16("Close"), "PracticeButton",
-                [this]() {
-                    this->settingsModal->Hide(true, nullptr);
-                }
-            );
+            {
+                autoNyaButton = QuestUI::BeatSaberUI::CreateToggle(horz2, "AutoNya",  getNyaConfig().AutoNya.GetValue(), [this](bool value){
+                    getNyaConfig().AutoNya.SetValue(value);
+                    if (value) {
+                        NyaUtils::ImageView* imageView = this->get_gameObject()->GetComponent<NyaUtils::ImageView *>();
+                        if (imageView) {
+                            imageView->OnEnable();
+                        }
+                    }
+                });
+                
+            }
+            
         }
        
 
@@ -242,6 +261,9 @@ namespace Nya {
         QuestUI::MainThreadScheduler::Schedule([this]
         {
             this->tabsSwitch->segmentedControl->SelectCellWithNumber(0);
+            // Autonya
+            autoNyaButton->set_isOn(getNyaConfig().AutoNya.GetValue());
+            
             std::string API = getNyaConfig().API.GetValue();
             SourceData* source = nullptr;
 

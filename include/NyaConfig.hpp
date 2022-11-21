@@ -29,7 +29,7 @@ DECLARE_CONFIG(NyaConfig,
 
     CONFIG_VALUE(AutoNya, bool, "Auto Nya", false);
     CONFIG_VALUE(AutoNyaInGame, bool, "Auto Nya in game", false);
-    CONFIG_VALUE(AutoNyaDelay, int, "Auto Nya delay", 10);
+    CONFIG_VALUE(AutoNyaDelay, float, "Nya Delay", 7.0f);
     CONFIG_VALUE(FloatingScreenScale, float, "Scale", 1.0f);
     CONFIG_VALUE(ShowHandle, bool, "Show handle", true);
 

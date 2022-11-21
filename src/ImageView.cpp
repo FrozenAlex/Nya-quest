@@ -27,6 +27,16 @@
 #include "Helpers/utilities.hpp"
 #include "Utils/FileUtils.hpp"
 #include "Utils/Utils.hpp"
+#include "UnityEngine/Coroutine.hpp"
+#include "UnityEngine/MonoBehaviour.hpp"
+#include "UnityEngine/WaitForSeconds.hpp"
+#include "custom-types/shared/coroutine.hpp"
+
+#include "beatsaber-hook/shared/utils/il2cpp-utils.hpp"
+#include "beatsaber-hook/shared/utils/il2cpp-functions.hpp"
+
+
+#define coro(coroutine) GlobalNamespace::SharedCoroutineStarter::get_instance()->StartCoroutine(custom_types::Helpers::CoroutineHelper::New(coroutine))
 
 // Necessary
 DEFINE_TYPE(NyaUtils, ImageView);
@@ -42,6 +52,7 @@ void NyaUtils::ImageView::ctor()
     // Temp File name
     this->tempName= "";
     imageView = this->get_gameObject()->GetComponent<HMUI::ImageView *>();
+    this->autoNyaRunning = false;
 }
 
 bool NyaUtils::ImageView::HasImageToSave() {
@@ -203,4 +214,59 @@ void NyaUtils::ImageView::SetErrorImage()
 
 void NyaUtils::ImageView::dtor()
 {
+}
+
+void NyaUtils::ImageView::OnEnable()
+{
+    if (getNyaConfig().AutoNya.GetValue() && this->autoNyaRunning == false) {
+        coro(this->AutoNyaCoro());
+    }
+}
+
+void NyaUtils::ImageView::OnDisable()
+{
+    this->autoNyaRunning = false;
+}
+
+
+// Coroutine for autonya
+custom_types::Helpers::Coroutine NyaUtils::ImageView::AutoNyaCoro()
+{
+    // Extra guard agains simultaneous autonyas just to be sure
+    if (this->autoNyaRunning) {
+        co_return;
+    };
+    autoNyaNewImage = true;
+    this->autoNyaRunning = true;
+
+    while (true) {
+        // Check if it's enabled
+        bool enabled = getNyaConfig().AutoNya.GetValue();
+
+        // Quit if not enabled or is not running
+        if (!enabled ||  !this->autoNyaRunning) {
+            this->autoNyaRunning = false;
+            co_return;
+        }
+
+        if (autoNyaNewImage) {
+            autoNyaNewImage = false;
+            int waitTime = getNyaConfig().AutoNyaDelay.GetValue();
+            co_yield reinterpret_cast<System::Collections::IEnumerator*>(WaitForSeconds::New_ctor(waitTime));
+
+            // Check again cause if it's disabled we want to quit after the delay
+            enabled = getNyaConfig().AutoNya.GetValue();
+            if (!enabled ||  !this->autoNyaRunning) {
+                this->autoNyaRunning = false;
+                co_return;
+            }
+            this->GetImage([this](bool success){
+                this->autoNyaNewImage = true;
+            });
+        }
+
+        co_yield nullptr;
+    }
+    
+    
 }

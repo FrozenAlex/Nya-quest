@@ -51,6 +51,24 @@ void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedTo
             
         );
 
+        QuestUI::BeatSaberUI::CreateToggle(container->get_transform(), "AutoNya",
+            getNyaConfig().AutoNya.GetValue(),
+            [](bool value) {
+                getNyaConfig().AutoNya.SetValue(value);
+                if (
+                    value &&
+                    Main::NyaFloatingUI != nullptr && 
+                    Main::NyaFloatingUI->imageView != nullptr
+                ) {
+                    Main::NyaFloatingUI->imageView->OnEnable();
+                }
+        });
+
+        QuestUI::BeatSaberUI::CreateSliderSetting(container->get_transform(), "Nya Delay", 0.5f, 
+            getNyaConfig().AutoNyaDelay.GetValue(), 4.0f, 30.0f, [](float value) {
+                getNyaConfig().AutoNyaDelay.SetValue(value);
+            }
+        );
 
 
         #ifdef NSFW
