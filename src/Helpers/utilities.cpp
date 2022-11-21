@@ -251,9 +251,22 @@ namespace BSML::Utilities {
     }
 
     void RemoveAnimationUpdater(UnityEngine::UI::Image* image) {
+        // Get old sprite to remove later
+        auto oldSprite = image->get_sprite();
+
         auto oldStateUpdater = image->GetComponent<AnimationStateUpdater*>();
         if (oldStateUpdater) {
             Object::DestroyImmediate(oldStateUpdater);
+        }
+
+        // Remove old sprite, it is supposed to remove the normal image that was here before
+        if (oldSprite &&  oldSprite->m_CachedPtr.m_value) {
+            UnityEngine::Texture2D *oldTexture =  oldSprite->get_texture();    
+            if (oldTexture && oldSprite->m_CachedPtr.m_value)
+            {
+                UnityEngine::Object::Destroy(oldTexture);
+            }
+            UnityEngine::Object::Destroy(oldSprite);
         }
     }
 
