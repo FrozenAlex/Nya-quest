@@ -44,6 +44,18 @@ inline std::map<std::string, SourceData> endpoint_data = {
             "url"
         }
     },
+    {"nekos.life",
+        {
+            "https://nekos.life/api/v2/img/",
+            DataMode::Json,
+            {
+                "neko", "waifu", "tickle", "slap", "pat", "meow", "lizard", "kiss", "hug", "fox_girl",
+                "feed", "cuddle", "ngif", "smug", "woof", "wallpaper", "goose", "gecg", "avatar"
+            },
+            {},
+            "url"
+        }
+    },
     {"Animals",
         {
             "https://some-random-api.ml/animal/",
