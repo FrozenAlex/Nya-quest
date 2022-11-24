@@ -58,6 +58,10 @@ namespace BSML {
     }
 
     custom_types::Helpers::Coroutine AnimationLoader::ProcessAnimationInfo(AnimationInfo* animationInfo, std::function<void(UnityEngine::Texture2D*, ArrayW<UnityEngine::Rect>, ArrayW<float>)> onProcessed) {
+        // Wait for a bit to reduce corruption
+        while (animationInfo->frames.size() < animationInfo->frameCount) {
+            co_yield nullptr; 
+        }
         DEBUG("ProcessAnimInfo");
         int textureSize = get_atlasSizeLimit(), width = 0, height = 0;
         UnityEngine::Texture2D* texture = nullptr;
