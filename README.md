@@ -1,9 +1,7 @@
 # Nya Quest  <img src="assets\Vanilla_Mini_Sitting.png" align="right" width="150">
 Beat Saber Quest mod for displaying nya-tastic images from various anime themed web APIs
 
-*It was not tested with Quest 1 if you have it, tell me if it works*
-
-*It may crash other mods based on BSML, if you find the mod it crashes, send me the mod*
+*GIFs could crash on Quest 1*
 
 ## Usage
 Nya's settings can be accessed from either the Mod Settings panel or from within Nya's setting modal
