@@ -78,12 +78,6 @@ MAKE_HOOK_MATCH(MultiResults, &MultiplayerResultsViewController::DidActivate, vo
     
 }
 
-MAKE_HOOK_FIND_CLASS_UNSAFE_INSTANCE(GameplayCoreSceneSetupData_ctor, "", "GameplayCoreSceneSetupData", ".ctor", void, GameplayCoreSceneSetupData* self, IDifficultyBeatmap* difficultyBeatmap, IPreviewBeatmapLevel* previewBeatmapLevel, GameplayModifiers* gameplayModifiers, PlayerSpecificSettings* playerSpecificSettings, PracticeSettings* practiceSettings, bool useTestNoteCutSoundEffects, EnvironmentInfoSO* environmentInfo, ColorScheme* colorScheme, MainSettingsModelSO* mainSettingsModel)
-{
-    DEBUG("GameplayCoreSceneSetupData_ctor");
-    GameplayCoreSceneSetupData_ctor(self, difficultyBeatmap, previewBeatmapLevel, gameplayModifiers, playerSpecificSettings, practiceSettings, useTestNoteCutSoundEffects, environmentInfo, colorScheme, mainSettingsModel);
-}
-
 // Soft restart in settings
 MAKE_HOOK_MATCH(MenuTransitionsHelper_RestartGame, &MenuTransitionsHelper::RestartGame, void, MenuTransitionsHelper* self, System::Action_1<Zenject::DiContainer*>* finishCallback)
 {
@@ -236,7 +230,6 @@ extern "C" void load() {
     // Install our hooks
     INSTALL_HOOK(Nya::getLoggerOld(), Pause);
     INSTALL_HOOK(Nya::getLoggerOld(), Results);
-    INSTALL_HOOK(Nya::getLoggerOld(), GameplayCoreSceneSetupData_ctor);
     INSTALL_HOOK(Nya::getLoggerOld(), Unpause);
     INSTALL_HOOK(Nya::getLoggerOld(), Restartbutton);
     INSTALL_HOOK(Nya::getLoggerOld(), MultiResults);
