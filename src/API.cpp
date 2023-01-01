@@ -61,7 +61,7 @@ inline std::map<std::string, SourceData> endpoint_data = {
             "https://some-random-api.ml/animal/",
             DataMode::Json,
             {
-                "cat", "dog", "fox", "panda", "red_panda", "birb", "koala", "kangaroo", "raccoon"
+                "cat", "dog", "fox", "panda", "red_panda", "bird", "koala", "kangaroo", "raccoon"
             },
             {},
             "image"
