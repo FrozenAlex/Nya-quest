@@ -50,17 +50,18 @@ void NyaUtils::ImageView::ctor()
     this->lastImageURL = "";
     this->isNSFW = false;
     // Temp File name
+    // WARNING: Sometimes this temp name does not make sense, so I validate it
     this->tempName= "";
     imageView = this->get_gameObject()->GetComponent<HMUI::ImageView *>();
     this->autoNyaRunning = false;
 }
 
 bool NyaUtils::ImageView::HasImageToSave() {
-    return (this->lastImageURL != "" && this->tempName != "");
+    return (this->lastImageURL != "" && this->tempName != "" && Nya::Utils::IsImage(this->tempName));
 }
 
 void NyaUtils::ImageView::SaveImage() {
-    if (this->lastImageURL != "" && this->tempName != "") {
+    if (this->lastImageURL != "" && this->tempName != "" && Nya::Utils::IsImage(this->tempName)) {
         INFO("MOVING FILE");
         StringW original = StringW(NyaGlobals::tempPath) + this->tempName;
         if (this->isNSFW) {
@@ -81,7 +82,7 @@ void NyaUtils::ImageView::SaveImage() {
 void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
 {
     // Delete the last downloaded image
-    if (this->lastImageURL != "" && this->tempName != "") {
+    if (this->lastImageURL != "" && this->tempName != "" && Nya::Utils::IsImage(this->tempName)) {
         StringW original = StringW(NyaGlobals::tempPath) + this->tempName;
         FileUtils::deleteFile(original);
         

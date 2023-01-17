@@ -64,16 +64,20 @@ namespace FileUtils {
 
     // Gets all supported files
     bool deleteFile(StringW path){
-        return fs::remove((std::string) path);
+        if (fs::exists((std::string) path)) {
+            return fs::remove((std::string) path);
+        }
+        return false;
     }
 
     // Gets all supported files
     void moveFile(StringW oldPath,StringW newPath){
-        return fs::rename((std::string) oldPath, (std::string) newPath);
+        if (fs::exists((std::string) oldPath)) {
+            fs::rename((std::string) oldPath, (std::string) newPath);
+        }
     }
 
     StringW GetFileFormat(StringW path) {
         return System::IO::Path::GetExtension(path);
     }
-
 }
