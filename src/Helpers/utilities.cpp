@@ -174,7 +174,9 @@ namespace BSML::Utilities {
 
 
     void DownloadData(StringW uri, std::function<void(bool success, ArrayW<uint8_t>)> onFinished) {
-        INFO("Getting data from uri: {}", (std::string) uri);
+        if (!getNyaConfig().NSFWEnabled.GetValue()){
+            INFO("Getting data from uri: {}", (std::string) uri);
+        }
         if (!onFinished) {
             ERROR("Can't get data async without a callback to use it with");
             return;
@@ -239,7 +241,7 @@ namespace BSML::Utilities {
         // Get old sprite to remove later
         auto oldSprite = image->get_sprite();
 
-        INFO("Setting image {}", (std::string) path);
+        INFO("Setting image");
         if (path->get_Length() > 1 && path[0] == '#') { // it's a base game sprite that is requested
             auto imgName = path->Substring(1);
             image->set_sprite(FindSpriteCached(imgName));

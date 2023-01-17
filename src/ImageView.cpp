@@ -64,15 +64,13 @@ void NyaUtils::ImageView::SaveImage() {
         INFO("MOVING FILE");
         StringW original = StringW(NyaGlobals::tempPath) + this->tempName;
         if (this->isNSFW) {
-            INFO("MOVING FROM {} TO {}", (std::string) original, (std::string) (StringW(NyaGlobals::imagesPathNSFW) + this->tempName) );
             FileUtils::moveFile(original, StringW(NyaGlobals::imagesPathNSFW) + this->tempName);
-            INFO("MOVED FILE NSFW");
         } else {
-            INFO("MOVING FROM {} TO {}", (std::string) original, (std::string) (StringW(NyaGlobals::imagesPathNSFW) + this->tempName) );
+            INFO("MOVING FROM {} TO {}", (std::string) original, (std::string) (StringW(NyaGlobals::imagesPathSFW) + this->tempName) );
             FileUtils::moveFile(original, StringW(NyaGlobals::imagesPathSFW) + this->tempName);
-            INFO("MOVED FILE SFW");
         }
         
+        INFO("MOVED FILE");
         // Cleanup 
         this->lastImageURL = "";
         this->tempName = "";
@@ -161,9 +159,14 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
 
     std::string endpointURL = source->BaseEndpoint + endpointValue;
 
-    INFO("Endpoint URL: {}", endpointURL);
+    if (!NSFWEnabled) {
+        INFO("Endpoint URL: {}", endpointURL);
+    }
     NyaAPI::get_path_from_json_api(source, endpointURL, 10.0f, [this, finished, NSFWEnabled](bool success, std::string url) {
-        INFO("Image URL: {}", url);
+        if (!NSFWEnabled) {
+            INFO("Image URL: {}", url);
+        }
+        
         if (success) {
             QuestUI::MainThreadScheduler::Schedule([this, url, finished, NSFWEnabled]{
                 // Make temp file name

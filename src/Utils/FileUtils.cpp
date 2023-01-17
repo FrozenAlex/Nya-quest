@@ -52,7 +52,6 @@ namespace FileUtils {
          std::vector<std::string> strings;
         for (const auto & entry : std::filesystem::directory_iterator(path)) {
             if (entry.is_regular_file()) {
-                INFO("Found file {} ", entry.path().c_str());
                 StringW path = StringW(entry.path().c_str());
                 if (Nya::Utils::IsImage(path)) {
                     strings.push_back(entry.path());
