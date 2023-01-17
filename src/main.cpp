@@ -156,22 +156,20 @@ void makeFolder()
         int makePath = mkpath(NyaGlobals::imagesPathSFW.c_str());
         if (makePath == -1)
         {
-            ERROR("Failed to make SFW folder!");
+            ERROR("Failed to make images folder!");
         }
     }
-    #ifdef NSFW
-        if (getNyaConfig().NSFWUI.GetValue()) {
-            if (!direxists(NyaGlobals::imagesPathNSFW.c_str()))
+
+    if (getNyaConfig().NSFWUI.GetValue()) {
+        if (!direxists(NyaGlobals::imagesPathNSFW.c_str()))
+        {
+            int makePath = mkpath(NyaGlobals::imagesPathNSFW.c_str());
+            if (makePath == -1)
             {
-                int makePath = mkpath(NyaGlobals::imagesPathNSFW.c_str());
-                if (makePath == -1)
-                {
-                    ERROR("Failed to make NSFW folder!");
-                }
+                ERROR("Failed to make images2 folder!");
             }
         }
-    #endif
-    
+    }
 }
 
 Logger& Nya::getLoggerOld() {
@@ -223,7 +221,6 @@ extern "C" void load() {
     QuestUI::Register::RegisterGameplaySetupMenu<Nya::ModifiersMenu*>(modInfo, "Nya");
     QuestUI::Register::RegisterModSettingsViewController<Nya::SettingsViewController*>(modInfo, "Nya");
 
-
     custom_types::Register::AutoRegister();
 
     Nya::getLoggerOld().info("Installing hooks...");
@@ -239,5 +236,3 @@ extern "C" void load() {
 
     Nya::getLoggerOld().info("Installed all hooks!");
 }
-
-

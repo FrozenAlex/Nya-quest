@@ -240,7 +240,10 @@ namespace Nya::Utils {
     }
 
     void DownloadFile(StringW uri, StringW path, std::function<void(bool success, StringW path)> onFinished) {
-        INFO("Getting data from uri: {}", (std::string) uri);
+        if (!getNyaConfig().NSFWEnabled.GetValue()){
+            INFO("Getting data from uri: {}", (std::string) uri);
+        }
+        
         if (!onFinished) {
             ERROR("Can't get data async without a callback to use it with");
             return;
