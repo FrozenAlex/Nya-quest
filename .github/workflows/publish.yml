@@ -104,6 +104,6 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: |
-          ./${{ env.qmodName }}.qmod
+          ./mods/${{ env.qmodName }}.qmod
           ./build/${{ env.LIBNAME }}
           ./build/debug/debug_${{ env.LIBNAME }}
