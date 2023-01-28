@@ -3,19 +3,47 @@
 #include "main.hpp"
 using namespace Nya;
 
+
+
 inline std::map<std::string, SourceData> endpoint_data = {
     {"waifu.pics",
         {
             "https://api.waifu.pics/",
             DataMode::Json,
             {
-                "sfw/neko", "sfw/waifu", "sfw/awoo", "sfw/shinobu", "sfw/megumin", "sfw/cuddle", "sfw/cry",
-                "sfw/hug", "sfw/kiss", "sfw/lick", "sfw/pat", "sfw/smug", "sfw/bonk", "sfw/yeet", "sfw/blush",
-                "sfw/smile", "sfw/wave", "sfw/highfive", "sfw/nom", "sfw/bite", "sfw/glomp", "sfw/slap",
-                "sfw/kick", "sfw/happy", "sfw/wink", "sfw/poke", "sfw/dance"
+                {"neko", "sfw/neko"},
+                {"waifu", "sfw/waifu"},
+                {"awoo", "sfw/awoo"},
+                {"shinobu", "sfw/shinobu"},
+                {"megumin", "sfw/megumin"},
+                {"cuddle", "sfw/cuddle"},
+                {"cry", "sfw/cry"},
+                {"hug", "sfw/hug"},
+                {"kiss", "sfw/kiss"},
+                {"lick", "sfw/lick"},
+                {"pat", "sfw/pat"},
+                {"smug", "sfw/smug"},
+                {"bonk", "sfw/bonk"},
+                {"yeet", "sfw/yeet"},
+                {"blush", "sfw/blush"},
+                {"smile", "sfw/smile"},
+                {"wave", "sfw/wave"},
+                {"highfive", "sfw/highfive"},
+                {"nom", "sfw/nom"},
+                {"bite", "sfw/bite"},
+                {"glomp", "sfw/glomp"},
+                {"slap", "sfw/slap"},
+                {"kick", "sfw/kick"},
+                {"happy", "sfw/happy"},
+                {"wink", "sfw/wink"},
+                {"poke", "sfw/poke"},
+                {"dance", "sfw/dance"},
             }, // Not including 'kill' because it's bad
             {
-                "nsfw/neko", "nsfw/waifu", "nsfw/trap", "nsfw/blowjob"
+                {"neko", "nsfw/neko"},
+                {"waifu", "nsfw/waifu"},
+                {"trap", "nsfw/trap"},
+                {"blowjob", "nsfw/blowjob"},
             },
             "url"
         }
@@ -25,10 +53,20 @@ inline std::map<std::string, SourceData> endpoint_data = {
             "https://anime-api.hisoka17.repl.co/img/",
             DataMode::Json,
             {
-                "hug", "kiss", "slap", "wink", "pat", "kill", "cuddle", "punch", "waifu"
+                {"hug", "hug"},
+                {"kiss", "kiss"},
+                {"slap", "slap"},
+                {"wink", "wink"},
+                {"pat", "pat"},
+                {"kill", "kill"},
+                {"cuddle", "cuddle"},
+                {"punch", "punch"},
+                {"waifu", "waifu"},
             },
             {
-                "hentai", "nsfw/boobs", "nsfw/lesbian" 
+                {"hentai", "hentai"},
+                {"boobs", "nsfw/boobs"},
+                {"lesbian", "nsfw/lesbian"},
             },
             "url"
         }
@@ -38,7 +76,8 @@ inline std::map<std::string, SourceData> endpoint_data = {
             "https://api.catboys.com/",
             DataMode::Json,
             {
-                "img", "baka"
+                {"catboys", "img"},
+                {"baka", "baka"},
             },
             {},
             "url"
@@ -49,19 +88,71 @@ inline std::map<std::string, SourceData> endpoint_data = {
             "https://nekos.life/api/v2/img/",
             DataMode::Json,
             {
-                "neko", "waifu", "tickle", "slap", "pat", "meow", "lizard", "kiss", "hug", "fox_girl",
-                "feed", "cuddle", "ngif", "smug", "woof", "wallpaper", "goose", "gecg", "avatar"
+                {"neko", "neko"},
+                {"waifu", "waifu"},
+                {"tickle", "tickle"},
+                {"slap", "slap"},
+                {"pat", "pat"},
+                {"meow", "meow"},
+                {"lizard", "lizard"},
+                {"kiss", "kiss"},
+                {"hug", "hug"},
+                {"fox girl", "fox_girl"},
+                {"feed", "feed"},
+                {"cuddle", "cuddle"},
+                {"ngif", "ngif"},
+                {"smug", "smug"},
+                {"woof", "woof"},
+                {"wallpaper", "wallpaper"},
+                {"goose", "goose"},
+                {"gecg", "gecg"},
+                {"avatar", "avatar"}
             },
             {},
             "url"
         }
     },
+    {"Bocchi",
+        {
+            "https://boccher.pixelboom.dev/api/",
+            DataMode::Json,
+            {
+                {"all", "frames"},
+                {"episode 1", "frames?episode=1"},
+                {"episode 2", "frames?episode=2"},
+                {"episode 3", "frames?episode=3"},
+                {"episode 4", "frames?episode=4"},
+                {"episode 5", "frames?episode=5"},
+                {"episode 6", "frames?episode=6"},
+                {"episode 7", "frames?episode=7"},
+                {"episode 8", "frames?episode=8"},
+                {"episode 9", "frames?episode=9"},
+                {"episode 10", "frames?episode=10"},
+                {"episode 11", "frames?episode=11"},
+                {"episode 12", "frames?episode=12"},
+                {"opening", "frames?episode=OP"},
+                {"ending 1", "frames?episode=ED1"},
+                {"ending 2", "frames?episode=ED2"},
+                {"ending 3",  "frames?episode=ED3"},   
+            },
+            {},
+            "url"
+        }
+    }, 
     {"Animals",
         {
             "https://some-random-api.ml/animal/",
             DataMode::Json,
             {
-                "cat", "dog", "fox", "panda", "red_panda", "bird", "koala", "kangaroo", "raccoon"
+                {"cat", "cat"},
+                {"dog", "dog"},
+                {"fox", "fox"},
+                {"panda", "panda"},
+                {"red panda", "red_panda"},
+                {"bird", "bird"},
+                {"koala", "koala"},
+                {"kangaroo", "kangaroo"},
+                {"raccoon", "raccoon"}
             },
             {},
             "image"
@@ -131,3 +222,40 @@ void NyaAPI::get_path_from_json_api(
         
     });
 }
+
+/**
+     * @brief Finds the string in a list
+     * 
+     * @param values 
+     * @param string 
+     * @return int -1 if not found anything or index of the element if the item is found
+     */
+    int  NyaAPI::findSourceIndexInListC(std::vector<EndpointCategory>* values, StringW string ) {
+        
+        // Create iterator pointing to first element
+        std::vector<EndpointCategory>::iterator it = values->begin();
+
+        for (int i = 0; i < values->size(); i++){
+            auto value = *it;
+            if (value.url == string) {
+                return i;
+            }
+            std::advance(it, 1);
+        }
+        return -1;
+    }
+
+    ListWrapper<StringW> NyaAPI::listEndpointLabels(std::vector<EndpointCategory>* values) {
+        // TODO: Fix
+        int count = values->size();
+        
+        // Convert stuff to list
+        ListWrapper<StringW> list(List<StringW>::New_ctor());
+        if (count == 0) {
+            return list;
+        }
+        list->EnsureCapacity(count);
+        for (auto item : *values) {list->Add(item.label);};
+
+        return list;
+    }
