@@ -6,29 +6,28 @@ DEFINE_TYPE(Nya, SettingsMenu);
 static ConstString SourcesSettingsWrapper("SourcesSettingsWrapper");
 static ConstString SettingsMenuWrapper("SettingsMenuWrapper");
 static ConstString FloatingSettingsWrapper("FloatingSettingsWrapper");
-namespace Nya {
+namespace Nya
+{
     // Constructor
     void SettingsMenu::ctor()
     {
-    
+
         // Init modal
-        this->settingsModal = QuestUI::BeatSaberUI::CreateModal(get_transform(), { 65, 60 }, nullptr);
+        this->settingsModal = QuestUI::BeatSaberUI::CreateModal(get_transform(), {65, 60}, nullptr);
         this->settingsModal->get_gameObject()->set_name(SettingsMenuWrapper);
 
-        auto sourcesView = UnityEngine::GameObject::New_ctor()->AddComponent<UnityEngine::RectTransform*>();
+        auto sourcesView = UnityEngine::GameObject::New_ctor()->AddComponent<UnityEngine::RectTransform *>();
         sourcesView->get_gameObject()->set_name(SourcesSettingsWrapper);
         sourcesView->SetParent(this->settingsModal->get_transform(), false);
 
-        auto floatingView = UnityEngine::GameObject::New_ctor()->AddComponent<UnityEngine::RectTransform*>();
+        auto floatingView = UnityEngine::GameObject::New_ctor()->AddComponent<UnityEngine::RectTransform *>();
         floatingView->get_gameObject()->set_name(FloatingSettingsWrapper);
         floatingView->SetParent(this->settingsModal->get_transform(), false);
-
-
 
         // Setup canvas
         auto canvas = QuestUI::BeatSaberUI::CreateCanvas();
         canvas->get_transform()->SetParent(this->settingsModal->get_transform(), false);
-        auto controlRect = reinterpret_cast<UnityEngine::RectTransform*>(canvas->get_transform());
+        auto controlRect = reinterpret_cast<UnityEngine::RectTransform *>(canvas->get_transform());
         controlRect->set_anchoredPosition({0, 0});
 
         controlRect->set_anchorMin(UnityEngine::Vector2(0.0f, 0.0f));
@@ -45,13 +44,10 @@ namespace Nya {
         this->tabsSwitch = QuestUI::BeatSaberUI::CreateTextSegmentedControl(controlRect, {0, -5.5}, {45, 5.5}, options, std::bind(&SettingsMenu::SwitchTab, this, std::placeholders::_1));
 
         // Create a text that says "Hello World!" and set the parent to the container.
-        UnityEngine::UI::VerticalLayoutGroup* sourcesViewLayout = QuestUI::BeatSaberUI::CreateVerticalLayoutGroup(sourcesView);
-        sourcesViewLayout->GetComponent<UnityEngine::UI::ContentSizeFitter*>()->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
-        sourcesViewLayout->GetComponent<UnityEngine::UI::ContentSizeFitter*>()->set_horizontalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
-        sourcesViewLayout->GetComponent<UnityEngine::UI::LayoutElement*>()->set_preferredWidth(60.0);
-
-     
-        
+        UnityEngine::UI::VerticalLayoutGroup *sourcesViewLayout = QuestUI::BeatSaberUI::CreateVerticalLayoutGroup(sourcesView);
+        sourcesViewLayout->GetComponent<UnityEngine::UI::ContentSizeFitter *>()->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
+        sourcesViewLayout->GetComponent<UnityEngine::UI::ContentSizeFitter *>()->set_horizontalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
+        sourcesViewLayout->GetComponent<UnityEngine::UI::LayoutElement *>()->set_preferredWidth(60.0);
 
         // TMPro::TextMeshProUGUI* title = QuestUI::BeatSaberUI::CreateText(vert->get_transform(), "Settings");
         // title->GetComponent<TMPro::TMP_Text*>()->set_alignment(TMPro::TextAlignmentOptions::Center);
@@ -128,9 +124,9 @@ namespace Nya {
                 }
             });
 
-
             // SFW endpoint switch
-            this->sfw_endpoint = QuestUI::BeatSaberUI::CreateDropdown(sourcesViewLayout->get_transform(), to_utf16("SFW endpoint"),  "Loading..", {"Loading.."}, [](StringW value){
+            this->sfw_endpoint = QuestUI::BeatSaberUI::CreateDropdown(sourcesViewLayout->get_transform(), to_utf16("SFW endpoint"), "Loading..", {"Loading.."}, [](StringW value)
+                                                                      {
                 std::string API = getNyaConfig().API.GetValue();
                 
                 EndpointConfig::updateEndpointValue(getNyaConfig().config, API, false, value); });
@@ -156,9 +152,9 @@ namespace Nya {
                                                                     { getNyaConfig().NSFWEnabled.SetValue(isChecked); });
             }
 
-            UnityEngine::UI::HorizontalLayoutGroup* horz = QuestUI::BeatSaberUI::CreateHorizontalLayoutGroup(sourcesViewLayout->get_transform());
-            horz->GetComponent<UnityEngine::UI::ContentSizeFitter*>()->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
-            horz->GetComponent<UnityEngine::UI::ContentSizeFitter*>()->set_horizontalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
+            UnityEngine::UI::HorizontalLayoutGroup *horz = QuestUI::BeatSaberUI::CreateHorizontalLayoutGroup(sourcesViewLayout->get_transform());
+            horz->GetComponent<UnityEngine::UI::ContentSizeFitter *>()->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
+            horz->GetComponent<UnityEngine::UI::ContentSizeFitter *>()->set_horizontalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
             horz->set_spacing(10);
             {
                 this->downloadButton = QuestUI::BeatSaberUI::CreateUIButton(horz->get_transform(), to_utf16("Download Nya"), "PracticeButton",
@@ -169,11 +165,11 @@ namespace Nya {
                         this->settingsModal->Hide(true, nullptr);
                 });
 
-                UnityEngine::UI::Button* closeButton = QuestUI::BeatSaberUI::CreateUIButton(horz->get_transform(), to_utf16("Close"), "PracticeButton",
-                    [this]() {
-                        this->settingsModal->Hide(true, nullptr);
-                    }
-                );
+                UnityEngine::UI::Button *closeButton = QuestUI::BeatSaberUI::CreateUIButton(horz->get_transform(), to_utf16("Close"), "PracticeButton",
+                [this]()
+                {
+                    this->settingsModal->Hide(true, nullptr);
+                });
             }
             UnityEngine::UI::HorizontalLayoutGroup *horz2 = QuestUI::BeatSaberUI::CreateHorizontalLayoutGroup(sourcesViewLayout->get_transform());
             horz->GetComponent<UnityEngine::UI::ContentSizeFitter *>()->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
@@ -194,84 +190,91 @@ namespace Nya {
             }
             
         }
-       
-
 
         {
-            UnityEngine::UI::VerticalLayoutGroup* floatingViewLayout = QuestUI::BeatSaberUI::CreateVerticalLayoutGroup(floatingView);
-            floatingViewLayout->GetComponent<UnityEngine::UI::ContentSizeFitter*>()->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
-            floatingViewLayout->GetComponent<UnityEngine::UI::ContentSizeFitter*>()->set_horizontalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
-            floatingViewLayout->GetComponent<UnityEngine::UI::LayoutElement*>()->set_preferredWidth(60.0);
-            UnityEngine::UI::Button* faceHeadset = QuestUI::BeatSaberUI::CreateUIButton(floatingViewLayout->get_transform(), to_utf16("Face headset"), "PracticeButton",
-            [this]() {
-                if (Main::NyaFloatingUI != nullptr) {
-                    Main::NyaFloatingUI->hoverClickHelper->LookAtCamera();
-                }
-            });
+            UnityEngine::UI::VerticalLayoutGroup *floatingViewLayout = QuestUI::BeatSaberUI::CreateVerticalLayoutGroup(floatingView);
+            floatingViewLayout->GetComponent<UnityEngine::UI::ContentSizeFitter *>()->set_verticalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
+            floatingViewLayout->GetComponent<UnityEngine::UI::ContentSizeFitter *>()->set_horizontalFit(UnityEngine::UI::ContentSizeFitter::FitMode::PreferredSize);
+            floatingViewLayout->GetComponent<UnityEngine::UI::LayoutElement *>()->set_preferredWidth(60.0);
+            UnityEngine::UI::Button *faceHeadset = QuestUI::BeatSaberUI::CreateUIButton(floatingViewLayout->get_transform(), to_utf16("Face headset"), "PracticeButton",
+                                                                                        [this]()
+                                                                                        {
+                                                                                            if (Main::NyaFloatingUI != nullptr)
+                                                                                            {
+                                                                                                Main::NyaFloatingUI->hoverClickHelper->LookAtCamera();
+                                                                                            }
+                                                                                        });
             QuestUI::BeatSaberUI::CreateUIButton(floatingViewLayout->get_transform(), to_utf16("Set upright"), "PracticeButton",
-            [this]() {
-                if (Main::NyaFloatingUI != nullptr) {
-                    Main::NyaFloatingUI->hoverClickHelper->SetUpRight();
-                }
-            });
+                                                 [this]()
+                                                 {
+                                                     if (Main::NyaFloatingUI != nullptr)
+                                                     {
+                                                         Main::NyaFloatingUI->hoverClickHelper->SetUpRight();
+                                                     }
+                                                 });
             QuestUI::BeatSaberUI::CreateUIButton(floatingViewLayout->get_transform(), to_utf16("Default position"), "PracticeButton",
-            [this]() {
-                if (Main::NyaFloatingUI != nullptr) {
-                    Main::NyaFloatingUI->SetDefaultPos();
-                }
-            });
+                                                 [this]()
+                                                 {
+                                                     if (Main::NyaFloatingUI != nullptr)
+                                                     {
+                                                         Main::NyaFloatingUI->SetDefaultPos();
+                                                     }
+                                                 });
 
-            UnityEngine::UI::Button* closeButton = QuestUI::BeatSaberUI::CreateUIButton(floatingViewLayout->get_transform(), to_utf16("Close"), "PracticeButton",
-                [this]() {
-                    this->settingsModal->Hide(true, nullptr);
-                }
-            );
+            UnityEngine::UI::Button *closeButton = QuestUI::BeatSaberUI::CreateUIButton(floatingViewLayout->get_transform(), to_utf16("Close"), "PracticeButton",
+                                                                                        [this]()
+                                                                                        {
+                                                                                            this->settingsModal->Hide(true, nullptr);
+                                                                                        });
 
             QuestUI::BeatSaberUI::CreateToggle(floatingViewLayout->get_transform(), "Show handle",
-            getNyaConfig().ShowHandle.GetValue(),
-            [](bool value) {
-                getNyaConfig().ShowHandle.SetValue(value);
-                if (
-                    Main::NyaFloatingUI != nullptr && 
-                    Main::NyaFloatingUI->UIScreen != nullptr
-                ) {
-                    Main::NyaFloatingUI->UpdateHandleVisibility();
-                }
-            });
+                                               getNyaConfig().ShowHandle.GetValue(),
+                                               [](bool value)
+                                               {
+                                                   getNyaConfig().ShowHandle.SetValue(value);
+                                                   if (
+                                                       Main::NyaFloatingUI != nullptr &&
+                                                       Main::NyaFloatingUI->UIScreen != nullptr)
+                                                   {
+                                                       Main::NyaFloatingUI->UpdateHandleVisibility();
+                                                   }
+                                               });
 
-            auto slider = QuestUI::BeatSaberUI::CreateSliderSetting(floatingViewLayout->get_transform(), "Floating Screen Scale", 0.1f, 
-                getNyaConfig().FloatingScreenScale.GetValue(), 0.1f, 2.0f, [](float value) {
+            auto slider = QuestUI::BeatSaberUI::CreateSliderSetting(floatingViewLayout->get_transform(), "Floating Screen Scale", 0.1f,
+                                                                    getNyaConfig().FloatingScreenScale.GetValue(), 0.1f, 2.0f, [](float value)
+                                                                    {
                     getNyaConfig().FloatingScreenScale.SetValue(value);
                     if (Main::NyaFloatingUI != nullptr) {
                         Main::NyaFloatingUI->UpdateScale();
-                    }
-                }
-                
+                    } }
+
             );
         }
     }
 
-    bool SettingsMenu::isShown() {
-        if (this->settingsModal == nullptr) return false;
+    bool SettingsMenu::isShown()
+    {
+        if (this->settingsModal == nullptr)
+            return false;
         return this->settingsModal->isShown;
     }
 
     void SettingsMenu::SwitchTab(int idx)
     {
-        
-        
+
         this->settingsModal->get_transform()->FindChild(SourcesSettingsWrapper)->get_gameObject()->SetActive(idx == 0);
         this->settingsModal->get_transform()->FindChild(FloatingSettingsWrapper)->get_gameObject()->SetActive(idx == 1);
     }
 
-    void SettingsMenu::Show() {
+    void SettingsMenu::Show()
+    {
         INFO("Settings button clicked");
-        auto imageView = this->get_gameObject()->GetComponent<NyaUtils::ImageView*>();
+        auto imageView = this->get_gameObject()->GetComponent<NyaUtils::ImageView *>();
         this->downloadButton->set_interactable(imageView->HasImageToSave());
-        
+
         // Run UI on the main thread
         QuestUI::MainThreadScheduler::Schedule([this]
-        {
+                                               {
             this->tabsSwitch->segmentedControl->SelectCellWithNumber(0);
             // Autonya
             autoNyaButton->set_isOn(getNyaConfig().AutoNya.GetValue());
@@ -336,7 +339,7 @@ namespace Nya {
                     this->nsfw_endpoint->button->set_interactable(true);
                     auto nsfwList = NyaAPI::listEndpointLabels(&source->NsfwEndpoints);
 
-                        this->nsfw_endpoint->SetTexts(nsfwList->i_IReadOnlyList_1_T());
+                    this->nsfw_endpoint->SetTexts(nsfwList->i_IReadOnlyList_1_T());
 
                     std::string endpoint_nsfw = EndpointConfig::getEndpointValue(getNyaConfig().config, API, true);
                     int nsfw_index = -1;
@@ -348,14 +351,17 @@ namespace Nya {
                         nsfw_endpoint->SelectCellWithIdx(nsfw_index); 
                     }
                 }
-            #endif
+
+                this->nsfw_toggle->set_isOn(getNyaConfig().NSFWEnabled.GetValue());
+            }
+#endif
             
             this->SwitchTab(0);
-            settingsModal->Show(true, true, nullptr);
-        });
+            settingsModal->Show(true, true, nullptr); });
     }
 
-    void SettingsMenu::Hide() {
+    void SettingsMenu::Hide()
+    {
         this->settingsModal->Hide(true, nullptr);
     }
 
