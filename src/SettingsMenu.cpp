@@ -1,6 +1,8 @@
 #include "SettingsMenu.hpp"
 #include "Utils/Utils.hpp"
 #include "NyaFloatingUI.hpp"
+#include "HMUI/ScrollView.hpp"
+#include "GlobalNamespace/LevelCollectionTableView.hpp"
 DEFINE_TYPE(Nya, SettingsMenu);
 
 static ConstString SourcesSettingsWrapper("SourcesSettingsWrapper");
@@ -52,6 +54,9 @@ namespace Nya
         // TMPro::TextMeshProUGUI* title = QuestUI::BeatSaberUI::CreateText(vert->get_transform(), "Settings");
         // title->GetComponent<TMPro::TMP_Text*>()->set_alignment(TMPro::TextAlignmentOptions::Center);
         // title->GetComponent<TMPro::TMP_Text*>()->set_fontSize(7.0);
+
+        // Get platform helper for scrolling
+        auto platformHelper = UnityEngine::Resources::FindObjectsOfTypeAll<GlobalNamespace::LevelCollectionTableView*>().First()->GetComponentInChildren<HMUI::ScrollView*>()->platformHelper;
 
         // Nya configuration
         {
@@ -124,12 +129,22 @@ namespace Nya
                 }
             });
 
+            // Add scrolling
+            if (platformHelper != nullptr) {
+                this->api_switch->tableView->scrollView->platformHelper = platformHelper;
+            }
+
             // SFW endpoint switch
             this->sfw_endpoint = QuestUI::BeatSaberUI::CreateDropdown(sourcesViewLayout->get_transform(), to_utf16("SFW endpoint"), "Loading..", {"Loading.."}, [](StringW value)
                                                                       {
                 std::string API = getNyaConfig().API.GetValue();
                 
                 EndpointConfig::updateEndpointValue(getNyaConfig().config, API, false, value); });
+
+            // Add scrolling
+            if (platformHelper != nullptr) {
+                this->sfw_endpoint->tableView->scrollView->platformHelper = platformHelper;
+            }
 
             if (getNyaConfig().NSFWUI.GetValue()) {
                 // NSFW endpoint selector
@@ -150,6 +165,10 @@ namespace Nya
                 bool NSFWEnabled = getNyaConfig().NSFWEnabled.GetValue();
                 this->nsfw_toggle = QuestUI::BeatSaberUI::CreateToggle(sourcesViewLayout->get_transform(), to_utf16("NSFW toggle"), NSFWEnabled, [](bool isChecked)
                                                                     { getNyaConfig().NSFWEnabled.SetValue(isChecked); });
+                // Add scrolling
+                if (platformHelper != nullptr) {
+                    this->nsfw_endpoint->tableView->scrollView->platformHelper = platformHelper;
+                }
             }
 
             UnityEngine::UI::HorizontalLayoutGroup *horz = QuestUI::BeatSaberUI::CreateHorizontalLayoutGroup(sourcesViewLayout->get_transform());
