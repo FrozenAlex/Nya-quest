@@ -10,6 +10,11 @@
 
 #include <iostream>
 
+struct EndpointCategory {
+    std::string label;
+    std::string url;
+};
+
 enum DataMode
 {
     Unsupported,
@@ -31,8 +36,8 @@ struct SourceData
     // };
     std::string BaseEndpoint;
     DataMode Mode;
-    std::list<std::string> SfwEndpoints;
-    std::list<std::string> NsfwEndpoints;
+    std::vector<EndpointCategory> SfwEndpoints;
+    std::vector<EndpointCategory> NsfwEndpoints;
     std::string propertyName;
 };
 
@@ -44,4 +49,8 @@ namespace NyaAPI {
     void get_path_from_json_api(SourceData* source, std::string url, float timeoutInSeconds,std::function<void(bool success, std::string url)> finished);
     // void NyaAPI::downloadImageFile();
     std::map<std::string, SourceData>* getEndpoints();
+
+    int findSourceIndexInListC(std::vector<EndpointCategory>* values, StringW string );
+
+    ListWrapper<StringW> listEndpointLabels(std::vector<EndpointCategory>* values);
 }

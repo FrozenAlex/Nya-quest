@@ -33,12 +33,12 @@ namespace EndpointConfig {
                             if (data.SfwEndpoints.size() > 0) {
                                 // Process sfw default
                                 endpoint.AddMember("sfw", rapidjson::Value(rapidjson::kStringType), allocator);
-                                endpoint["sfw"].SetString(data.SfwEndpoints.front(), allocator);
+                                endpoint["sfw"].SetString(data.SfwEndpoints.front().url, allocator);
                             }
                             if (data.NsfwEndpoints.size() > 0) {
                                 // Process nsfw default
                                 endpoint.AddMember("nsfw", rapidjson::Value(rapidjson::kStringType), allocator);
-                                endpoint["nsfw"].SetString(data.NsfwEndpoints.front(), allocator);
+                                endpoint["nsfw"].SetString(data.NsfwEndpoints.front().url, allocator);
                             }
                             
                         }
@@ -83,10 +83,10 @@ namespace EndpointConfig {
                     if (source_data->NsfwEndpoints.size() > 0) {
                         // Process sfw default
                         endpoint.AddMember("nsfw", rapidjson::Value(rapidjson::kStringType), allocator);
-                        endpoint["nsfw"].SetString(source_data->NsfwEndpoints.front(), allocator);
+                        endpoint["nsfw"].SetString(source_data->NsfwEndpoints.front().url, allocator);
                         // Mark to save at the end
                         save = true;
-                        endpointValue = source_data->NsfwEndpoints.front();
+                        endpointValue = source_data->NsfwEndpoints.front().url;
                     }
                 }
                 
@@ -99,10 +99,10 @@ namespace EndpointConfig {
                     if (source_data->SfwEndpoints.size() > 0) {
                         // Process sfw default
                         endpoint.AddMember("sfw", rapidjson::Value(rapidjson::kStringType), allocator);
-                        endpoint["sfw"].SetString(source_data->SfwEndpoints.front(), allocator);
+                        endpoint["sfw"].SetString(source_data->SfwEndpoints.front().url, allocator);
                         save = true;
                         config->Write();
-                        endpointValue = source_data->SfwEndpoints.front();
+                        endpointValue = source_data->SfwEndpoints.front().url;
                     }
                 }
             }
@@ -125,10 +125,10 @@ namespace EndpointConfig {
                 if (source_data->SfwEndpoints.size() > 0) {
                     // Process sfw default
                     endpoint.AddMember("sfw", rapidjson::Value(rapidjson::kStringType), allocator);
-                    endpoint["sfw"].SetString(source_data->SfwEndpoints.front(), allocator);
+                    endpoint["sfw"].SetString(source_data->SfwEndpoints.front().url, allocator);
                     // Set endpoint value if it matches
                     if (!nsfw) {
-                        endpointValue = source_data->SfwEndpoints.front();
+                        endpointValue = source_data->SfwEndpoints.front().url;
                     }
                 }
 
@@ -136,10 +136,10 @@ namespace EndpointConfig {
                 if (source_data->NsfwEndpoints.size() > 0) {
                     // Process nsfw default
                     endpoint.AddMember("nsfw", rapidjson::Value(rapidjson::kStringType), allocator);
-                    endpoint["nsfw"].SetString(source_data->NsfwEndpoints.front(), allocator);
+                    endpoint["nsfw"].SetString(source_data->NsfwEndpoints.front().url, allocator);
                     // Set endpoint value if it matches
                     if (nsfw) {
-                        endpointValue = source_data->NsfwEndpoints.front();
+                        endpointValue = source_data->NsfwEndpoints.front().url;
                     }
                 }
             }
@@ -173,18 +173,39 @@ namespace EndpointConfig {
         if (endpoints.HasMember(name)) {
             
             auto endpoint = endpoints[name].GetObject();
-        
+            auto dataSource = NyaAPI::get_data_source(name);
+
+            std::string url = "";
+
+            if (nsfw) {
+                auto it = std::find_if(dataSource->NsfwEndpoints.begin(), dataSource->NsfwEndpoints.end(), [value](const EndpointCategory& s) { return s.label == value; });
+                if (it != dataSource->NsfwEndpoints.end()) {
+                    url = it->url;
+                } else {
+                    WARNING("Source not found wtf lel");
+                }
+            } else {
+                auto it = std::find_if(dataSource->SfwEndpoints.begin(), dataSource->SfwEndpoints.end(), [value](const EndpointCategory& s) { return s.label == value; });
+                if (it != dataSource->SfwEndpoints.end()) {
+                    url = it->url;
+                } else {
+                    WARNING("Source not found wtf lel");
+                }
+            }
+
             // Save values depending on the thing
             if (nsfw) {
                 // If the value is present, load it
                 if (endpoint.HasMember("nsfw")) {
-                    endpoint["nsfw"].SetString(value, allocator);
+                    endpoint["nsfw"].SetString(url, allocator);
+                    save = true;
                 }
             } 
             
             if (!nsfw) {
                 if (endpoint.HasMember("sfw")) {
-                    endpoint["sfw"].SetString(value, allocator);
+                    endpoint["sfw"].SetString(url, allocator);
+                    save = true;
                 }
             }
         }
