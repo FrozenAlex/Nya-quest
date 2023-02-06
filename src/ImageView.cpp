@@ -82,7 +82,13 @@ void NyaUtils::ImageView::SaveImage() {
 void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
 {
     // Delete the last downloaded image
-    if (this->lastImageURL != "" && this->tempName != "" && Nya::Utils::IsImage(this->tempName)) {
+    if (
+        this->tempName != nullptr &&
+        this->lastImageURL != nullptr &&
+        this->tempName != "" &&
+        this->lastImageURL != "" &&
+        Nya::Utils::IsImage(this->tempName)
+    ) {
         StringW original = StringW(NyaGlobals::tempPath) + this->tempName;
         FileUtils::deleteFile(original);
         
