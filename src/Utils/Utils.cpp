@@ -149,13 +149,22 @@ namespace Nya::Utils {
     // Checks if the path is animated
     bool IsAnimated(StringW str)
     {
+        // Catch nulls 
+        if (str == nullptr) {
+            WARNING("IsAnimated got null string, possibly a bug");
+            return false;
+        }
         return  str->EndsWith(".gif", System::StringComparison::OrdinalIgnoreCase) || 
                 str->EndsWith("_gif", System::StringComparison::OrdinalIgnoreCase) ||
                 str->EndsWith(".apng", System::StringComparison::OrdinalIgnoreCase)||
                 str->EndsWith("_apng", System::StringComparison::OrdinalIgnoreCase);
     }
     bool IsImage(StringW str) {
-     
+        // Catch nulls 
+        if (str == nullptr) {
+            WARNING("IsImage got null string, possibly a bug");
+            return false;
+        }
         return  str->EndsWith(".gif", System::StringComparison::OrdinalIgnoreCase) || 
                 str->EndsWith("_gif", System::StringComparison::OrdinalIgnoreCase) ||
                 str->EndsWith(".apng", System::StringComparison::OrdinalIgnoreCase)||
