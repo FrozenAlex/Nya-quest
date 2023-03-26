@@ -145,7 +145,7 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
         int randomIndex = Nya::Utils::random(0, fileList.size()-1);
 
         auto path = fileList[randomIndex];
-        BSML::Utilities::SetImage(this->imageView, "file://" + path,  true, BSML::Utilities::ScaleOptions(),[finished, this]() {
+        FSML::Utilities::SetImage(this->imageView, "file://" + path,  true, FSML::Utilities::ScaleOptions(),[finished, this]() {
             if (finished != nullptr) finished(true);
         });
       }
@@ -192,7 +192,7 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
                         this->tempName = fileFullName;
                         this->isNSFW = NSFWEnabled;
 
-                        BSML::Utilities::SetImage(this->imageView, "file://" + path,  true, BSML::Utilities::ScaleOptions(),[finished, this]() {
+                        FSML::Utilities::SetImage(this->imageView, "file://" + path,  true, FSML::Utilities::ScaleOptions(),[finished, this]() {
                             if (finished != nullptr) finished(true);
                         });
                     }
@@ -218,7 +218,7 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
 
 void NyaUtils::ImageView::SetErrorImage()
 {
-    BSML::Utilities::RemoveAnimationUpdater(this->imageView);
+    FSML::Utilities::RemoveAnimationUpdater(this->imageView);
     this->imageView->set_sprite(QuestUI::BeatSaberUI::ArrayToSprite(IncludedAssets::Chocola_Dead_png));
 }
 

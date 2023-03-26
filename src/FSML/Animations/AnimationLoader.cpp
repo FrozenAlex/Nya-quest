@@ -1,6 +1,6 @@
 #include "main.hpp"
-#include "BSML/Animations/AnimationLoader.hpp"
-#include "BSML/Animations/GIF/GifDecoder.hpp"
+#include "FSML/Animations/AnimationLoader.hpp"
+#include "FSML/Animations/GIF/GifDecoder.hpp"
 
 
 #include "UnityEngine/SystemInfo.hpp"
@@ -14,10 +14,10 @@
 
 #include "GlobalNamespace/SharedCoroutineStarter.hpp"
 #include "System/Func_1.hpp"
-DEFINE_TYPE(BSML, AnimationLoader);
+DEFINE_TYPE(FSML, AnimationLoader);
 
 
-namespace BSML {
+namespace FSML {
     int get_atlasSizeLimit() {
         using GetMaxTextureSize = function_ptr_t<int>;
         static auto getMaxTextureSize = reinterpret_cast<GetMaxTextureSize>(il2cpp_functions::resolve_icall("UnityEngine.SystemInfo::GetMaxTextureSize"));

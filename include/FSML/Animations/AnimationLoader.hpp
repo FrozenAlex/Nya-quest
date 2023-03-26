@@ -8,7 +8,7 @@
 #include "custom-types/shared/coroutine.hpp"
 
 
-DECLARE_CLASS_CODEGEN(BSML, AnimationLoader, Il2CppObject,
+DECLARE_CLASS_CODEGEN(FSML, AnimationLoader, Il2CppObject,
     public:
         enum class AnimationType {
             GIF,

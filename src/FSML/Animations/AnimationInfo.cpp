@@ -1,6 +1,6 @@
-#include "BSML/Animations/AnimationInfo.hpp"
+#include "FSML/Animations/AnimationInfo.hpp"
 
-namespace BSML {
+namespace FSML {
     AnimationInfo::~AnimationInfo() {
         for (auto f : frames) { if (f) delete f; }
     }

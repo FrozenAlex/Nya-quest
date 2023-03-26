@@ -1,13 +1,13 @@
 #include "main.hpp"
-#include "BSML/Animations/AnimationController.hpp"
+#include "FSML/Animations/AnimationController.hpp"
 
 
 #include "UnityEngine/GameObject.hpp"
 #include <chrono>
 
-DEFINE_TYPE(BSML, AnimationController);
+DEFINE_TYPE(FSML, AnimationController);
 
-namespace BSML {
+namespace FSML {
     SafePtrUnity<AnimationController> AnimationController::instance;
     AnimationController* AnimationController::get_instance() {
         if (!instance) {

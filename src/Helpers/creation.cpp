@@ -14,7 +14,7 @@
 using namespace UnityEngine;
 using namespace TMPro;
 
-namespace BSML::Helpers {
+namespace FSML::Helpers {
     TMP_Text* CreateText(System::Type* type, UnityEngine::Transform* parent, StringW text, Vector2 anchoredPosition, Vector2 sizeDelta) {
         auto gameObj = GameObject::New_ctor("CustomUIText");
         gameObj->SetActive(false);
