@@ -10,5 +10,5 @@ if (Test-Path ./logs/) {
 }
 
 
-adb pull "/storage/emulated/0/Android/data/com.beatgames.beatsaber/files/logs/paper/Nya.log" ./logs/
+adb pull "/storage/emulated/0/Android/data/com.beatgames.beatsaber/files/logs" ./logs/
 adb pull "/storage/emulated/0/ModData/com.beatgames.beatsaber/Configs/Nya.json" ./logs/
