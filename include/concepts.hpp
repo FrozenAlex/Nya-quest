@@ -7,13 +7,13 @@
 #include "UnityEngine/Transform.hpp"
 
 
-namespace BSML::Concepts {
+namespace FSML::Concepts {
     template<typename T, typename U>
-    concept BSMLConvertible = std::is_convertible_v<T, U>;
+    concept FSMLConvertible = std::is_convertible_v<T, U>;
 
     template<typename T>
-    concept HasGameObject = !BSMLConvertible<T, UnityEngine::GameObject*> && requires (T a) { {a->get_gameObject() } -> BSMLConvertible<UnityEngine::GameObject*>; };
+    concept HasGameObject = !FSMLConvertible<T, UnityEngine::GameObject*> && requires (T a) { {a->get_gameObject() } -> FSMLConvertible<UnityEngine::GameObject*>; };
 
     template<typename T>
-    concept HasTransform = !BSMLConvertible<T, UnityEngine::Transform*> && requires (T a) { {a->get_transform() } -> BSMLConvertible<UnityEngine::Transform*>; };
+    concept HasTransform = !FSMLConvertible<T, UnityEngine::Transform*> && requires (T a) { {a->get_transform() } -> FSMLConvertible<UnityEngine::Transform*>; };
 }

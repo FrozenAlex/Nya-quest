@@ -8,7 +8,7 @@
 #include "GlobalNamespace/IVRPlatformHelper.hpp"
 #include "GlobalNamespace/MainFlowCoordinator.hpp"
 
-namespace BSML::Helpers {
+namespace FSML::Helpers {
     VRUIControls::PhysicsRaycasterWithCache* GetPhysicsRaycasterWithCache();
     Zenject::DiContainer* GetDiContainer();
     HMUI::HoverHintController* GetHoverHintController();

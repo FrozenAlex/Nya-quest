@@ -4,7 +4,7 @@
 #include "beatsaber-hook/shared/utils/typedefs.h"
 #include "custom-types/shared/coroutine.hpp"
 
-namespace BSML {
+namespace FSML {
     class GifDecoder {
         public:
             static custom_types::Helpers::Coroutine Process(ArrayW<uint8_t> data, std::function<void(AnimationInfo*)> onFinished);

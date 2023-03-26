@@ -1,4 +1,4 @@
-#include "BSML/Animations/AnimationControllerData.hpp"
+#include "FSML/Animations/AnimationControllerData.hpp"
 
 #include "Helpers/utilities.hpp"
 
@@ -6,10 +6,10 @@
 #include "UnityEngine/Texture2D.hpp"
 #include <chrono>
 
-DEFINE_TYPE(BSML, AnimationControllerData);
+DEFINE_TYPE(FSML, AnimationControllerData);
 
 
-namespace BSML {
+namespace FSML {
     AnimationControllerData* AnimationControllerData::Make_new(UnityEngine::Texture2D* tex, ArrayW<UnityEngine::Rect> uvs, ArrayW<float> delays) {
         auto self = AnimationControllerData::New_ctor();
         // Init uvIndex to 0 for force frame drawing thing
