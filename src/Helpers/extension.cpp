@@ -8,7 +8,7 @@ using namespace TMPro;
 using namespace UnityEngine;
 using namespace UnityEngine::UI;
 
-namespace BSML::Helpers {
+namespace FSML::Helpers {
     void SetButtonText(Button* button, StringW text) {
             auto localizer = button->GetComponentInChildren<Polyglot::LocalizedTextMeshProUGUI*>(true);
             if (localizer)

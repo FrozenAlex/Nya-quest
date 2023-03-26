@@ -9,7 +9,7 @@
 #include "UnityEngine/Transform.hpp"
 #include "UnityEngine/Vector2.hpp"
 
-namespace BSML::Helpers {
+namespace FSML::Helpers {
     /// @brief creates a text object
     /// @param parent the parent transform of the text object
     /// @param text the string to write
@@ -70,7 +70,7 @@ namespace BSML::Helpers {
     /// @param object the object to add the hoverhint to
     /// @param text the text to display in the hoverhint
     /// @return the hoverhint
-    template<BSML::Concepts::HasGameObject T>
+    template<FSML::Concepts::HasGameObject T>
     HMUI::HoverHint* AddHoverHint(T object, StringW text) {
         return AddHoverHint(object->get_gameObject(), text);
     }

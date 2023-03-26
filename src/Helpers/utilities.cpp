@@ -1,5 +1,5 @@
 #include "Helpers/utilities.hpp"
-#include "BSMLDataCache_internal.hpp"
+#include "FSMLDataCache_internal.hpp"
 #include "main.hpp"
 
 #include "GlobalNamespace/SharedCoroutineStarter.hpp"
@@ -21,10 +21,10 @@
 #include "UnityEngine/Networking/DownloadHandler.hpp"
 #include "UnityEngine/Networking/UnityWebRequestAsyncOperation.hpp"
 
-#include "BSML/Animations/AnimationStateUpdater.hpp"
-#include "BSML/Animations/AnimationController.hpp"
-#include "BSML/Animations/AnimationControllerData.hpp"
-#include "BSML/Animations/AnimationLoader.hpp"
+#include "FSML/Animations/AnimationStateUpdater.hpp"
+#include "FSML/Animations/AnimationController.hpp"
+#include "FSML/Animations/AnimationControllerData.hpp"
+#include "FSML/Animations/AnimationLoader.hpp"
 
 #include "System/Uri.hpp"
 #include "Utils/Utils.hpp"
@@ -39,7 +39,7 @@
 using namespace UnityEngine;
 using namespace UnityEngine::Networking;
 
-namespace BSML::Utilities {
+namespace FSML::Utilities {
 
     template<typename T, typename U>
     using Dictionary = System::Collections::Generic::Dictionary_2<T, U>;

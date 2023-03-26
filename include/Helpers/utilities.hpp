@@ -8,7 +8,7 @@
 #include "UnityEngine/UI/Image.hpp"
 #include "System/Uri.hpp"
 
-namespace BSML::Utilities {
+namespace FSML::Utilities {
     /// @brief Finds a sprite by name.
     UnityEngine::Sprite* FindSpriteCached(StringW name);
 

@@ -1,8 +1,8 @@
-#include "BSMLDataCache_internal.hpp"
+#include "FSMLDataCache_internal.hpp"
 #include "main.hpp"
 #include <map>
 
-namespace BSML::DataCache {
+namespace FSML::DataCache {
     std::map<std::string, const Entry*> dataCache;
     void RegisterEntry(std::string key, const Entry* value) {
         INFO("Registering Data, Key: {}", key);

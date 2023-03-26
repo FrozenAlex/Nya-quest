@@ -2,6 +2,6 @@
 
 #include "UnityEngine/UI/Button.hpp"
 
-namespace BSML::Helpers {
+namespace FSML::Helpers {
     void SetButtonText(UnityEngine::UI::Button* button, StringW text);
 }
