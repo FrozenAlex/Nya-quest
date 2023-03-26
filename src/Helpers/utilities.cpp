@@ -27,7 +27,7 @@
 #include "BSML/Animations/AnimationLoader.hpp"
 
 #include "System/Uri.hpp"
-#include "System/StringComparison.hpp"
+#include "Utils/Utils.hpp"
 
 #include "custom-types/shared/coroutine.hpp"
 
@@ -195,14 +195,6 @@ namespace BSML::Utilities {
         }
     }
 
-    bool IsAnimated(StringW str)
-    {
-        return  str->EndsWith(".gif", System::StringComparison::OrdinalIgnoreCase) || 
-                str->EndsWith("_gif", System::StringComparison::OrdinalIgnoreCase) ||
-                str->EndsWith(".apng", System::StringComparison::OrdinalIgnoreCase)||
-                str->EndsWith("_apng", System::StringComparison::OrdinalIgnoreCase);
-    }
-
     void SetImage(UnityEngine::UI::Image* image, StringW path) {
         SetImage(image, path, true, ScaleOptions());
     }
@@ -260,7 +252,7 @@ namespace BSML::Utilities {
         bool isUri = System::Uri::TryCreate(path, System::UriKind::Absolute, byref(uri));
         // animated just means ".gif || .apng"
         // TODO: support for animated sprites in the future
-        if (IsAnimated(path) || (isUri && IsAnimated(uri->get_LocalPath()))) {
+        if (Nya::Utils::IsAnimated(path) || (isUri && Nya::Utils::IsAnimated(uri->get_LocalPath()))) {
             DEBUG("Adding state updater");
             auto stateUpdater = image->get_gameObject()->AddComponent<AnimationStateUpdater*>();
             stateUpdater->image = image;
@@ -277,7 +269,7 @@ namespace BSML::Utilities {
                 if (onFinished) onFinished();
             } else {
                 DEBUG("Data not found. starting fetch");
-                bool isGif = path->EndsWith("gif", System::StringComparison::OrdinalIgnoreCase) || (isUri && uri->get_LocalPath()->EndsWith("gif", System::StringComparison::OrdinalIgnoreCase));
+                bool isGif = Nya::Utils::IsGif(path) || (isUri && Nya::Utils::IsGif(uri->get_LocalPath()));
 
                 DEBUG("Creating callback");
                 auto onDataFinished = [stateUpdater, oldSprite, path, onFinished, animationController, isGif](bool success, ArrayW<uint8_t> data){

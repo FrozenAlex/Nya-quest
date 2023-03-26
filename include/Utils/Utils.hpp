@@ -7,6 +7,8 @@
 #include "Utils/FileUtils.hpp"
 
 namespace Nya::Utils {
+    bool IsGif(StringW str);
+    std::string ToLowercase(std::string str);
     List<StringW>* vectorToList(std::vector<StringW> values);
     std::vector<StringW> listWToVector(List<StringW>* values);
     int findStrIndexInList(List<StringW>* values, StringW string );
