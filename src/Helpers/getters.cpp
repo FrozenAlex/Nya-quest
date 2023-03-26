@@ -19,7 +19,7 @@ using namespace GlobalNamespace;
 
 #define CacheNotFoundWarningLog(type) WARNING("Can't find '{}'! (This shouldn't happen and can cause unexpected behaviour)", #type)
 
-namespace BSML::Helpers {
+namespace FSML::Helpers {
     SafePtr<PhysicsRaycasterWithCache> physicsRaycaster;
     PhysicsRaycasterWithCache* GetPhysicsRaycasterWithCache()
     {

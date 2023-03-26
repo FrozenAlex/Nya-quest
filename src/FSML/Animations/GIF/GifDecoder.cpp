@@ -1,4 +1,4 @@
-#include "BSML/Animations/GIF/GifDecoder.hpp"
+#include "FSML/Animations/GIF/GifDecoder.hpp"
 #include "main.hpp"
 #include "Helpers/delegates.hpp"
 
@@ -34,7 +34,7 @@ inline uint32_t make_black_transparent(const uint32_t& v) {
     return v >> 8 ? v : 0;
 }
 
-namespace BSML {
+namespace FSML {
 
     custom_types::Helpers::Coroutine GifDecoder::Process(ArrayW<uint8_t> data, std::function<void(AnimationInfo*)> onFinished) {
         auto animationInfo = new AnimationInfo();

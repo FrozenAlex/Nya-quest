@@ -10,7 +10,7 @@
 #include "System/Collections/Generic/Dictionary_2.hpp"
 #include "System/Collections/Generic/IReadOnlyDictionary_2.hpp"
 
-DECLARE_CLASS_CODEGEN(BSML, AnimationController, UnityEngine::MonoBehaviour,
+DECLARE_CLASS_CODEGEN(FSML, AnimationController, UnityEngine::MonoBehaviour,
     DECLARE_INSTANCE_FIELD(AnimationControllerData*, loadingAnimation);
     using StringToAnimDataDictionary = System::Collections::Generic::Dictionary_2<StringW, Il2CppObject*>;
     DECLARE_INSTANCE_FIELD(StringToAnimDataDictionary*, registeredAnimations);

@@ -1,8 +1,8 @@
-#include "BSML/Animations/AnimationStateUpdater.hpp"
+#include "FSML/Animations/AnimationStateUpdater.hpp"
 
-DEFINE_TYPE(BSML, AnimationStateUpdater);
+DEFINE_TYPE(FSML, AnimationStateUpdater);
 
-namespace BSML {
+namespace FSML {
     AnimationControllerData* AnimationStateUpdater::get_controllerData() {
         return controllerData;
     }

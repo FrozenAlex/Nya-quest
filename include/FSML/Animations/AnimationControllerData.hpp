@@ -6,7 +6,7 @@
 #include "UnityEngine/Material.hpp"
 #include "UnityEngine/UI/Image.hpp"
 
-DECLARE_CLASS_CODEGEN(BSML, AnimationControllerData, Il2CppObject,
+DECLARE_CLASS_CODEGEN(FSML, AnimationControllerData, Il2CppObject,
     DECLARE_INSTANCE_FIELD(UnityEngine::Sprite*, sprite);
     DECLARE_INSTANCE_FIELD(int, uvIndex);
 

@@ -22,7 +22,7 @@
 
 #include "fmt/format.h"
 
-namespace BSML {
+namespace FSML {
     /// @brief struct to check argcount
     template <int argc, int check>
     struct check_count_equals {

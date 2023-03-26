@@ -4,7 +4,7 @@
 // this is just included because otherwise the SafePtr complains about conversion to unity object
 #include "UnityEngine/Object.hpp"
 
-namespace BSML {
+namespace FSML {
     class FrameInfo;
     class AnimationInfo {
         public:
