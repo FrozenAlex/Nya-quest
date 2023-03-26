@@ -17,7 +17,34 @@
 using namespace UnityEngine;
 using namespace UnityEngine::Networking;
 
+namespace fs = std::filesystem;
+ 
+
+// Extensions for images
+static std::unordered_set<std::string> ImageExtensions = {
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".apng",
+    ".webp",
+    ".tiff",
+    ".bmp"
+};  
+
+// Extensions for animated images
+static std::unordered_set<std::string> AnimatedImageExtensions = {
+    ".gif",
+    ".apng"
+};
+
 namespace Nya::Utils {
+    // Lowercase a string
+    std::string ToLowercase(std::string str) {
+        std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c){ return std::tolower(c); });
+        return str;
+    }
+
     /**
      * @brief Converts vector to list
      * 
@@ -154,34 +181,45 @@ namespace Nya::Utils {
             WARNING("IsAnimated got null string, possibly a bug");
             return false;
         }
-        return  str->EndsWith(".gif", System::StringComparison::OrdinalIgnoreCase) || 
-                str->EndsWith("_gif", System::StringComparison::OrdinalIgnoreCase) ||
-                str->EndsWith(".apng", System::StringComparison::OrdinalIgnoreCase)||
-                str->EndsWith("_apng", System::StringComparison::OrdinalIgnoreCase);
+        
+        auto path = fs::path(str);
+        auto extension = path.extension().string();
+        
+        // Convert to lowercase
+        extension = ToLowercase(extension);
+        
+        return AnimatedImageExtensions.contains(extension);
     }
+
+    // Checks if the path is animated
+    bool IsGif(StringW str)
+    {
+        // Catch nulls 
+        if (str == nullptr) {
+            WARNING("IsAnimated got null string, possibly a bug");
+            return false;
+        }
+        
+        auto path = fs::path(str);
+        auto extension = path.extension().string();
+        
+        return extension == ".gif";
+    }
+
     bool IsImage(StringW str) {
         // Catch nulls 
         if (str == nullptr) {
             WARNING("IsImage got null string, possibly a bug");
             return false;
         }
-        return  str->EndsWith(".gif", System::StringComparison::OrdinalIgnoreCase) || 
-                str->EndsWith("_gif", System::StringComparison::OrdinalIgnoreCase) ||
-                str->EndsWith(".apng", System::StringComparison::OrdinalIgnoreCase)||
-                str->EndsWith("_apng", System::StringComparison::OrdinalIgnoreCase)||
-                str->EndsWith(".png", System::StringComparison::OrdinalIgnoreCase) ||
-                str->EndsWith("_png", System::StringComparison::OrdinalIgnoreCase) ||
-                str->EndsWith(".jpeg", System::StringComparison::OrdinalIgnoreCase)||
-                str->EndsWith("_jpeg", System::StringComparison::OrdinalIgnoreCase) ||
-                str->EndsWith(".webp", System::StringComparison::OrdinalIgnoreCase)||
-                str->EndsWith("_webp", System::StringComparison::OrdinalIgnoreCase)||
-                str->EndsWith(".tiff", System::StringComparison::OrdinalIgnoreCase)||
-                str->EndsWith("_tiff", System::StringComparison::OrdinalIgnoreCase) ||
-                str->EndsWith(".jpg", System::StringComparison::OrdinalIgnoreCase)||
-                str->EndsWith("_jpg", System::StringComparison::OrdinalIgnoreCase) ||
-                str->EndsWith(".bmp", System::StringComparison::OrdinalIgnoreCase)||
-                str->EndsWith("_bmp", System::StringComparison::OrdinalIgnoreCase);
-  
+
+        auto path = fs::path(str);
+        auto extension = path.extension().string();
+
+        // Convert to lowercase
+        extension = ToLowercase(extension);
+        
+        return ImageExtensions.contains(extension);
     }
 
     // Got tired of pointers. If we can get a controller from a pointer, it means it's valid
@@ -259,5 +297,7 @@ namespace Nya::Utils {
         }
         coro(DownloadFileCoroutine(uri, path, onFinished));
     }
+
+    
 }
 
