@@ -213,7 +213,7 @@ inline std::map<std::string, SourceData> endpoint_data = {
                 {"ngif", "ngif"},
                 {"smug", "smug"},
                 {"woof", "woof"},
-                {"wallpaper", "wallpaper"},
+                // {"wallpaper", "wallpaper"},
                 {"goose", "goose"},
                 {"gecg", "gecg"},
                 {"avatar", "avatar"}
