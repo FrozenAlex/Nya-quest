@@ -25,7 +25,7 @@ namespace EndpointConfig {
                     fieldname.SetString(key, allocator);
                     // Value
                     endpoints.AddMember(fieldname, rapidjson::Value(rapidjson::kObjectType), allocator);
-                    if (data.Mode == DataMode::Json) {
+                    if (data.Mode == DataMode::Json || data.Mode == DataMode::Authenticated) {
                         if (data.NsfwEndpoints.size() > 0 ||data.SfwEndpoints.size() >0 ) {
                             // Get the endpoint
                             auto endpoint = endpoints[key].GetObject();
@@ -115,7 +115,7 @@ namespace EndpointConfig {
             // Value
             endpoints.AddMember(fieldname, rapidjson::Value(rapidjson::kObjectType), allocator);
             if (
-                source_data->Mode == DataMode::Json &&
+                (source_data->Mode == DataMode::Json || source_data->Mode == DataMode::Authenticated) &&
                 (source_data->NsfwEndpoints.size() > 0 || source_data->SfwEndpoints.size() > 0)
             ) {
                 // Get the endpoint
