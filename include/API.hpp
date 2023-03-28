@@ -19,7 +19,8 @@ enum DataMode
 {
     Unsupported,
     Json,
-    Local
+    Local,
+    Authenticated
 };
 
 struct SourceData
@@ -46,7 +47,7 @@ namespace NyaAPI {
     // Function gets url for the current selected category
     SourceData* get_data_source(std::string name);
     std::vector<StringW> get_source_list();
-    void get_path_from_json_api(SourceData* source, std::string url, float timeoutInSeconds,std::function<void(bool success, std::string url)> finished);
+    void get_path_from_json_api(SourceData* source, std::string url, float timeoutInSeconds,std::function<void(bool success, std::string url)> finished, std::string apiKey);
     // void NyaAPI::downloadImageFile();
     std::map<std::string, SourceData>* getEndpoints();
 
