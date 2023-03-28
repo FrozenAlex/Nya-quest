@@ -210,7 +210,65 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
                 if (finished != nullptr) finished(false);
             });
         }
-    });
+    }, "");
+  } else if (source->Mode == DataMode::Authenticated) {  
+    // Construct the url
+    // TODO: check if endpoint from the setting exists and make it dynamic
+
+    std::string endpointValue = EndpointConfig::getEndpointValue(getNyaConfig().config, currentAPI, NSFWEnabled);
+
+    // If we found no nsfw, show sfw
+    if (endpointValue == "" && NSFWEnabled) {
+        endpointValue = EndpointConfig::getEndpointValue(getNyaConfig().config, currentAPI, false);
+    }
+
+    std::string endpointURL = source->BaseEndpoint + endpointValue;
+
+    if (!NSFWEnabled) {
+        INFO("Endpoint URL: {}", endpointURL);
+    }
+    NyaAPI::get_path_from_json_api(source, endpointURL, 10.0f, [this, finished, NSFWEnabled](bool success, std::string url) {
+        if (!NSFWEnabled) {
+            INFO("Image URL: {}", url);
+        }
+        
+        if (success) {
+            QuestUI::MainThreadScheduler::Schedule([this, url, finished, NSFWEnabled]{
+                // Make temp file name
+                StringW fileExtension = FileUtils::GetFileFormat(url);
+                StringW fileName = Nya::Utils::RandomString(8);
+
+                StringW filePath = StringW(NyaGlobals::tempPath) + fileName  + fileExtension;
+                StringW fileFullName = fileName  + fileExtension;
+
+                Nya::Utils::DownloadFile(url, filePath, [this, finished, url, NSFWEnabled, fileFullName](bool success, StringW path) {
+                    if (!success ) {
+                        this->SetErrorImage();
+                        if (finished != nullptr) finished(false);
+                    } else {
+                        this->lastImageURL = url;
+                        this->tempName = fileFullName;
+                        this->isNSFW = NSFWEnabled;
+
+                        BSML::Utilities::SetImage(this->imageView, "file://" + path,  true, BSML::Utilities::ScaleOptions(),[finished, this]() {
+                            if (finished != nullptr) finished(true);
+                        });
+                    }
+                
+                });
+                
+            });
+            
+        } else {
+            // Error getting things
+            ERROR("Failed to load image from api");
+            // getLogger().Backtrace(20);
+            QuestUI::MainThreadScheduler::Schedule([this, finished]{
+                this->SetErrorImage();
+                if (finished != nullptr) finished(false);
+            });
+        }
+    }, "FP-Public-naEjca70OhKMtq67WpzaN8Gs");
   }
 
            
