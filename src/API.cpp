@@ -193,35 +193,6 @@ inline std::map<std::string, SourceData> endpoint_data = {
             "url"
         }
     },
-    {"nekos.life",
-        {
-            "https://nekos.life/api/v2/img/",
-            DataMode::Json,
-            {
-                {"neko", "neko"},
-                {"waifu", "waifu"},
-                {"tickle", "tickle"},
-                {"slap", "slap"},
-                {"pat", "pat"},
-                {"meow", "meow"},
-                {"lizard", "lizard"},
-                {"kiss", "kiss"},
-                {"hug", "hug"},
-                {"fox girl", "fox_girl"},
-                {"feed", "feed"},
-                {"cuddle", "cuddle"},
-                {"ngif", "ngif"},
-                {"smug", "smug"},
-                {"woof", "woof"},
-                // {"wallpaper", "wallpaper"},
-                {"goose", "goose"},
-                {"gecg", "gecg"},
-                {"avatar", "avatar"}
-            },
-            {},
-            "url"
-        }
-    },
     {"Bocchi",
         {
             "https://boccher.pixelboom.dev/api/",
