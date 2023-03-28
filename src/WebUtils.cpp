@@ -111,14 +111,18 @@ namespace WebUtils
 		std::function<void(float)> progressUpdate;
 	};
 
-	void GetAsync(std::string url, long timeout, std::function<void(long, std::string)> finished, std::function<void(float)> progressUpdate) {
+	void GetAsync(std::string url, long timeout, std::function<void(long, std::string)> finished, std::function<void(float)> progressUpdate, std::string apiKey) {
 		std::thread t (
-			[url, timeout, progressUpdate, finished] {
+			[url, timeout, progressUpdate, finished, apiKey] {
 				std::string val;
 				// Init curl
 				auto* curl = curl_easy_init();
 				struct curl_slist *headers = NULL;
 				headers = curl_slist_append(headers, "Accept: */*");
+				if (apiKey != "") {
+					headers = curl_slist_append(headers, ("Authorization: " + apiKey).c_str());
+				}
+				
 				// Set headers
 				curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers); 
 
