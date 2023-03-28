@@ -250,7 +250,7 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
                         this->tempName = fileFullName;
                         this->isNSFW = NSFWEnabled;
 
-                        BSML::Utilities::SetImage(this->imageView, "file://" + path,  true, BSML::Utilities::ScaleOptions(),[finished, this]() {
+                        FSML::Utilities::SetImage(this->imageView, "file://" + path,  true, FSML::Utilities::ScaleOptions(),[finished, this]() {
                             if (finished != nullptr) finished(true);
                         });
                     }
