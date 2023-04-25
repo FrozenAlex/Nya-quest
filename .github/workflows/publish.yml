@@ -10,6 +10,9 @@ on:
     tags:
       - "v*.*.*-bs-*.*.*"
 
+permissions:
+  contents: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
