@@ -42,7 +42,7 @@
 DEFINE_TYPE(NyaUtils, ImageView);
 
 using namespace UnityEngine;
-
+using namespace NyaAPI;
 
 // Start
 void NyaUtils::ImageView::ctor()
@@ -151,17 +151,43 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
       }
 
      
-  } else if (source->Mode == DataMode::Json) {
-    
+  } else if (source->Mode == DataMode::Json || source->Mode == DataMode::Authenticated) {
+
+    // API is authenticated
+    bool authenticated = source->Mode == DataMode::Authenticated;
       
     // Construct the url
     // TODO: check if endpoint from the setting exists and make it dynamic
 
     std::string endpointValue = EndpointConfig::getEndpointValue(getNyaConfig().config, currentAPI, NSFWEnabled);
-
-    // If we found no nsfw, show sfw
+    
+    // Fallback to sfw if nsfw is enabled and no nsfw endpoint is found
     if (endpointValue == "" && NSFWEnabled) {
         endpointValue = EndpointConfig::getEndpointValue(getNyaConfig().config, currentAPI, false);
+    }
+
+    bool nsfwEmpty = source->NsfwEndpoints.empty();
+    bool sfwEmpty = source->SfwEndpoints.empty();
+
+    // If the endpoint is random, get a random endpoint
+    if (endpointValue == "random") {
+        if (NSFWEnabled) {
+            if (nsfwEmpty) {
+                auto endpoint = NyaAPI::getRandomEndpoint(&source->SfwEndpoints);
+                if (endpoint != nullptr) endpointValue = endpoint->url;
+            } else {
+                auto endpoint = NyaAPI::getRandomEndpoint(&source->NsfwEndpoints);
+                if (endpoint != nullptr) endpointValue = endpoint->url;
+            }
+        } else {
+            if (sfwEmpty) {
+                // DO NOT FALLBACK TO NSFW since it is disabled
+                endpointValue = "";
+            } else {
+                auto endpoint = NyaAPI::getRandomEndpoint(&source->SfwEndpoints);
+                if (endpoint != nullptr) endpointValue = endpoint->url;
+            }
+        }
     }
 
     std::string endpointURL = source->BaseEndpoint + endpointValue;
@@ -169,106 +195,54 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
     if (!NSFWEnabled) {
         INFO("Endpoint URL: {}", endpointURL);
     }
+    
+    // Get the image url from the api
     NyaAPI::get_path_from_json_api(source, endpointURL, 10.0f, [this, finished, NSFWEnabled](bool success, std::string url) {
         if (!NSFWEnabled) {
             INFO("Image URL: {}", url);
         }
         
-        if (success) {
-            QuestUI::MainThreadScheduler::Schedule([this, url, finished, NSFWEnabled]{
-                // Make temp file name
-                StringW fileExtension = FileUtils::GetFileFormat(url);
-                StringW fileName = Nya::Utils::RandomString(8);
-
-                StringW filePath = StringW(NyaGlobals::tempPath) + fileName  + fileExtension;
-                StringW fileFullName = fileName  + fileExtension;
-
-                Nya::Utils::DownloadFile(url, filePath, [this, finished, url, NSFWEnabled, fileFullName](bool success, StringW path) {
-                    if (!success ) {
-                        this->SetErrorImage();
-                        if (finished != nullptr) finished(false);
-                    } else {
-                        this->lastImageURL = url;
-                        this->tempName = fileFullName;
-                        this->isNSFW = NSFWEnabled;
-
-                        FSML::Utilities::SetImage(this->imageView, "file://" + path,  true, FSML::Utilities::ScaleOptions(),[finished, this]() {
-                            if (finished != nullptr) finished(true);
-                        });
-                    }
-                  
-                });
-                
-            });
-            
-        } else {
+        // If we failed to get the image url
+        if (!success) {
             // Error getting things
             ERROR("Failed to load image from api");
+
             // getLogger().Backtrace(20);
             QuestUI::MainThreadScheduler::Schedule([this, finished]{
                 this->SetErrorImage();
                 if (finished != nullptr) finished(false);
             });
+            return;
         }
-    }, "");
-  } else if (source->Mode == DataMode::Authenticated) {  
-    // Construct the url
-    // TODO: check if endpoint from the setting exists and make it dynamic
+          
+        QuestUI::MainThreadScheduler::Schedule([this, url, finished, NSFWEnabled]{
+            // Make temp file name
+            StringW fileExtension = FileUtils::GetFileFormat(url);
+            StringW fileName = Nya::Utils::RandomString(8);
 
-    std::string endpointValue = EndpointConfig::getEndpointValue(getNyaConfig().config, currentAPI, NSFWEnabled);
+            StringW filePath = StringW(NyaGlobals::tempPath) + fileName  + fileExtension;
+            StringW fileFullName = fileName  + fileExtension;
 
-    // If we found no nsfw, show sfw
-    if (endpointValue == "" && NSFWEnabled) {
-        endpointValue = EndpointConfig::getEndpointValue(getNyaConfig().config, currentAPI, false);
-    }
+            Nya::Utils::DownloadFile(url, filePath, [this, finished, url, NSFWEnabled, fileFullName](bool success, StringW path) {
+                if (!success ) {
+                    this->SetErrorImage();
+                    if (finished != nullptr) finished(false);
+                } else {
+                    this->lastImageURL = url;
+                    this->tempName = fileFullName;
+                    this->isNSFW = NSFWEnabled;
 
-    std::string endpointURL = source->BaseEndpoint + endpointValue;
-
-    if (!NSFWEnabled) {
-        INFO("Endpoint URL: {}", endpointURL);
-    }
-    NyaAPI::get_path_from_json_api(source, endpointURL, 10.0f, [this, finished, NSFWEnabled](bool success, std::string url) {
-        if (!NSFWEnabled) {
-            INFO("Image URL: {}", url);
-        }
-        
-        if (success) {
-            QuestUI::MainThreadScheduler::Schedule([this, url, finished, NSFWEnabled]{
-                // Make temp file name
-                StringW fileExtension = FileUtils::GetFileFormat(url);
-                StringW fileName = Nya::Utils::RandomString(8);
-
-                StringW filePath = StringW(NyaGlobals::tempPath) + fileName  + fileExtension;
-                StringW fileFullName = fileName  + fileExtension;
-
-                Nya::Utils::DownloadFile(url, filePath, [this, finished, url, NSFWEnabled, fileFullName](bool success, StringW path) {
-                    if (!success ) {
-                        this->SetErrorImage();
-                        if (finished != nullptr) finished(false);
-                    } else {
-                        this->lastImageURL = url;
-                        this->tempName = fileFullName;
-                        this->isNSFW = NSFWEnabled;
-
-                        FSML::Utilities::SetImage(this->imageView, "file://" + path,  true, FSML::Utilities::ScaleOptions(),[finished, this]() {
-                            if (finished != nullptr) finished(true);
-                        });
-                    }
-                
-                });
+                    FSML::Utilities::SetImage(this->imageView, "file://" + path,  true, FSML::Utilities::ScaleOptions(),[finished, this]() {
+                        if (finished != nullptr) finished(true);
+                    });
+                }
                 
             });
             
-        } else {
-            // Error getting things
-            ERROR("Failed to load image from api");
-            // getLogger().Backtrace(20);
-            QuestUI::MainThreadScheduler::Schedule([this, finished]{
-                this->SetErrorImage();
-                if (finished != nullptr) finished(false);
-            });
-        }
-    }, "FP-Public-naEjca70OhKMtq67WpzaN8Gs");
+        });
+            
+     
+    }, authenticated ? "FP-Public-naEjca70OhKMtq67WpzaN8Gs" : "");
   }
 
            

@@ -66,82 +66,37 @@ namespace EndpointConfig {
 
         auto endpoints = cfg["endpoints"].GetObject();
 
-        // If the source setting key exists
-        if (endpoints.HasMember(name)) {
+        // If the source setting key does not exist, create it
+        if (!endpoints.HasMember(name)) {
 
-            auto endpoint = endpoints[name].GetObject();
-        
-            // Load the nsfw value
-            if (nsfw) {
-
-                // If the value is present, load it
-                if (endpoint.HasMember("nsfw")) {
-                    std::string value = endpoint["nsfw"].GetString();
-                    endpointValue = value;
-                // If not, then try to find it an initialize or skip
-                } else {
-                    if (source_data->NsfwEndpoints.size() > 0) {
-                        // Process sfw default
-                        endpoint.AddMember("nsfw", rapidjson::Value(rapidjson::kStringType), allocator);
-                        endpoint["nsfw"].SetString(source_data->NsfwEndpoints.front().url, allocator);
-                        // Mark to save at the end
-                        save = true;
-                        endpointValue = source_data->NsfwEndpoints.front().url;
-                    }
-                }
-                
-            } 
-            if (!nsfw) {
-                if (endpoint.HasMember("sfw")) {
-                    std::string value = endpoint["sfw"].GetString();
-                    endpointValue = value;
-                } else {
-                    if (source_data->SfwEndpoints.size() > 0) {
-                        // Process sfw default
-                        endpoint.AddMember("sfw", rapidjson::Value(rapidjson::kStringType), allocator);
-                        endpoint["sfw"].SetString(source_data->SfwEndpoints.front().url, allocator);
-                        save = true;
-                        config->Write();
-                        endpointValue = source_data->SfwEndpoints.front().url;
-                    }
-                }
-            }
-        // If source key does not exist then init and return default category for the thing
-        } else {
-            // Add endpoint and init it if it has no name
-
+            // Create field
             rapidjson::Value fieldname;
             fieldname.SetString(name, allocator);
-            // Value
             endpoints.AddMember(fieldname, rapidjson::Value(rapidjson::kObjectType), allocator);
-            if (
-                (source_data->Mode == DataMode::Json || source_data->Mode == DataMode::Authenticated) &&
-                (source_data->NsfwEndpoints.size() > 0 || source_data->SfwEndpoints.size() > 0)
-            ) {
-                // Get the endpoint
-                auto endpoint = endpoints[name].GetObject();
+        }
 
-                // Init sfw
-                if (source_data->SfwEndpoints.size() > 0) {
-                    // Process sfw default
-                    endpoint.AddMember("sfw", rapidjson::Value(rapidjson::kStringType), allocator);
-                    endpoint["sfw"].SetString(source_data->SfwEndpoints.front().url, allocator);
-                    // Set endpoint value if it matches
-                    if (!nsfw) {
-                        endpointValue = source_data->SfwEndpoints.front().url;
-                    }
-                }
+        // Get the endpoint json object
+        auto endpoint = endpoints[name].GetObject();
+    
+        // Check if it's sfw or nsfw and get appropriate stuff
+        std::string member = nsfw ? "nsfw" : "sfw";
+        std::vector<NyaAPI::EndpointCategory>* endpoint_data = nsfw ? &source_data->NsfwEndpoints : &source_data->SfwEndpoints;       
 
-                // Init nsfw
-                if (source_data->NsfwEndpoints.size() > 0) {
-                    // Process nsfw default
-                    endpoint.AddMember("nsfw", rapidjson::Value(rapidjson::kStringType), allocator);
-                    endpoint["nsfw"].SetString(source_data->NsfwEndpoints.front().url, allocator);
-                    // Set endpoint value if it matches
-                    if (nsfw) {
-                        endpointValue = source_data->NsfwEndpoints.front().url;
-                    }
-                }
+        // If the value is present, load it
+        if (endpoint.HasMember(member)) {
+            std::string value = endpoint[member].GetString();
+            endpointValue = value;
+        // If not, then try to find it an initialize or skip
+        } else {
+            if (endpoint_data->size() > 0) {
+                rapidjson::Value member_fieldname;
+                member_fieldname.SetString(member, allocator);
+                // Process sfw default
+                endpoint.AddMember(member_fieldname, rapidjson::Value(rapidjson::kStringType), allocator);
+                endpoint[member_fieldname].SetString(endpoint_data->front().url, allocator);
+                // Mark to save at the end
+                save = true;
+                endpointValue = endpoint_data->front().url;
             }
         }
 
@@ -158,12 +113,11 @@ namespace EndpointConfig {
     /// @param config config object
     /// @param name name of the selected API
     /// @param nsfw is nsfw or no
-    /// @param value endpoint category
-    void updateEndpointValue(Configuration* config, std::string name, bool nsfw, std::string value) {
+    /// @param endpointUrl endpoint category url chunk
+    void updateEndpointValue(Configuration* config, std::string name, bool nsfw, std::string endpointUrl) {
         auto& cfg = config->config;
         auto& allocator = cfg.GetAllocator();
 
-        auto source_data = NyaAPI::get_data_source(name);
         bool save = false;
 
         auto endpoints = cfg["endpoints"].GetObject();
@@ -171,42 +125,18 @@ namespace EndpointConfig {
         // If the source setting key exists
         // We don't need to init because it's done on load of the settings page
         if (endpoints.HasMember(name)) {
-            
             auto endpoint = endpoints[name].GetObject();
-            auto dataSource = NyaAPI::get_data_source(name);
+  
+            // Variable to store the endpoint url
+            std::string url = endpointUrl;
 
-            std::string url = "";
-
-            if (nsfw) {
-                auto it = std::find_if(dataSource->NsfwEndpoints.begin(), dataSource->NsfwEndpoints.end(), [value](const EndpointCategory& s) { return s.label == value; });
-                if (it != dataSource->NsfwEndpoints.end()) {
-                    url = it->url;
-                } else {
-                    WARNING("Source not found wtf lel");
-                }
-            } else {
-                auto it = std::find_if(dataSource->SfwEndpoints.begin(), dataSource->SfwEndpoints.end(), [value](const EndpointCategory& s) { return s.label == value; });
-                if (it != dataSource->SfwEndpoints.end()) {
-                    url = it->url;
-                } else {
-                    WARNING("Source not found wtf lel");
-                }
-            }
-
-            // Save values depending on the thing
-            if (nsfw) {
-                // If the value is present, load it
-                if (endpoint.HasMember("nsfw")) {
-                    endpoint["nsfw"].SetString(url, allocator);
-                    save = true;
-                }
-            } 
+            // Check if it's sfw or nsfw
+            std::string member = nsfw ? "nsfw" : "sfw";
             
-            if (!nsfw) {
-                if (endpoint.HasMember("sfw")) {
-                    endpoint["sfw"].SetString(url, allocator);
-                    save = true;
-                }
+            // Save the endpoint to appropriate slot
+            if (endpoint.HasMember(member)) {
+                endpoint[member].SetString(url, allocator);
+                save = true;
             }
         }
 
