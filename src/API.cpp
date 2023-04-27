@@ -341,3 +341,31 @@ void NyaAPI::get_path_from_json_api(
 
         return list;
     }
+
+    ListWrapper<StringW> NyaAPI::listEndpointUrls(std::vector<EndpointCategory>* values) {
+        // TODO: Fix
+        int count = values->size();
+        
+        // Convert stuff to list
+        ListWrapper<StringW> list(List<StringW>::New_ctor());
+        if (count == 0) {
+            return list;
+        }
+        list->EnsureCapacity(count);
+        for (auto item : *values) {list->Add(item.url);};
+
+        return list;
+    }
+
+EndpointCategory* NyaAPI::getRandomEndpoint(std::vector<EndpointCategory>* values) {
+    // If there are no values, return null
+    int count = values->size();
+    if (count == 0) {
+        return nullptr;
+    }
+
+    // Get random index
+    int index = rand() % count;
+    // Return value at index
+    return &((*values)[index]); 
+}
