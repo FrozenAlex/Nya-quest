@@ -14,7 +14,10 @@
 #include "custom-types/shared/macros.hpp"
 #include "questui/shared/CustomTypes/Components/FloatingScreen/FloatingScreenMoverPointer.hpp"
 #include "questui/shared/CustomTypes/Components/Backgroundable.hpp"
+#include "beatsaber-hook/shared/utils/typedefs.h"
+#include "API.hpp"
 
+using namespace NyaAPI;
 
 DECLARE_CLASS_CODEGEN(Nya, SettingsMenu, UnityEngine::MonoBehaviour,
     public:
@@ -25,6 +28,21 @@ DECLARE_CLASS_CODEGEN(Nya, SettingsMenu, UnityEngine::MonoBehaviour,
 
         // If the menu is floating
         bool isFloating = false;
+
+        SourceData *selectedDataSource = nullptr;
+        StringW selectedDataSourceName = "";
+
+        // Labels
+        DECLARE_INSTANCE_FIELD(List<StringW>*, sfw_endpoint_labels);
+        DECLARE_INSTANCE_FIELD(List<StringW>*, nsfw_endpoint_labels);
+
+        // Urls
+        DECLARE_INSTANCE_FIELD(List<StringW>*, sfw_endpoint_urls);
+        DECLARE_INSTANCE_FIELD(List<StringW>*, nsfw_endpoint_urls);
+
+        // Update methods
+        DECLARE_INSTANCE_METHOD(void, UpdateEndpointLists );
+
 
         DECLARE_INSTANCE_METHOD(void, Show );
         DECLARE_INSTANCE_METHOD(bool, isShown );
@@ -44,6 +62,4 @@ DECLARE_CLASS_CODEGEN(Nya, SettingsMenu, UnityEngine::MonoBehaviour,
         
         DECLARE_INSTANCE_FIELD(HMUI::SimpleTextDropdown*, nsfw_endpoint);
         DECLARE_INSTANCE_FIELD(UnityEngine::UI::Toggle*, nsfw_toggle);
-        DECLARE_INSTANCE_FIELD(List<StringW>*, sfw_endpoints);
-        DECLARE_INSTANCE_FIELD(List<StringW>*, nsfw_endpoints);
 )

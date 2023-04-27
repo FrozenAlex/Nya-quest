@@ -1,30 +1,21 @@
 #pragma once
-#include "NyaConfig.hpp"
-#include "main.hpp"
-
-
-#include <string>
-#include <map>
-#include <list>
-#include <vector>
 
 #include <iostream>
+#include <list>
+#include <map>
+#include <string>
+#include <vector>
+#include "beatsaber-hook/shared/utils/typedefs.h"
 
+namespace NyaAPI {
 struct EndpointCategory {
     std::string label;
     std::string url;
 };
 
-enum DataMode
-{
-    Unsupported,
-    Json,
-    Local,
-    Authenticated
-};
+enum DataMode { Unsupported, Json, Local, Authenticated };
 
-struct SourceData
-{
+struct SourceData {
     // SourceData(
     //     std::string i,
     //     DataMode j,
@@ -42,16 +33,22 @@ struct SourceData
     std::string propertyName;
 };
 
+// Function gets url for the current selected category
+SourceData* get_data_source(std::string name);
+std::vector<StringW> get_source_list();
+void get_path_from_json_api(SourceData* source,
+                            std::string url,
+                            float timeoutInSeconds,
+                            std::function<void(bool success, std::string url)> finished,
+                            std::string apiKey);
+// void NyaAPI::downloadImageFile();
+std::map<std::string, SourceData>* getEndpoints();
 
-namespace NyaAPI {
-    // Function gets url for the current selected category
-    SourceData* get_data_source(std::string name);
-    std::vector<StringW> get_source_list();
-    void get_path_from_json_api(SourceData* source, std::string url, float timeoutInSeconds,std::function<void(bool success, std::string url)> finished, std::string apiKey);
-    // void NyaAPI::downloadImageFile();
-    std::map<std::string, SourceData>* getEndpoints();
+int findSourceIndexInListC(std::vector<EndpointCategory>* values, StringW string);
 
-    int findSourceIndexInListC(std::vector<EndpointCategory>* values, StringW string );
+ListWrapper<StringW> listEndpointLabels(std::vector<EndpointCategory>* values);
+ListWrapper<StringW> listEndpointUrls(std::vector<EndpointCategory>* values);
 
-    ListWrapper<StringW> listEndpointLabels(std::vector<EndpointCategory>* values);
-}
+// Get random endpoint from the list
+EndpointCategory* getRandomEndpoint(std::vector<EndpointCategory>* values);
+}  // namespace NyaAPI
