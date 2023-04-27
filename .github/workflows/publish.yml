@@ -77,7 +77,7 @@ jobs:
     - name: Calculate SHA-256 of the qmod file
       id: qmodsha
       run: |
-        echo "QMOD_SHA=$(sha256sum ./${{ env.qmodName }}.qmod | grep -Po "^[0-9a-f]+")" >> $GITHUB_ENV
+        echo "QMOD_SHA=$(sha256sum ./mods/${{ env.qmodName }}.qmod | grep -Po "^[0-9a-f]+")" >> $GITHUB_ENV
 
     - name: Release
       uses: softprops/action-gh-release@v1
@@ -93,7 +93,7 @@ jobs:
           SHA-256: ${{ env.QMOD_SHA }}
           Build ID: ${{ env.BUILD_ID }}
         files: |
-          ./${{ env.qmodName }}.qmod
+          ./mods/${{ env.qmodName }}.qmod
           ./build/${{ env.LIBNAME }}
           ./build/debug/debug_${{ env.LIBNAME }}
         draft: true
