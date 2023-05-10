@@ -222,7 +222,7 @@ inline std::map<std::string, SourceData> endpoint_data = {
     }, 
     {"Animals",
         {
-            "https://some-random-api.ml/animal/",
+            "https://some-random-api.com/animal/",
             DataMode::Json,
             {
                 {"cat", "cat"},
