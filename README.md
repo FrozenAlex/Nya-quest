@@ -14,7 +14,7 @@ Nya features a floating screen, allowing Nya to be accessed outside of the gamep
 * [Fluxpoint.dev](https://fluxpoint.dev/api)
 * [Anime-Images API](https://anime-api.hisoka17.repl.co/)
 * [Catboys](https://catboys.com/)
-* [Animals (some-random-api.ml)](https://some-random-api.ml/)
+* [Animals (https://some-random-api.com)](https://some-random-api.com/)
 * [Local Files](#local-files)
 ### Local Files
 In order for local files to work there must be compatible images in the sfw / nsfw files found in Nya's folder in `ModData\com.beatgames.beatsaber\Mods\Nya\Images`.
