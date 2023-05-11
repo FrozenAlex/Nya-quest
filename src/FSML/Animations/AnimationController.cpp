@@ -38,7 +38,7 @@ namespace FSML {
     void AnimationController::RemoveUnusedAnimationData() {
         auto enumerator = registeredAnimations->GetEnumerator();
 
-        std::vector<StringW> keysToRemove = std::vector<StringW>();
+        std::vector<std::string> keysToRemove = std::vector<std::string>();
 
         while (enumerator.MoveNext()) {
             auto current = reinterpret_cast<AnimationControllerData*>(enumerator.get_Current().get_Value());
@@ -52,7 +52,7 @@ namespace FSML {
             }
         }
 
-        for (StringW key: keysToRemove) {
+        for (std::string key: keysToRemove) {
             registeredAnimations->Remove(key);
         }
     }
