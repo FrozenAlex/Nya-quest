@@ -1,4 +1,4 @@
-#include "SettingsMenu.hpp"
+#include "UI/Modals/SettingsMenu.hpp"
 #include "GlobalNamespace/LevelCollectionTableView.hpp"
 #include "HMUI/ScrollView.hpp"
 #include "NyaFloatingUI.hpp"
