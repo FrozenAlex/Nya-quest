@@ -14,7 +14,9 @@ using namespace std;
 #define coro(coroutine) GlobalNamespace::SharedCoroutineStarter::get_instance()->StartCoroutine(custom_types::Helpers::CoroutineHelper::New(coroutine))
 
 custom_types::Helpers::Coroutine Nya::NSFWConsent::InteractabilityCooldown(SliderSetting * setting) {
-
+    setting->slider->set_interactable(false);
+    co_yield reinterpret_cast<System::Collections::IEnumerator*>(WaitForSeconds::New_ctor(2.0f));
+    setting->slider->set_interactable(true);
     co_return;
 } 
 
@@ -223,6 +225,7 @@ void Nya::NSFWConsent::ctor() {
             topText = CreateText(mainLayout->get_transform(), to_utf16("TopText"), false);
             topText->set_fontSize(8.2f);
             topText->set_fontStyle(TMPro::FontStyles::Underline);
+            topText->set_alignment(TMPro::TextAlignmentOptions::Center);
         }
         {
             // Create horizontal layout for mid text and image
@@ -248,6 +251,7 @@ void Nya::NSFWConsent::ctor() {
             // TODO: Remove later
             midImage->set_sprite(QuestUI::BeatSaberUI::ArrayToSprite(IncludedAssets::Vanilla_Horny_Pastry_Puffer_png));
             midImage->GetComponent<UnityEngine::UI::LayoutElement*>()->set_preferredWidth(40);
+            midImage->GetComponent<UnityEngine::UI::LayoutElement*>()->set_preferredHeight(40);
 
         }
         {
@@ -274,7 +278,7 @@ void Nya::NSFWConsent::ctor() {
             sliderLayout->GetComponent<UnityEngine::UI::LayoutElement*>()->set_preferredWidth(80);
 
             // Create slider
-            slider = CreateSliderSetting(sliderLayout->get_transform(), "", 1.0f, 1.0f, 0.0f, 60.0f, [this](float value){});
+            slider = CreateSliderSetting(sliderLayout->get_transform(), "Value", 1.0f, 1.0f, 0.0f, 60.0f, [this](float value){});
             slider->GetComponent<UnityEngine::UI::LayoutElement*>()->set_preferredWidth(80);
             
             // create submit button
@@ -310,9 +314,6 @@ void Nya::NSFWConsent::ctor() {
 void Nya::NSFWConsent::Show() {
 
     QuestUI::MainThreadScheduler::Schedule([this] {
-        // We have some memory corruption, just to make sure it works
-        InitModalContents();
-
         mainLayout->get_gameObject()->set_active(true);
         hornyPastryPufferLayout->get_gameObject()->set_active(false);
         buttonsLayout->get_gameObject()->set_active(true);
