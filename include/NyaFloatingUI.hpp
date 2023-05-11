@@ -50,6 +50,8 @@ DECLARE_CLASS_CODEGEN(Nya, NyaFloatingUI, UnityEngine::MonoBehaviour,
             DECLARE_INSTANCE_METHOD(void, UpdateScale);
 
             DECLARE_INSTANCE_METHOD(void, UpdateHandleVisibility);
+
+            DECLARE_INSTANCE_METHOD(void, OnIsLoadingChange, bool isLoading); 
             
             DECLARE_CTOR(ctor);
             // DECLARE_DTOR(dtor);
