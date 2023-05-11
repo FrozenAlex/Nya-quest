@@ -82,7 +82,7 @@ void SettingsMenu::ctor() {
                                               auto source = NyaAPI::get_data_source(value);
 
                                               this->selectedDataSource = source;
-                                              this->selectedDataSourceName = value;
+                                              this->selectedDataSourceName = std::string(value);
 
                                               this->UpdateEndpointLists();
                                           });

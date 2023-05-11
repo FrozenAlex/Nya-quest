@@ -15,13 +15,13 @@
 DECLARE_CLASS_CODEGEN(NyaUtils, ImageView, UnityEngine::MonoBehaviour,
   public:
     
+    std::string lastImageURL;
+    std::string tempName;
+
     DECLARE_CTOR(ctor);
     DECLARE_DTOR(dtor);
 
-    
     DECLARE_INSTANCE_FIELD(HMUI::ImageView*, imageView);
-    DECLARE_INSTANCE_FIELD(StringW, lastImageURL);
-    DECLARE_INSTANCE_FIELD(StringW, tempName);
     DECLARE_INSTANCE_FIELD(bool, autoNyaRunning);
     DECLARE_INSTANCE_FIELD(bool, autoNyaNewImage);
     DECLARE_INSTANCE_FIELD(bool, isLoading);

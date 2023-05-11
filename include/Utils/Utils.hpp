@@ -27,6 +27,6 @@ namespace Nya::Utils {
     /// @param uri the URI to get data from
     /// @param path path to the file
     /// @param onFinished what to do with the downloaded bytes
-    void DownloadFile(StringW uri, StringW path, std::function<void(bool success, StringW path)> onFinished);
+    void DownloadFile(std::string uri, std::string path, std::function<void(bool success, std::string path)> onFinished);
 }
 

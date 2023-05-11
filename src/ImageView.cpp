@@ -51,7 +51,7 @@ void NyaUtils::ImageView::ctor()
     this->isNSFW = false;
     // Temp File name
     // WARNING: Sometimes this temp name does not make sense, so I validate it
-    this->tempName= "";
+    this->tempName = "";
     imageView = this->get_gameObject()->GetComponent<HMUI::ImageView *>();
     this->autoNyaRunning = false;
     this->isLoading = false;
@@ -65,12 +65,12 @@ bool NyaUtils::ImageView::HasImageToSave() {
 void NyaUtils::ImageView::SaveImage() {
     if (this->lastImageURL != "" && this->tempName != "" && Nya::Utils::IsImage(this->tempName)) {
         INFO("MOVING FILE");
-        StringW original = StringW(NyaGlobals::tempPath) + this->tempName;
+        std::string original = NyaGlobals::tempPath + this->tempName;
         if (this->isNSFW) {
-            FileUtils::moveFile(original, StringW(NyaGlobals::imagesPathNSFW) + this->tempName);
+            FileUtils::moveFile(original, NyaGlobals::imagesPathNSFW + this->tempName);
         } else {
-            INFO("MOVING FROM {} TO {}", (std::string) original, (std::string) (StringW(NyaGlobals::imagesPathSFW) + this->tempName) );
-            FileUtils::moveFile(original, StringW(NyaGlobals::imagesPathSFW) + this->tempName);
+            INFO("MOVING FROM {} TO {}", original,  NyaGlobals::imagesPathSFW + this->tempName);
+            FileUtils::moveFile(original, NyaGlobals::imagesPathSFW + this->tempName);
         }
         
         INFO("MOVED FILE");
@@ -88,13 +88,11 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished = 
 
     // Delete the last downloaded image
     if (
-        this->tempName != nullptr &&
-        this->lastImageURL != nullptr &&
-        this->tempName != "" &&
-        this->lastImageURL != "" &&
+        !this->tempName.empty() &&
+        this->lastImageURL.empty() &&
         Nya::Utils::IsImage(this->tempName)
     ) {
-        StringW original = StringW(NyaGlobals::tempPath) + this->tempName;
+        std::string original = NyaGlobals::tempPath + this->tempName;
         FileUtils::deleteFile(original);
         
         // Reset 
@@ -236,13 +234,13 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished = 
           
         QuestUI::MainThreadScheduler::Schedule([this, url, finished, NSFWEnabled]{
             // Make temp file name
-            StringW fileExtension = FileUtils::GetFileFormat(url);
-            StringW fileName = Nya::Utils::RandomString(8);
+            std::string fileExtension = FileUtils::GetFileFormat(url);
+            std::string fileName = Nya::Utils::RandomString(8);
 
-            StringW filePath = StringW(NyaGlobals::tempPath) + fileName  + fileExtension;
-            StringW fileFullName = fileName  + fileExtension;
+            std::string filePath = NyaGlobals::tempPath + fileName  + fileExtension;
+            std::string fileFullName = fileName  + fileExtension;
 
-            Nya::Utils::DownloadFile(url, filePath, [this, finished, url, NSFWEnabled, fileFullName](bool success, StringW path) {
+            Nya::Utils::DownloadFile(url, filePath, [this, finished, url, NSFWEnabled, fileFullName](bool success, std::string path) {
                 if (!success ) {
                     this->SetErrorImage();
 

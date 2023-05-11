@@ -9,11 +9,11 @@
 #include "assets.hpp"
 
 struct ModalContent {
-    StringW TopText;
-    StringW MidText;
+    std::string TopText;
+    std::string MidText;
     IncludedAsset MidImage;
-    StringW NoButtonText;
-    StringW YesButtonText;
+    std::string NoButtonText;
+    std::string YesButtonText;
     bool ButtonIntractabilityCooldown;
     bool Animated;
     bool ShowInputs;
