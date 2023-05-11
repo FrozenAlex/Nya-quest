@@ -155,24 +155,6 @@ namespace Nya::Utils {
         return min + rand() % (( max + 1 ) - min);
     }
 
-    // Download new picture
-    void onNyaClick(UnityEngine::UI::Button* button, NyaUtils::ImageView* imageView) {
-        try
-        {   
-            button->set_interactable(false);
-            imageView->GetImage([button, imageView](bool success){
-                button->set_interactable(true);
-            });
-        }
-        // TODO: If the source is not set up, set up the default
-        catch(const std::exception& e)
-        {
-            ERROR("Custom fail");
-            getLogger().Backtrace(20);
-            button->set_interactable(true);
-        }  
-    }
-
     // Checks if the path is animated
     bool IsAnimated(StringW str)
     {

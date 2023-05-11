@@ -29,6 +29,8 @@ DECLARE_CLASS_CODEGEN(Nya, ModifiersMenu, UnityEngine::MonoBehaviour,
     DECLARE_INSTANCE_METHOD(void, OnDisable);
     DECLARE_INSTANCE_METHOD(void, OnEnable);
 
+    DECLARE_INSTANCE_METHOD(void, OnIsLoadingChange, bool isLoading);    
+
     DECLARE_CTOR(ctor);
     DECLARE_DTOR(dtor);
 

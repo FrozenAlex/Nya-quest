@@ -34,7 +34,7 @@
 
 #include "beatsaber-hook/shared/utils/il2cpp-utils.hpp"
 #include "beatsaber-hook/shared/utils/il2cpp-functions.hpp"
-
+#include "Events.hpp"
 
 #define coro(coroutine) GlobalNamespace::SharedCoroutineStarter::get_instance()->StartCoroutine(custom_types::Helpers::CoroutineHelper::New(coroutine))
 
@@ -54,6 +54,8 @@ void NyaUtils::ImageView::ctor()
     this->tempName= "";
     imageView = this->get_gameObject()->GetComponent<HMUI::ImageView *>();
     this->autoNyaRunning = false;
+    this->isLoading = false;
+    this->imageLoadingChange = UnorderedEventCallback<bool>();
 }
 
 bool NyaUtils::ImageView::HasImageToSave() {
@@ -79,8 +81,11 @@ void NyaUtils::ImageView::SaveImage() {
 }
 
 // Update
-void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
+void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished = nullptr)
 {
+    this->isLoading = true;
+    if (this->imageLoadingChange.size() > 0) this->imageLoadingChange.invoke(true);
+
     // Delete the last downloaded image
     if (
         this->tempName != nullptr &&
@@ -139,6 +144,11 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
       if (fileList.size() == 0) {
         ERROR("Selected local folder is empty");
         this->SetErrorImage();
+
+        // Set is loading status
+        this->isLoading = false;
+        if (this->imageLoadingChange.size() > 0) this->imageLoadingChange.invoke(false);
+
         if (finished != nullptr) finished(false);
         
       } else {
@@ -146,6 +156,10 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
 
         auto path = fileList[randomIndex];
         FSML::Utilities::SetImage(this->imageView, "file://" + path,  true, FSML::Utilities::ScaleOptions(),[finished, this]() {
+            // Set is loading status
+            this->isLoading = false;
+            if (this->imageLoadingChange.size() > 0) this->imageLoadingChange.invoke(false);
+
             if (finished != nullptr) finished(true);
         });
       }
@@ -210,6 +224,11 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
             // getLogger().Backtrace(20);
             QuestUI::MainThreadScheduler::Schedule([this, finished]{
                 this->SetErrorImage();
+                
+                // Set is loading status
+                this->isLoading = false;
+                if (this->imageLoadingChange.size() > 0) this->imageLoadingChange.invoke(false);
+                
                 if (finished != nullptr) finished(false);
             });
             return;
@@ -226,6 +245,11 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
             Nya::Utils::DownloadFile(url, filePath, [this, finished, url, NSFWEnabled, fileFullName](bool success, StringW path) {
                 if (!success ) {
                     this->SetErrorImage();
+
+                    // Set is loading status
+                    this->isLoading = false;
+                    if (this->imageLoadingChange.size() > 0) this->imageLoadingChange.invoke(false);
+
                     if (finished != nullptr) finished(false);
                 } else {
                     this->lastImageURL = url;
@@ -233,6 +257,10 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished)
                     this->isNSFW = NSFWEnabled;
 
                     FSML::Utilities::SetImage(this->imageView, "file://" + path,  true, FSML::Utilities::ScaleOptions(),[finished, this]() {
+                        // Set is loading status
+                        this->isLoading = false;
+                        if (this->imageLoadingChange.size() > 0) this->imageLoadingChange.invoke(false);
+
                         if (finished != nullptr) finished(true);
                     });
                 }
@@ -258,8 +286,19 @@ void NyaUtils::ImageView::dtor()
 {
 }
 
+void NyaUtils::ImageView::OnNyaPhysicalClick(){
+    if (this->isLoading) {
+        return;
+    }
+
+    this->GetImage(nullptr);
+}
+
 void NyaUtils::ImageView::OnEnable()
 {
+    // Subscribe to physical click
+    Nya::GlobalEvents::onControllerNya += {&NyaUtils::ImageView::OnNyaPhysicalClick ,this};
+
     if (getNyaConfig().AutoNya.GetValue() && this->autoNyaRunning == false) {
         coro(this->AutoNyaCoro());
     }
@@ -268,6 +307,8 @@ void NyaUtils::ImageView::OnEnable()
 void NyaUtils::ImageView::OnDisable()
 {
     this->autoNyaRunning = false;
+    // Unsubscribe to physical click
+    Nya::GlobalEvents::onControllerNya -= {&NyaUtils::ImageView::OnNyaPhysicalClick ,this};
 }
 
 

@@ -17,8 +17,6 @@ namespace Nya::Utils {
     int random(int min, int max);
     ListWrapper<StringW> listStringToStringW(std::list<std::string> values);
 
-    // Gets the next image
-    void onNyaClick(UnityEngine::UI::Button * button, NyaUtils::ImageView * imageView);
     bool IsAnimated(StringW str);
 
     bool IsImage(StringW str);

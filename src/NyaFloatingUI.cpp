@@ -70,7 +70,7 @@ namespace Nya {
         // Get new picture
         this->nyaButton = QuestUI::BeatSaberUI::CreateUIButton(horz->get_transform(), "Nya", "PlayButton",
         [this]() {
-            Nya::Utils::onNyaClick(this->nyaButton, this->imageView);
+            this->imageView->GetImage(nullptr);
         });
 
         this->settingsMenu = NYA->get_gameObject()->AddComponent<Nya::SettingsMenu*>();
@@ -85,10 +85,14 @@ namespace Nya {
         auto* screenthingidk = thing->get_gameObject()->AddComponent<HMUI::Screen*>();
         auto* normalpointer = Resources::FindObjectsOfTypeAll<VRUIControls::VRPointer*>().get(0);
         hoverClickHelper = Nya::addHoverClickHelper(normalpointer, screenhandle, thing);
+
         this->isInitialized = true;
 
         this->UpdateScale();
         this->UpdateHandleVisibility();
+
+        // // Sub to events
+        this->imageView->imageLoadingChange += {&NyaFloatingUI::OnIsLoadingChange, this};
     }
     
     void NyaFloatingUI::SetDefaultPos () {
@@ -311,6 +315,14 @@ namespace Nya {
             getNyaConfig().inMenu.GetValue() ||
             getNyaConfig().inPause.GetValue() 
         );
+    }
+
+    void NyaFloatingUI::OnIsLoadingChange (bool isLoading) {
+        QuestUI::MainThreadScheduler::Schedule([this, isLoading]
+        {
+            if (this->nyaButton && this->nyaButton->m_CachedPtr.m_value)
+                this->nyaButton->set_interactable(!isLoading);
+        });
     }
 
     void NyaFloatingUI::OnActiveSceneChanged(UnityEngine::SceneManagement::Scene prevScene, UnityEngine::SceneManagement::Scene nextScene) {
