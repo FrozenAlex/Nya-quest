@@ -29,6 +29,10 @@
 #include "UnityEngine/SceneManagement/SceneManager.hpp"
 #include "NyaConfig.hpp"
 #include "questui/shared/CustomTypes/Components/MainThreadScheduler.hpp"
+#include "GlobalNamespace/OVRInput.hpp"
+#include "GlobalNamespace/OVRInput_Button.hpp"
+#include "GlobalNamespace/OculusVRHelper.hpp"
+#include "Events.hpp"
 
 using namespace UnityEngine;
 using namespace GlobalNamespace;
@@ -201,6 +205,39 @@ void InitConfigOnStart(){
     }
 }
 
+MAKE_HOOK_MATCH(FixedUpdateHook, &GlobalNamespace::OculusVRHelper::FixedUpdate, void, GlobalNamespace::OculusVRHelper* self){
+    FixedUpdateHook(self);
+
+
+    static bool pressedEventAllreadyRun = false;
+    
+    // 0 Means nothing is assigned, and we dont need to do anything
+    int useButtonValue = getNyaConfig().UseButton.GetValue();
+    if(useButtonValue > 0){
+        // Determine if we need the Right or Left Controller (Right is 2 Left is One)
+        // Definition from: GlobalNamespace::OVRInput::Controller::RTouch
+        int controllerIndex = useButtonValue > 2 ? 1 : 2;
+
+        // Here we correct the Index for direct Usage as Input for OVRInput.Get
+        // After this line the Primary Button A/X (1/3 in Config) is 0 and the Secondary Button (2/4 in Config) is 1
+        // Source: https://developer.oculus.com/documentation/unity/unity-ovrinput/
+        useButtonValue = ((useButtonValue - 1) % 2) + 1;
+        
+        bool buttonPressed = GlobalNamespace::OVRInput::Get(useButtonValue, controllerIndex);
+        if(buttonPressed){
+            if(!pressedEventAllreadyRun) {
+                if (Nya::GlobalEvents::onControllerNya.size() > 0) {
+                    Nya::GlobalEvents::onControllerNya.invoke();
+                    pressedEventAllreadyRun = true;
+                }
+            }
+        }
+        else {
+            pressedEventAllreadyRun = false;
+        }
+    }
+}
+
 // Called later on in the game loading - a good time to install function hooks
 extern "C" void load() {
     il2cpp_functions::Init();
@@ -226,6 +263,7 @@ extern "C" void load() {
     Nya::getLoggerOld().info("Installing hooks...");
     // Install our hooks
     INSTALL_HOOK(Nya::getLoggerOld(), Pause);
+    INSTALL_HOOK(Nya::getLoggerOld(), FixedUpdateHook);
     INSTALL_HOOK(Nya::getLoggerOld(), Results);
     INSTALL_HOOK(Nya::getLoggerOld(), Unpause);
     INSTALL_HOOK(Nya::getLoggerOld(), Restartbutton);
