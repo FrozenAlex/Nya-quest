@@ -237,7 +237,7 @@ namespace Nya::Utils {
     /// @param path Path to a new file on local storage
     /// @param onFinished 
     /// @return 
-    custom_types::Helpers::Coroutine DownloadFileCoroutine(StringW uri, StringW path, std::function<void(bool success, StringW path)> onFinished) {
+    custom_types::Helpers::Coroutine DownloadFileCoroutine(std::string uri, std::string path, std::function<void(bool success, std::string path)> onFinished) {
 
         DEBUG("GetReq");
         auto www = UnityWebRequest::Get(uri);
@@ -268,9 +268,9 @@ namespace Nya::Utils {
         co_return;
     }
 
-    void DownloadFile(StringW uri, StringW path, std::function<void(bool success, StringW path)> onFinished) {
+    void DownloadFile(std::string uri, std::string path, std::function<void(bool success, std::string path)> onFinished) {
         if (!getNyaConfig().NSFWEnabled.GetValue()){
-            INFO("Getting data from uri: {}", (std::string) uri);
+            INFO("Getting data from uri: {}", uri.c_str());
         }
         
         if (!onFinished) {

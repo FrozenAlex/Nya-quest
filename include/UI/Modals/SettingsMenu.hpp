@@ -30,7 +30,7 @@ DECLARE_CLASS_CODEGEN(Nya, SettingsMenu, UnityEngine::MonoBehaviour,
         bool isFloating = false;
 
         SourceData *selectedDataSource = nullptr;
-        StringW selectedDataSourceName = "";
+        std::string selectedDataSourceName = "";
 
         // Labels
         DECLARE_INSTANCE_FIELD(List<StringW>*, sfw_endpoint_labels);
