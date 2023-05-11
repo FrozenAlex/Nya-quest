@@ -61,7 +61,7 @@ namespace Nya {
 
         this->nyaButton = QuestUI::BeatSaberUI::CreateUIButton(horz->get_transform(), "Nya", "PlayButton",
             [this]() {
-                Nya::Utils::onNyaClick(this->nyaButton, this->imageView);
+                this->imageView->GetImage(nullptr);
             });
 
         this->settingsMenu = NYA->get_gameObject()->AddComponent<Nya::SettingsMenu*>();
@@ -72,14 +72,23 @@ namespace Nya {
         });
 
         
-        
     }
 
     void ModifiersMenu::DidActivate(bool firstActivation)
     {
         if(firstActivation)
         {
+            // Sub to events of the image view
+            this->imageView->imageLoadingChange += {&ModifiersMenu::OnIsLoadingChange, this};
         }
+    }
+
+    void ModifiersMenu::OnIsLoadingChange (bool isLoading) {
+        QuestUI::MainThreadScheduler::Schedule([this, isLoading]
+        {
+            if (this->nyaButton && this->nyaButton->m_CachedPtr.m_value)
+                this->nyaButton->set_interactable(!isLoading);
+        });
     }
 
     void ModifiersMenu::dtor(){

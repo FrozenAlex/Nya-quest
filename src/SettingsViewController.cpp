@@ -1,5 +1,13 @@
 #include "SettingsViewController.hpp"
 
+std::vector<std::string> buttonOptions = {
+    "None",
+    "A",
+    "B",
+    "X",
+    "Y"
+};
+
 
 DEFINE_TYPE(Nya, SettingsViewController);
 
@@ -69,6 +77,23 @@ void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedTo
                 getNyaConfig().AutoNyaDelay.SetValue(value);
             }
         );
+
+        // Create StringWrapper Vector with Content of buttonOptions
+        // We cant create it directly, as StringW is not designed for static use
+        std::vector<StringW> buttonOptionsWrapper = {};
+        for (auto option : buttonOptions) {
+            buttonOptionsWrapper.emplace_back(option);
+        }
+
+        // Create actual Dropdown
+        QuestUI::BeatSaberUI::CreateDropdown(container->get_transform(), "Nya on controller button", buttonOptionsWrapper[getNyaConfig().UseButton.GetValue()], buttonOptionsWrapper, [](auto value) {
+
+            // Find Index of selected Element
+            int index = std::find(buttonOptions.begin(), buttonOptions.end(), value) - buttonOptions.begin();
+
+            // And Save it
+            getNyaConfig().UseButton.SetValue(index); 
+        });
 
 
         #ifdef NSFW
