@@ -17,7 +17,7 @@
 #include "UnityEngine/UI/Toggle.hpp"
 #include "UnityEngine/UI/Button.hpp"
 #include "UnityEngine/SceneManagement/Scene.hpp"
-#include "SettingsMenu.hpp"
+#include "UI/Modals/SettingsMenu.hpp"
 #include "ImageView.hpp"
 
 
