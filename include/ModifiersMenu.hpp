@@ -12,7 +12,7 @@
 #include "API.hpp"
 #include "Utils/Utils.hpp"
 #include "ImageView.hpp"
-#include "SettingsMenu.hpp"
+#include "UI/Modals/SettingsMenu.hpp"
 
 DECLARE_CLASS_CODEGEN(Nya, ModifiersMenu, UnityEngine::MonoBehaviour,
     DECLARE_INSTANCE_FIELD(HMUI::ImageView*, NYA);

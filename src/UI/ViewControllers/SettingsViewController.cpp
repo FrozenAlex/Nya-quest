@@ -1,5 +1,6 @@
-#include "SettingsViewController.hpp"
-
+#include "UI/ViewControllers/SettingsViewController.hpp"
+#include "GlobalNamespace/MenuTransitionsHelper.hpp"
+#include "UnityEngine/Resources.hpp"
 std::vector<std::string> buttonOptions = {
     "None",
     "A",
@@ -13,6 +14,9 @@ DEFINE_TYPE(Nya, SettingsViewController);
 
 void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
     if (firstActivation) {
+
+        this->nsfwModal = get_gameObject()->AddComponent<Nya::NSFWConsent*>();
+
         auto *container = QuestUI::BeatSaberUI::CreateScrollableSettingsContainer(get_transform());
 
         QuestUI::BeatSaberUI::CreateToggle(container->get_transform(), "Floating in Pause Menu",
@@ -138,6 +142,26 @@ void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedTo
             }
         });
 
+        
+
+        #ifdef NSFW
+            QuestUI::BeatSaberUI::CreateUIButton(container->get_transform(), to_utf16(getNyaConfig().NSFWUI.GetValue()?"Enable NSFW again":"Enable NSFW"), "PracticeButton",
+            [this]() {
+                QuestUI::MainThreadScheduler::Schedule([this]{
+                    this->nsfwModal->Show();
+                });
+            });
+            if (getNyaConfig().NSFWUI.GetValue()) {
+              
+                QuestUI::BeatSaberUI::CreateUIButton(container->get_transform(), to_utf16("Disable NSFW"), "PracticeButton",
+                [this]() {
+                    QuestUI::MainThreadScheduler::Schedule([this]{
+                        getNyaConfig().NSFWUI.SetValue(false);
+                        UnityEngine::Resources::FindObjectsOfTypeAll<GlobalNamespace::MenuTransitionsHelper*>()[0]->RestartGame(nullptr);
+                    });
+                });
+            }
+        #endif
         
     }
 }

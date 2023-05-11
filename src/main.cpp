@@ -1,7 +1,7 @@
 #include "main.hpp"
 #include "ModifiersMenu.hpp"
 
-#include "SettingsViewController.hpp"
+#include "UI/ViewControllers/SettingsViewController.hpp"
 #include "questui/shared/QuestUI.hpp"
 #include "GlobalNamespace/ResultsViewController.hpp"
 #include "GlobalNamespace/LevelCompletionResults.hpp"
