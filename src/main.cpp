@@ -33,6 +33,7 @@
 #include "GlobalNamespace/OVRInput_Button.hpp"
 #include "GlobalNamespace/OculusVRHelper.hpp"
 #include "Events.hpp"
+#include "UI/FlowCoordinators/NyaSettingsFlowCoordinator.hpp"
 
 using namespace UnityEngine;
 using namespace GlobalNamespace;
@@ -256,7 +257,8 @@ extern "C" void load() {
     QuestUI::Init();
 
     QuestUI::Register::RegisterGameplaySetupMenu<Nya::ModifiersMenu*>(modInfo, "Nya");
-    QuestUI::Register::RegisterModSettingsViewController<Nya::SettingsViewController*>(modInfo, "Nya");
+    // QuestUI::Register::RegisterModSettingsViewController<Nya::SettingsViewController*>(modInfo, "Nya");
+    QuestUI::Register::RegisterModSettingsFlowCoordinator<Nya::UI::FlowCoordinators::NyaSettingsFlowCoordinator*>(modInfo, "Nya");
 
     custom_types::Register::AutoRegister();
 
