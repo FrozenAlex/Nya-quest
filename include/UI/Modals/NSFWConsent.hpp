@@ -34,7 +34,7 @@ using namespace QuestUI;
 
 
 
-DECLARE_CLASS_CODEGEN(Nya, NSFWConsent, UnityEngine::MonoBehaviour,
+DECLARE_CLASS_CODEGEN(Nya::UI::Modals, NSFWConsent, UnityEngine::MonoBehaviour,
     public:
         std::vector<ModalContent> ModalContents;
         int ConfirmationStage = 0;
