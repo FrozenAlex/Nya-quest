@@ -4,7 +4,7 @@
 #include "UnityEngine/RectOffset.hpp"
 #include "assets.hpp"
 #include "UnityEngine/WaitForSeconds.hpp"
-DEFINE_TYPE(Nya, NSFWConsent);
+DEFINE_TYPE(Nya::UI::Modals, NSFWConsent);
 
 using namespace UnityEngine;
 using namespace UnityEngine::UI;
@@ -13,14 +13,14 @@ using namespace std;
 
 #define coro(coroutine) GlobalNamespace::SharedCoroutineStarter::get_instance()->StartCoroutine(custom_types::Helpers::CoroutineHelper::New(coroutine))
 
-custom_types::Helpers::Coroutine Nya::NSFWConsent::InteractabilityCooldown(SliderSetting * setting) {
+custom_types::Helpers::Coroutine Nya::UI::Modals::NSFWConsent::InteractabilityCooldown(SliderSetting * setting) {
     setting->slider->set_interactable(false);
     co_yield reinterpret_cast<System::Collections::IEnumerator*>(WaitForSeconds::New_ctor(2.0f));
     setting->slider->set_interactable(true);
     co_return;
 } 
 
-custom_types::Helpers::Coroutine Nya::NSFWConsent::InteractabilityCooldown(Button * button) {
+custom_types::Helpers::Coroutine Nya::UI::Modals::NSFWConsent::InteractabilityCooldown(Button * button) {
     button->set_interactable(false);
     co_yield reinterpret_cast<System::Collections::IEnumerator*>(WaitForSeconds::New_ctor(2.0f));
     button->set_interactable(true);
@@ -30,7 +30,7 @@ custom_types::Helpers::Coroutine Nya::NSFWConsent::InteractabilityCooldown(Butto
 
 
 
-custom_types::Helpers::Coroutine Nya::NSFWConsent::FadeoutModal(FadeOutContent content) { 
+custom_types::Helpers::Coroutine Nya::UI::Modals::NSFWConsent::FadeoutModal(FadeOutContent content) { 
     // TODO: animate fadeout
     co_yield nullptr;
 
@@ -74,7 +74,7 @@ custom_types::Helpers::Coroutine Nya::NSFWConsent::FadeoutModal(FadeOutContent c
 
 }
 
-void Nya::NSFWConsent::UpdateModalContent() {
+void Nya::UI::Modals::NSFWConsent::UpdateModalContent() {
     if (ConfirmationStage >= ModalContents.size()) {
 
         // Enable nsfw
@@ -90,7 +90,7 @@ void Nya::NSFWConsent::UpdateModalContent() {
     ChangeModalContent(modalContent);
 }
 
-void Nya::NSFWConsent::InitModalContents() {
+void Nya::UI::Modals::NSFWConsent::InitModalContents() {
     ModalContents.clear();
  ModalContents.push_back(
             {
@@ -200,7 +200,7 @@ void Nya::NSFWConsent::InitModalContents() {
         );
 }
 
-void Nya::NSFWConsent::ctor() {
+void Nya::UI::Modals::NSFWConsent::ctor() {
     {
        InitModalContents();
     }
@@ -311,7 +311,7 @@ void Nya::NSFWConsent::ctor() {
     
 }
 
-void Nya::NSFWConsent::Show() {
+void Nya::UI::Modals::NSFWConsent::Show() {
 
     QuestUI::MainThreadScheduler::Schedule([this] {
         mainLayout->get_gameObject()->set_active(true);
@@ -328,7 +328,7 @@ void Nya::NSFWConsent::Show() {
 
 }
 
-void Nya::NSFWConsent::ChangeModalContent(ModalContent& modalContent) {
+void Nya::UI::Modals::NSFWConsent::ChangeModalContent(ModalContent& modalContent) {
     // Scheduler
     QuestUI::MainThreadScheduler::Schedule([this, modalContent] {
         topText->SetText(modalContent.TopText);
@@ -371,12 +371,12 @@ void Nya::NSFWConsent::ChangeModalContent(ModalContent& modalContent) {
     
 }
 
-void Nya::NSFWConsent::Hide() {
+void Nya::UI::Modals::NSFWConsent::Hide() {
     QuestUI::MainThreadScheduler::Schedule([this] {
         this->modal->Hide(true, nullptr);
     });
 }
 
-bool Nya::NSFWConsent::isShown() {
+bool Nya::UI::Modals::NSFWConsent::isShown() {
     return this->modal->isShown;
 }

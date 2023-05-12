@@ -1,6 +1,8 @@
 #include "UI/ViewControllers/SettingsViewController.hpp"
+
 #include "GlobalNamespace/MenuTransitionsHelper.hpp"
 #include "UnityEngine/Resources.hpp"
+
 std::vector<std::string> buttonOptions = {
     "None",
     "A",
@@ -10,16 +12,18 @@ std::vector<std::string> buttonOptions = {
 };
 
 
-DEFINE_TYPE(Nya, SettingsViewController);
+DEFINE_TYPE(Nya::UI::ViewControllers, SettingsViewController);
 
-void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
+using namespace QuestUI::BeatSaberUI;
+
+void Nya::UI::ViewControllers::SettingsViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
     if (firstActivation) {
 
-        this->nsfwModal = get_gameObject()->AddComponent<Nya::NSFWConsent*>();
+        this->nsfwModal = get_gameObject()->AddComponent<Nya::UI::Modals::NSFWConsent*>();
 
-        auto *container = QuestUI::BeatSaberUI::CreateScrollableSettingsContainer(get_transform());
+        auto *container = CreateScrollableSettingsContainer(get_transform());
 
-        QuestUI::BeatSaberUI::CreateToggle(container->get_transform(), "Floating in Pause Menu",
+        CreateToggle(container->get_transform(), "Floating in Pause Menu",
             getNyaConfig().inPause.GetValue(), [](bool value) {
             getNyaConfig().inPause.SetValue(value);
             if (
@@ -29,7 +33,7 @@ void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedTo
                 Main::NyaFloatingUI->onSceneChange( Main::NyaFloatingUI->currentScene, true);
             }
         });
-        QuestUI::BeatSaberUI::CreateToggle(container->get_transform(), "Floating on Menu Screen",
+        CreateToggle(container->get_transform(), "Floating on Menu Screen",
             getNyaConfig().inMenu.GetValue(),
             [](bool value) {
                 getNyaConfig().inMenu.SetValue(value);
@@ -41,7 +45,7 @@ void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedTo
                 }
         });
 
-        QuestUI::BeatSaberUI::CreateToggle(container->get_transform(), "Show handle",
+        CreateToggle(container->get_transform(), "Show handle",
             getNyaConfig().ShowHandle.GetValue(),
             [](bool value) {
                 getNyaConfig().ShowHandle.SetValue(value);
@@ -53,7 +57,7 @@ void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedTo
                 }
         });
 
-        auto slider = QuestUI::BeatSaberUI::CreateSliderSetting(container->get_transform(), "Floating Screen Scale", 0.1f, 
+        auto slider = CreateSliderSetting(container->get_transform(), "Floating Screen Scale", 0.1f, 
             getNyaConfig().FloatingScreenScale.GetValue(), 0.1f, 2.0f, [](float value) {
                 getNyaConfig().FloatingScreenScale.SetValue(value);
                 if (Main::NyaFloatingUI != nullptr) {
@@ -63,7 +67,7 @@ void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedTo
             
         );
 
-        QuestUI::BeatSaberUI::CreateToggle(container->get_transform(), "AutoNya",
+        CreateToggle(container->get_transform(), "AutoNya",
             getNyaConfig().AutoNya.GetValue(),
             [](bool value) {
                 getNyaConfig().AutoNya.SetValue(value);
@@ -76,7 +80,7 @@ void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedTo
                 }
         });
 
-        QuestUI::BeatSaberUI::CreateSliderSetting(container->get_transform(), "Nya Delay", 0.5f, 
+        CreateSliderSetting(container->get_transform(), "Nya Delay", 0.5f, 
             getNyaConfig().AutoNyaDelay.GetValue(), 4.0f, 30.0f, [](float value) {
                 getNyaConfig().AutoNyaDelay.SetValue(value);
             }
@@ -90,7 +94,7 @@ void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedTo
         }
 
         // Create actual Dropdown
-        QuestUI::BeatSaberUI::CreateDropdown(container->get_transform(), "Nya on controller button", buttonOptionsWrapper[getNyaConfig().UseButton.GetValue()], buttonOptionsWrapper, [](auto value) {
+        CreateDropdown(container->get_transform(), "Nya on controller button", buttonOptionsWrapper[getNyaConfig().UseButton.GetValue()], buttonOptionsWrapper, [](auto value) {
 
             // Find Index of selected Element
             int index = std::find(buttonOptions.begin(), buttonOptions.end(), value) - buttonOptions.begin();
@@ -102,7 +106,7 @@ void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedTo
 
         #ifdef NSFW
             if (getNyaConfig().NSFWUI.GetValue()) {
-                QuestUI::BeatSaberUI::CreateToggle(container->get_transform(), "Remember NSFW",
+                CreateToggle(container->get_transform(), "Remember NSFW",
                     getNyaConfig().RememberNSFW.GetValue(), [](bool value) {
                         getNyaConfig().RememberNSFW.SetValue(value);
                     }
@@ -110,28 +114,31 @@ void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedTo
             }
         #endif
 
-        // Buttons for settings
-        // TODO: Make it work with floating ui off
-        UnityEngine::UI::Button* faceHeadset = QuestUI::BeatSaberUI::CreateUIButton(container->get_transform(), to_utf16("Face headset"), "PracticeButton",
-        [this]() {
-            if (Main::NyaFloatingUI != nullptr) {
-                Main::NyaFloatingUI->hoverClickHelper->LookAtCamera();
-            }
-        });
-        QuestUI::BeatSaberUI::CreateUIButton(container->get_transform(), to_utf16("Set upright"), "PracticeButton",
-        [this]() {
-            if (Main::NyaFloatingUI != nullptr) {
-                Main::NyaFloatingUI->hoverClickHelper->SetUpRight();
-            }
-        });
-        QuestUI::BeatSaberUI::CreateUIButton(container->get_transform(), to_utf16("Default position"), "PracticeButton",
-        [this]() {
-            if (Main::NyaFloatingUI != nullptr) {
-                Main::NyaFloatingUI->SetDefaultPos();
-            }
-        });
-
-        QuestUI::BeatSaberUI::CreateUIButton(container->get_transform(), to_utf16("Reset all positions"), "PracticeButton",
+        {   
+            auto* hor = CreateHorizontalLayoutGroup(container->get_transform());
+            // Buttons for settings
+            // TODO: Make it work with floating ui off
+            UnityEngine::UI::Button* faceHeadset = CreateUIButton(hor->get_transform(), to_utf16("Face headset"), "PracticeButton",
+            [this]() {
+                if (Main::NyaFloatingUI != nullptr) {
+                    Main::NyaFloatingUI->hoverClickHelper->LookAtCamera();
+                }
+            });
+            CreateUIButton(hor->get_transform(), to_utf16("Set upright"), "PracticeButton",
+            [this]() {
+                if (Main::NyaFloatingUI != nullptr) {
+                    Main::NyaFloatingUI->hoverClickHelper->SetUpRight();
+                }
+            });
+            CreateUIButton(hor->get_transform(), to_utf16("Default position"), "PracticeButton",
+            [this]() {
+                if (Main::NyaFloatingUI != nullptr) {
+                    Main::NyaFloatingUI->SetDefaultPos();
+                }
+            });
+        }
+        
+        CreateUIButton(container->get_transform(), to_utf16("Reset all positions"), "PracticeButton",
         [this]() {
             EndpointConfig::ResetPositions();
             if (
@@ -145,7 +152,7 @@ void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedTo
         
 
         #ifdef NSFW
-            QuestUI::BeatSaberUI::CreateUIButton(container->get_transform(), to_utf16(getNyaConfig().NSFWUI.GetValue()?"Enable NSFW again":"Enable NSFW"), "PracticeButton",
+            CreateUIButton(container->get_transform(), to_utf16(getNyaConfig().NSFWUI.GetValue()?"Enable NSFW again":"Enable NSFW"), "PracticeButton",
             [this]() {
                 QuestUI::MainThreadScheduler::Schedule([this]{
                     this->nsfwModal->Show();
@@ -153,7 +160,7 @@ void Nya::SettingsViewController::DidActivate(bool firstActivation, bool addedTo
             });
             if (getNyaConfig().NSFWUI.GetValue()) {
               
-                QuestUI::BeatSaberUI::CreateUIButton(container->get_transform(), to_utf16("Disable NSFW"), "PracticeButton",
+                CreateUIButton(container->get_transform(), to_utf16("Disable NSFW"), "PracticeButton",
                 [this]() {
                     QuestUI::MainThreadScheduler::Schedule([this]{
                         getNyaConfig().NSFWUI.SetValue(false);

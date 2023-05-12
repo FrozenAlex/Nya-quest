@@ -176,17 +176,21 @@ void SettingsMenu::ctor() {
         floatingViewLayout->GetComponent<ContentSizeFitter*>()->set_horizontalFit(
             ContentSizeFitter::FitMode::PreferredSize);
         floatingViewLayout->GetComponent<LayoutElement*>()->set_preferredWidth(60.0);
-        Button* faceHeadset =
-            CreateUIButton(floatingViewLayout->get_transform(), to_utf16("Face headset"), "PracticeButton", [this]() {
+        {
+            auto* hor = QuestUI::BeatSaberUI::CreateHorizontalLayoutGroup(floatingViewLayout->get_transform());
+
+            Button* faceHeadset =
+            CreateUIButton(hor->get_transform(), to_utf16("Face headset"), "PracticeButton", [this]() {
                 if (Main::NyaFloatingUI != nullptr) {
                     Main::NyaFloatingUI->hoverClickHelper->LookAtCamera();
                 }
             });
-        CreateUIButton(floatingViewLayout->get_transform(), to_utf16("Set upright"), "PracticeButton", [this]() {
-            if (Main::NyaFloatingUI != nullptr) {
-                Main::NyaFloatingUI->hoverClickHelper->SetUpRight();
-            }
-        });
+            CreateUIButton(hor->get_transform(), to_utf16("Set upright"), "PracticeButton", [this]() {
+                if (Main::NyaFloatingUI != nullptr) {
+                    Main::NyaFloatingUI->hoverClickHelper->SetUpRight();
+                }
+            });
+        }
         CreateUIButton(floatingViewLayout->get_transform(), to_utf16("Default position"), "PracticeButton", [this]() {
             if (Main::NyaFloatingUI != nullptr) {
                 Main::NyaFloatingUI->SetDefaultPos();
@@ -205,14 +209,13 @@ void SettingsMenu::ctor() {
                      });
 
         auto slider = CreateSliderSetting(floatingViewLayout->get_transform(), "Floating Screen Scale", 0.1f,
-                                          getNyaConfig().FloatingScreenScale.GetValue(), 0.1f, 2.0f,
-                                          [](float value) {
-                                              getNyaConfig().FloatingScreenScale.SetValue(value);
-                                              if (Main::NyaFloatingUI != nullptr) {
-                                                  Main::NyaFloatingUI->UpdateScale();
-                                              }
-                                          }
-
+            getNyaConfig().FloatingScreenScale.GetValue(), 0.1f, 2.0f,
+            [](float value) {
+                getNyaConfig().FloatingScreenScale.SetValue(value);
+                if (Main::NyaFloatingUI != nullptr) {
+                    Main::NyaFloatingUI->UpdateScale();
+                }
+            }
         );
     }
 }
