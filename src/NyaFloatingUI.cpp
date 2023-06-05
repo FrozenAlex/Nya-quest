@@ -11,6 +11,8 @@
 #include "Utils/FileUtils.hpp"
 #include "GlobalNamespace/SharedCoroutineStarter.hpp"
 #include "assets.hpp"
+#include "libs/magic_enum.hpp"
+
 using namespace UnityEngine::UI;
 using namespace UnityEngine;
 
@@ -169,7 +171,7 @@ namespace Nya {
     }
 
     void NyaFloatingUI::onSceneChange(Nya::FloatingUIScene scene, bool reinitialize) {
-        INFO("Switched from {} to {} ", this->currentScene, scene);
+        INFO("Switched from {} to {} ", magic_enum::enum_name(this->currentScene), magic_enum::enum_name(scene));
         
         // Do nothing if the scene did not change unless reinitialize is active
         if (!reinitialize && this->currentScene == scene) {
