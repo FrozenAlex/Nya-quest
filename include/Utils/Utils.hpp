@@ -7,7 +7,7 @@
 #include "Utils/FileUtils.hpp"
 
 namespace Nya::Utils {
-    bool IsGif(StringW str);
+    bool IsGif(std::string str);
     std::string ToLowercase(std::string str);
     List<StringW>* vectorToList(std::vector<StringW> values);
     std::vector<StringW> listWToVector(List<StringW>* values);
@@ -17,9 +17,9 @@ namespace Nya::Utils {
     int random(int min, int max);
     ListWrapper<StringW> listStringToStringW(std::list<std::string> values);
 
-    bool IsAnimated(StringW str);
+    bool IsAnimated(std::string str);
 
-    bool IsImage(StringW str);
+    bool IsImage(std::string str);
     std::string RandomString(const int len);
     VRUIControls::VRPointer* getAnyPointerWithController();
 
