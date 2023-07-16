@@ -156,13 +156,8 @@ namespace Nya::Utils {
     }
 
     // Checks if the path is animated
-    bool IsAnimated(StringW str)
+    bool IsAnimated(std::string str)
     {
-        // Catch nulls 
-        if (str == nullptr) {
-            WARNING("IsAnimated got null string, possibly a bug");
-            return false;
-        }
         
         auto path = fs::path(str);
         auto extension = path.extension().string();
@@ -174,27 +169,15 @@ namespace Nya::Utils {
     }
 
     // Checks if the path is animated
-    bool IsGif(StringW str)
-    {
-        // Catch nulls 
-        if (str == nullptr) {
-            WARNING("IsAnimated got null string, possibly a bug");
-            return false;
-        }
-        
+    bool IsGif(std::string str)
+    {   
         auto path = fs::path(str);
         auto extension = path.extension().string();
         
         return extension == ".gif";
     }
 
-    bool IsImage(StringW str) {
-        // Catch nulls 
-        if (str == nullptr) {
-            WARNING("IsImage got null string, possibly a bug");
-            return false;
-        }
-
+    bool IsImage(std::string str) {
         auto path = fs::path(str);
         auto extension = path.extension().string();
 
