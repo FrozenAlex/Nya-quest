@@ -30,6 +30,10 @@ namespace Nya {
     Configuration& getConfig();  
     // Old version of the logger
     Logger& getLoggerOld();
+    // Creates/removes .nomedia based on config
+    void ApplyIndexingRules();
+    // Cleans temp folder
+    void CleanTempFolder();
 }
 
 
