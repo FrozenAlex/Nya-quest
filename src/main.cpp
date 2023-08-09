@@ -34,6 +34,7 @@
 #include "GlobalNamespace/OculusVRHelper.hpp"
 #include "Events.hpp"
 #include "UI/FlowCoordinators/NyaSettingsFlowCoordinator.hpp"
+#include <fstream>
 
 using namespace UnityEngine;
 using namespace GlobalNamespace;
@@ -130,35 +131,35 @@ MAKE_HOOK_MATCH(SceneManager_Internal_ActiveSceneChanged, &UnityEngine::SceneMan
 
 void makeFolder() 
 {    
-    if (!direxists(NyaGlobals::nyaPath.c_str()))
+    if (!direxists(NyaGlobals::nyaPath))
     {
-        int makePath = mkpath(NyaGlobals::nyaPath.c_str());
+        int makePath = mkpath(NyaGlobals::nyaPath);
         if (makePath == -1)
         {
             ERROR("Failed to make Nya Folder path!");
         }
     }
 
-    if (!direxists(NyaGlobals::imagesPath.c_str()))
+    if (!direxists(NyaGlobals::imagesPath))
     {
-        int makePath = mkpath(NyaGlobals::imagesPath.c_str());
+        int makePath = mkpath(NyaGlobals::imagesPath);
         if (makePath == -1)
         {
             ERROR("Failed to make Images folder!");
         }
     }
-    if (!direxists(NyaGlobals::tempPath.c_str()))
+    if (!direxists(NyaGlobals::tempPath))
     {
-        int makePath = mkpath(NyaGlobals::tempPath.c_str());
+        int makePath = mkpath(NyaGlobals::tempPath);
         if (makePath == -1)
         {
             ERROR("Failed to make Temp folder!");
         }
     }
 
-    if (!direxists(NyaGlobals::imagesPathSFW.c_str()))
+    if (!direxists(NyaGlobals::imagesPathSFW))
     {
-        int makePath = mkpath(NyaGlobals::imagesPathSFW.c_str());
+        int makePath = mkpath(NyaGlobals::imagesPathSFW);
         if (makePath == -1)
         {
             ERROR("Failed to make images folder!");
@@ -166,15 +167,89 @@ void makeFolder()
     }
 
     if (getNyaConfig().NSFWUI.GetValue()) {
-        if (!direxists(NyaGlobals::imagesPathNSFW.c_str()))
+        if (!direxists(NyaGlobals::imagesPathNSFW))
         {
-            int makePath = mkpath(NyaGlobals::imagesPathNSFW.c_str());
+            int makePath = mkpath(NyaGlobals::imagesPathNSFW);
             if (makePath == -1)
             {
                 ERROR("Failed to make images2 folder!");
             }
         }
     }
+}
+
+
+void Nya::CleanTempFolder(){
+    if (direxists(NyaGlobals::tempPath.c_str()))
+    {
+        std::vector<std::string> files = FileUtils::getAllFilesInFolder(NyaGlobals::tempPath);
+        for (std::string file : files) {
+            FileUtils::deleteFile(file);
+        }
+    }
+}
+
+void Nya::ApplyIndexingRules() 
+{    
+    if (!direxists(NyaGlobals::nyaPath.c_str()))
+    {
+        ERROR("Nya folder not found, no reason to proceed!");
+        return;
+    }
+    // Temp folder should not be indexed
+    if (direxists(NyaGlobals::tempPath))
+    {
+        std::string tempNomedia = NyaGlobals::tempPath + ".nomedia";
+        if (!fileexists(tempNomedia)) {
+            // Create .nomedia file
+            std::ofstream f(tempNomedia);
+            f.close();
+        }
+    }
+
+    bool indexSFW = getNyaConfig().IndexSFW.GetValue();
+    bool indexNSFW = getNyaConfig().IndexNSFW.GetValue();
+
+
+    if (direxists(NyaGlobals::imagesPathSFW)) {
+        // Indexing rules for sfw
+        std::string imagesSFWNomedia = NyaGlobals::imagesPathSFW + ".nomedia";
+        if (indexSFW) {
+            // If index SFW, delete .nomedia file if it exists
+            if (fileexists(imagesSFWNomedia)) {
+                // Delete .nomedia file
+                remove(imagesSFWNomedia.c_str());
+            }
+        } else {
+            // If dont index SFW, create .nomedia file if it doesnt exist
+            if (!fileexists(imagesSFWNomedia)) {
+                // Create .nomedia file
+                std::ofstream f(imagesSFWNomedia);
+                f.close();
+            }
+        }
+    }
+    
+
+    if (direxists(NyaGlobals::imagesPathNSFW)) {
+        std::string imagesNSFWNomedia = NyaGlobals::imagesPathNSFW + ".nomedia";
+        // Indexing rules for nsfw
+        if (indexNSFW) {
+            // If index NSFW, delete .nomedia file if it exists
+            if (fileexists(imagesNSFWNomedia)) {
+                // Delete .nomedia file
+                remove(imagesNSFWNomedia.c_str());
+            }
+        } else {
+            // If dont index NSFW, create .nomedia file if it doesnt exist
+            if (!fileexists(imagesNSFWNomedia)) {
+                // Create .nomedia file
+                std::ofstream f(imagesNSFWNomedia);
+                f.close();
+            }
+        }
+    }
+    
 }
 
 Logger& Nya::getLoggerOld() {
@@ -254,6 +329,9 @@ extern "C" void load() {
 
     // Make local folders if they do not exist
     makeFolder();
+    // Sometimes when crashing, the temp folder is not deleted, so we do it here on start
+    Nya::CleanTempFolder();
+    Nya::ApplyIndexingRules();
     QuestUI::Init();
 
     QuestUI::Register::RegisterGameplaySetupMenu<Nya::ModifiersMenu*>(modInfo, "Nya");

@@ -37,8 +37,12 @@ DECLARE_CONFIG(NyaConfig,
     CONFIG_VALUE(NSFWUI, bool, "NSFWUI", false);
     CONFIG_VALUE(NSFWEnabled, bool, "NSFW Enabled", false);
     CONFIG_VALUE(SkipNSFWWarning, bool, "Skip NSFW warning", false);
-    CONFIG_VALUE(RememberNSFW, bool, "Remember NSFW", false);    
+    CONFIG_VALUE(RememberNSFW, bool, "Remember NSFW", false);
 
+    // Android indexing settings
+    CONFIG_VALUE(IndexSFW, bool, "Index SFW", true);
+    CONFIG_VALUE(IndexNSFW, bool, "Index NSFW", false);
+    
     CONFIG_VALUE(pausePositionX, float, "Pause PositionX", -2.12f);
     CONFIG_VALUE(pausePositionY, float, "Pause PositionY", 1.52f);
     CONFIG_VALUE(pausePositionZ, float, "Pause PositionZ", 1.65f);
@@ -72,6 +76,10 @@ DECLARE_CONFIG(NyaConfig,
         CONFIG_INIT_VALUE(NSFWEnabled);
         CONFIG_INIT_VALUE(SkipNSFWWarning);
         CONFIG_INIT_VALUE(RememberNSFW);
+
+        // Android indexing settings
+        CONFIG_INIT_VALUE(IndexSFW);
+        CONFIG_INIT_VALUE(IndexNSFW);
 
         // Positions because vectors crash
         CONFIG_INIT_VALUE(pausePositionX);
