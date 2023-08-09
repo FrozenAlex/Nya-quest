@@ -102,7 +102,24 @@ void Nya::UI::ViewControllers::SettingsViewController::DidActivate(bool firstAct
             // And Save it
             getNyaConfig().UseButton.SetValue(index); 
         });
+        
+        CreateToggle(container->get_transform(), "Index saved images",
+            getNyaConfig().IndexSFW.GetValue(), [](bool value) {
+                getNyaConfig().IndexSFW.SetValue(value);
+                Nya::ApplyIndexingRules();
+            }
+        );
 
+        #ifdef NSFW
+            if (getNyaConfig().NSFWUI.GetValue()) {
+                CreateToggle(container->get_transform(), "Index saved NSFW images",
+                    getNyaConfig().IndexNSFW.GetValue(), [](bool value) {
+                        getNyaConfig().IndexNSFW.SetValue(value);
+                        Nya::ApplyIndexingRules();
+                    }
+                );
+            }
+        #endif
 
         #ifdef NSFW
             if (getNyaConfig().NSFWUI.GetValue()) {
@@ -164,6 +181,9 @@ void Nya::UI::ViewControllers::SettingsViewController::DidActivate(bool firstAct
                 [this]() {
                     QuestUI::MainThreadScheduler::Schedule([this]{
                         getNyaConfig().NSFWUI.SetValue(false);
+                        // If we are turning it off completely, we should also turn off indexing of NSFW images
+                        getNyaConfig().IndexNSFW.SetValue(false);
+                        Nya::ApplyIndexingRules();
                         UnityEngine::Resources::FindObjectsOfTypeAll<GlobalNamespace::MenuTransitionsHelper*>()[0]->RestartGame(nullptr);
                     });
                 });
