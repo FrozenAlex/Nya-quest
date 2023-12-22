@@ -2,6 +2,7 @@
   "_QPVersion": "0.1.2",
   "name": "${mod_name}",
   "id": "${mod_id}",
+  "modloader": "QuestLoader",
   "author": "FrozenAlex",
   "version": "${version}",
   "packageId": "com.beatgames.beatsaber",
@@ -9,7 +10,9 @@
   "description": "Beat Saber mod for displaying nya-tastic images from various anime themed web APIs!",
   "dependencies": [],
   "coverImage": "cover.jpg",
-  "modFiles": [],
+  "modFiles": [
+    "${binary}"
+  ],
   "libraryFiles": [],
   "fileCopies": [],
   "copyExtensions": []
