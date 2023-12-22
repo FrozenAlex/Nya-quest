@@ -8,7 +8,8 @@
     "author": "FrozenAlex",
     "url": "https://github.com/FrozenAlex/Nya-quest",
     "additionalData": {
-      "overrideSoName": "libNya.so"
+      "overrideSoName": "libNya.so",
+      "cmake": true
     }
   },
   "dependencies": [
@@ -60,7 +61,7 @@
     },
     {
       "id": "paper",
-      "versionRange": "=1.2.9",
+      "versionRange": "^1.2.20",
       "additionalData": {}
     }
   ],
