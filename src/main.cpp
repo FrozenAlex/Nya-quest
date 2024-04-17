@@ -84,8 +84,10 @@ MAKE_HOOK_MATCH(MenuTransitionsHelper_RestartGame, &MenuTransitionsHelper::Resta
     DEBUG("MenuTransitionsHelper_RestartGame");
     // Destroy the floating UI on soft restart
     if (Main::NyaFloatingUI && Main::NyaFloatingUI){
-        GameObject::DestroyImmediate(Main::NyaFloatingUI->floatingScreen->get_gameObject());
-
+        // Destroy the floating UI screen
+        if (Main::NyaFloatingUI->floatingScreen && Main::NyaFloatingUI->floatingScreen->get_gameObject()){
+            GameObject::DestroyImmediate(Main::NyaFloatingUI->floatingScreen->get_gameObject());
+        }
         Nya::NyaFloatingUI::delete_instance();
         Main::NyaFloatingUI = nullptr;
     }

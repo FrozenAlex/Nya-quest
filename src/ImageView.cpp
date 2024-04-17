@@ -70,6 +70,9 @@ bool NyaUtils::ImageView::HasImageToSave() {
     return (this->lastImageURL != "" && this->tempName != "" && Nya::Utils::IsImage(this->tempName));
 }
 
+
+// TODO: review crash related to this (https://analyzer.questmodding.com/crashes/4V2U)
+//  filesystem error: in rename: No such file or directory [/sdcard/ModData/com.beatgames.beatsaber/Mods/Nya/Temp/edOwqtb4.png] [/sdcard/ModData/com.beatgames.beatsaber/Mods/Nya/Images/nsfw/edOwqtb4.png]
 void NyaUtils::ImageView::SaveImage() {
     if (this->lastImageURL != "" && this->tempName != "" && Nya::Utils::IsImage(this->tempName)) {
         INFO("MOVING FILE");
@@ -222,16 +225,10 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished = 
 
     std::string endpointURL = source->BaseEndpoint + endpointValue;
 
-    if (!NSFWEnabled) {
-        INFO("Endpoint URL: {}", endpointURL);
-    }
+    if (!NSFWEnabled) INFO("Endpoint URL: {}", endpointURL);
     
     // Get the image url from the api
     NyaAPI::get_path_from_json_api(source, endpointURL, 10.0f, [this, finished, NSFWEnabled](bool success, std::string url) {
-        if (!NSFWEnabled) {
-            INFO("Image URL: {}", url);
-        }
-        
         // If we failed to get the image url
         if (!success) {
             // Error getting things
@@ -249,7 +246,9 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished = 
             });
             return;
         }
-          
+
+        if (!NSFWEnabled) INFO("Image URL: {}", url);
+
         BSML::MainThreadScheduler::Schedule([this, url, finished, NSFWEnabled]{
             // Make temp file name
             std::string fileExtension = FileUtils::GetFileFormat(url);
@@ -302,7 +301,7 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished = 
 
 void NyaUtils::ImageView::SetErrorImage()
 {
-    // BSML::Utilities::RemoveAnimationUpdater(this->imageView);
+    Nya::Utils::RemoveAnimationUpdater(this->imageView);
     this->imageView->set_sprite(BSML::Lite::ArrayToSprite(Assets::Chocola_Dead_png));
 }
 

@@ -209,12 +209,10 @@ namespace Nya {
 
     void NyaFloatingUI::updateCoordinates(UnityEngine::Vector3 position, UnityEngine::Vector3 eulerRotation) {
         if (this->currentScene == Nya::FloatingUIScene::Pause){
-            INFO("Saved to Pause");
             getNyaConfig().pausePosition.SetValue(position);
             getNyaConfig().pauseRotation.SetValue(eulerRotation);
         }
         if (this->currentScene == Nya::FloatingUIScene::MainMenu){
-            INFO("Saved to MainMenu");
             getNyaConfig().menuPosition.SetValue(position);
             getNyaConfig().menuRotation.SetValue(eulerRotation);
         }
@@ -236,12 +234,14 @@ namespace Nya {
     void NyaFloatingUI::delete_instance()
     {
         if (instance){
-            Object::DestroyImmediate(instance->get_gameObject());
+            if (instance->get_gameObject()){
+                Object::DestroyImmediate(instance->get_gameObject());
+            }
             instance = nullptr;
         }
     }
 
-//    Check if nya is enabled anywhere
+    // Check if nya is enabled anywhere
     bool NyaFloatingUI::isEnabled (){
         return (
             getNyaConfig().inMenu.GetValue() ||

@@ -30,8 +30,15 @@ DECLARE_CLASS_CODEGEN(NyaUtils, ImageView, UnityEngine::MonoBehaviour,
     DECLARE_INSTANCE_METHOD(void, OnDisable);
     DECLARE_INSTANCE_METHOD(void, OnNyaPhysicalClick);
     DECLARE_INSTANCE_FIELD(bool, isNSFW);
-    
+    /**
+     * @brief Get a new image from currently selected source
+     * 
+     * @param finished Callback when the image is loaded or failed to load
+     */
     void GetImage(std::function<void(bool success)> finished);
+    /**
+     * @brief Save the image from the cache to the images folder
+     */
     void SaveImage();
     bool HasImageToSave();
     void SetErrorImage();

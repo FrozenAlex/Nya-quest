@@ -1,6 +1,7 @@
 #include "Utils/Utils.hpp"
 #include <random>
 #include "bsml/shared/BSML/SharedCoroutineStarter.hpp"
+#include "bsml/shared/BSML/Animations/AnimationStateUpdater.hpp"
 #include "System/StringComparison.hpp"
 #include "System/Uri.hpp"
 #include <fstream>
@@ -183,34 +184,6 @@ namespace Nya::Utils {
         return ImageExtensions.contains(extension);
     }
 
-    // Got tired of pointers. If we can get a controller from a pointer, it means it's valid
-    VRUIControls::VRPointer* getAnyPointerWithController(){
-        // Get all pointers
-        auto pointers = UnityEngine::Resources::FindObjectsOfTypeAll<VRUIControls::VRPointer*>();
-
-        int count = pointers.size();
-        DEBUG("Total number of pointers: {}", count );
-
-        for (int i = 0; i < count; i++)
-        {
-            auto pointer = pointers.get(i);
-            
-            // Game clones the pointers all the time and disables the original pointer, so we need to only look at active pointers
-            if (pointer->get_isActiveAndEnabled()) {
-                // VR conroller is sometimes null after leaving multiplayer?
-                auto vrController = pointer->get_lastSelectedVrController();
-                if (vrController  && vrController->m_CachedPtr) {
-                    DEBUG("Found vr conroller on {}", i );
-                    return pointer;
-                }
-            }
-            
-        }   
-
-        return nullptr;
-    }
-
-
     /// @brief Downloads data and returns it. If it does not get the data, 
     /// @param uri File url
     /// @param path Path to a new file on local storage
@@ -228,22 +201,64 @@ namespace Nya::Utils {
         
         auto error = www->GetError();
         bool failed = error != UnityEngine::Networking::UnityWebRequest::UnityWebRequestError::OK;
-        if (!failed) {
-            DEBUG("Got data, callback");
-            // Saving files 
+        
+        if (failed) {
+            ERROR("Failed to get the data WebError: {}", UnityEngine::Networking::UnityWebRequest::GetWebErrorString(error));
+            if (onFinished) 
+                onFinished(false, path);
+            
+        }
+
+        DEBUG("Trying to get downloadHandler");
+        UnityEngine::Networking::DownloadHandler* downloadHandler = www->get_downloadHandler();
+        if (downloadHandler == nullptr) {
+            ERROR("Download handler is null");
+            if (onFinished) 
+                onFinished(false, path);
+            co_return;
+        }
+        
+        auto arr = downloadHandler->GetData();
+        if (arr.size() == 0) {
+            ERROR("Failed to get the data");
+            if (onFinished) 
+                onFinished(false, path);
+            co_return;
+        }
+
+        
+        // Check free space
+        fs::path fsPath(path);
+        auto parentPath = fsPath.parent_path();
+        auto space = fs::space(parentPath);
+        if (space.available < arr.size()) {
+            ERROR("Not enough space to save the file, available: {}, needed: {}", space.available, arr.size());
+            if (onFinished) 
+                onFinished(false, path);
+            co_return;
+        }
+        
+        try {
             std::ofstream f(path,  std::ios_base::binary | std::ios_base::trunc);
-            auto arr = www->get_downloadHandler()->GetData();
             f.write((char*)arr.begin(), arr.size());
             f.flush();
             f.close();
-
-            if (onFinished)
-                onFinished(true, path);
-        } else {
-            DEBUG("Failed to get the data");
+        } catch (std::exception& e) {
+            ERROR("Failed to save the file: {}", e.what());
             if (onFinished) 
                 onFinished(false, path);
+            co_return;
         }
+        
+        if (!fs::exists(path)) {
+            ERROR("Failed to save the file, it does not exist after saving");
+            if (onFinished) 
+                onFinished(false, path);
+            co_return;
+        }
+
+        if (onFinished)
+            onFinished(true, path);
 
         co_return;
     }
@@ -285,6 +300,12 @@ namespace Nya::Utils {
         layoutElement->set_flexibleWidth(size.x);
         layoutElement->set_flexibleHeight(size.y);
     }
-    
+
+    void RemoveAnimationUpdater(UnityW<UnityEngine::UI::Image> image) {
+        UnityW<BSML::AnimationStateUpdater> oldStateUpdater = image->GetComponent<BSML::AnimationStateUpdater*>();
+        if (oldStateUpdater) {
+            Object::DestroyImmediate(oldStateUpdater);
+        }
+    }
 }
 

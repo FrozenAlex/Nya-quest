@@ -21,7 +21,6 @@ namespace Nya::Utils {
 
     bool IsImage(std::string str);
     std::string RandomString(const int len);
-    VRUIControls::VRPointer* getAnyPointerWithController();
 
     /// @brief function to get data at a URI and save it to a file
     /// @param uri the URI to get data from
@@ -30,5 +29,9 @@ namespace Nya::Utils {
     void DownloadFile(std::string uri, std::string path, std::function<void(bool success, std::string path)> onFinished);
 
     void SetButtonSize(UnityW<UnityEngine::UI::Button> button, UnityEngine::Vector2 size);
-}
 
+    /// @brief Function to remove the bsml animation updater from an image
+    /// @param image the image to remove the updater from
+    /// @attention This function should only be called on the main thread
+    void RemoveAnimationUpdater(UnityW<UnityEngine::UI::Image> image);
+}
