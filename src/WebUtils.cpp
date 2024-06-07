@@ -164,7 +164,9 @@ namespace WebUtils
 				auto res = curl_easy_perform(curl);
 				/* Check for errors */ 
 				if (res != CURLE_OK) {
-//					DEBUG("curl_easy_perform() failed: {}: {}", res, curl_easy_strerror(res));
+					curl_easy_cleanup(curl);
+					delete wrapper;
+					return finished(0, val);
 				}
 				curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
 				curl_easy_cleanup(curl);
@@ -226,7 +228,9 @@ namespace WebUtils
 				auto res = curl_easy_perform(curl);
 				/* Check for errors */ 
 				if (res != CURLE_OK) {
-//					getLogger().critical("curl_easy_perform() failed: %u: %s", res, curl_easy_strerror(res));
+					curl_easy_cleanup(curl);
+					delete wrapper;
+					return  finished(0, val);
 				}
 				curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
 				curl_easy_cleanup(curl);
