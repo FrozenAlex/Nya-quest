@@ -53,7 +53,7 @@ DECLARE_CONFIG(NyaConfig,
     CONFIG_VALUE(pausePosition, UnityEngine::Vector3, "Pause Position", UnityEngine::Vector3(-2.12f, 1.52f, 1.65f));
     CONFIG_VALUE(pauseRotation, UnityEngine::Vector3, "Pause Rotation", UnityEngine::Vector3(4.52f, 312.22f, 359.63f));
 
-    CONFIG_VALUE(menuPosition, UnityEngine::Vector3, "Menu Position", UnityEngine::Vector3(0.0f, 3.75f, 4.0f));
+    CONFIG_VALUE(menuPosition, UnityEngine::Vector3, "Menu Position", UnityEngine::Vector3(0.0f, 4.0f, 4.0f));
     CONFIG_VALUE(menuRotation, UnityEngine::Vector3, "Menu Rotation", UnityEngine::Vector3(332.0f, 0.0f, 0.0f));
 
     CONFIG_VALUE(endpoints, StringKeyedMap<EndpointConfig>, "EndpointsConfig", StringKeyedMap<EndpointConfig>());
