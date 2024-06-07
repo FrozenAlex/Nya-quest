@@ -196,7 +196,43 @@ namespace Nya {
     
     void NyaFloatingUI::updateCoordinates(BSML::FloatingScreen* self, const BSML::FloatingScreenHandleEventArgs& args) {
         DEBUG("Updating coordinates called from handle event");
+        if (!self) {
+            ERROR("Floating screen not found when updating coordinates");
+            return;
+        };
+
+        this->ensureAboveTheGround();
+
         this->updateCoordinates(self->get_transform());
+    }
+
+    void NyaFloatingUI::ensureAboveTheGround() {
+        if (!this->floatingScreen) {
+            ERROR("Floating screen not found when ensuring above the ground");
+            return;
+        };
+        if (!this->floatingScreen->handle) {
+            ERROR("Floating screen handle not found when ensuring above the ground");
+            return;
+        };
+
+        if (this->currentScene == Nya::FloatingUIScene::Pause) {
+            INFO("Skipping ground check for pause screen");
+            return;
+        }
+
+        auto handlePosition = this->floatingScreen->handle->get_transform()->get_position();
+        if (handlePosition.y < 0.00f) {
+            INFO("Screen is below the ground, setting y to 0");
+            // distance between the handle and the screen on y axis
+            auto distance = this->floatingScreen->get_ScreenPosition().y - handlePosition.y;
+
+            this->floatingScreen->set_ScreenPosition(UnityEngine::Vector3(
+                this->floatingScreen->get_ScreenPosition().x,
+                0.0f + distance,
+                this->floatingScreen->get_ScreenPosition().z
+            ));
+        }
     }
 
     // Saves the coordinates to a config
@@ -309,7 +345,14 @@ namespace Nya {
 
     void NyaFloatingUI::LookAtCamera(){
         auto mainCamera = UnityEngine::Camera::get_main();
-        if (!mainCamera) return;
+        if (!mainCamera) {
+            ERROR("Main camera not found when looking at camera");
+            return;
+        };
+        if (!this->floatingScreen) {
+            ERROR("Floating screen not found when looking at camera");
+            return;
+        };
         auto currentPosition = this->floatingScreen->get_ScreenPosition();
         auto newRotation = UnityEngine::Quaternion::LookRotation(
             Vector3::op_Subtraction(
@@ -318,15 +361,30 @@ namespace Nya {
             );
         // TODO: Do lerp
         this->floatingScreen->set_ScreenRotation(newRotation);
+        
+        // Ensure the screen is above the ground after rotation
+        this->ensureAboveTheGround();
+        currentPosition = this->floatingScreen->get_ScreenPosition();
+
         Main::NyaFloatingUI->updateCoordinates(currentPosition, newRotation.get_eulerAngles());
     }
 
     void NyaFloatingUI::SetUpRight (){
-        if (!this->floatingScreen) return;
+        INFO("Setting UpRight");
+        if (!this->floatingScreen) {
+            ERROR("Floating screen not found when setting UpRight");
+            return;
+        };
         auto currentPosition = this->floatingScreen->get_ScreenPosition();
         auto currentRotation = this->floatingScreen->get_ScreenRotation();
-        auto newRotation = UnityEngine::Quaternion::Euler(0.0, currentRotation.get_eulerAngles().y, 0.0);
+        auto newRotation = UnityEngine::Quaternion::Euler(0.0f, currentRotation.get_eulerAngles().y, 0.0f);
        
+        this->floatingScreen->set_ScreenRotation(newRotation);
+
+        // Ensure the screen is above the ground after rotation
+        this->ensureAboveTheGround();
+        currentPosition = this->floatingScreen->get_ScreenPosition();
+
         Main::NyaFloatingUI->updateCoordinates(currentPosition, newRotation.get_eulerAngles());
     }
 }
