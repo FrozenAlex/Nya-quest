@@ -302,6 +302,10 @@ namespace Nya::Utils {
     }
 
     void RemoveAnimationUpdater(UnityW<UnityEngine::UI::Image> image) {
+        if (!image) {
+            ERROR("Image is null when trying to remove animation updater");
+            return;
+        }
         UnityW<BSML::AnimationStateUpdater> oldStateUpdater = image->GetComponent<BSML::AnimationStateUpdater*>();
         if (oldStateUpdater) {
             Object::DestroyImmediate(oldStateUpdater);
