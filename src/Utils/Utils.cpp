@@ -206,7 +206,7 @@ namespace Nya::Utils {
             ERROR("Failed to get the data WebError: {}", UnityEngine::Networking::UnityWebRequest::GetWebErrorString(error));
             if (onFinished) 
                 onFinished(false, path);
-            
+            co_return;
         }
 
         DEBUG("Trying to get downloadHandler");
