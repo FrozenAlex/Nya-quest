@@ -8,7 +8,7 @@
 #include "beatsaber-hook/shared/utils/il2cpp-functions.hpp"
 #include "UnityEngine/Networking/UnityWebRequest.hpp"
 #include "UnityEngine/Networking/DownloadHandler.hpp"
-
+#include "web-utils/shared/WebUtils.hpp"
 
 #include "custom-types/shared/coroutine.hpp"
 using namespace UnityEngine;
@@ -184,85 +184,6 @@ namespace Nya::Utils {
         return ImageExtensions.contains(extension);
     }
 
-    /// @brief Downloads data and returns it. If it does not get the data, 
-    /// @param uri File url
-    /// @param path Path to a new file on local storage
-    /// @param onFinished 
-    /// @return 
-    custom_types::Helpers::Coroutine DownloadFileCoroutine(std::string uri, std::string path, std::function<void(bool success, std::string path)> onFinished) {
-
-        DEBUG("GetReq");
-        auto www = UnityWebRequest::Get(uri);
-        // I suppose it's in seconds
-        www->set_timeout(10);
-        DEBUG("SendReq");
-        co_yield reinterpret_cast<System::Collections::IEnumerator*>(www->SendWebRequest());
-        
-        
-        auto error = www->GetError();
-        bool failed = error != UnityEngine::Networking::UnityWebRequest::UnityWebRequestError::OK;
-        
-        if (failed) {
-            ERROR("Failed to get the data WebError: {}", UnityEngine::Networking::UnityWebRequest::GetWebErrorString(error));
-            if (onFinished) 
-                onFinished(false, path);
-            co_return;
-        }
-
-        DEBUG("Trying to get downloadHandler");
-        UnityEngine::Networking::DownloadHandler* downloadHandler = www->get_downloadHandler();
-        if (downloadHandler == nullptr) {
-            ERROR("Download handler is null");
-            if (onFinished) 
-                onFinished(false, path);
-            co_return;
-        }
-        
-        auto arr = downloadHandler->GetData();
-        if (arr.size() == 0) {
-            ERROR("Failed to get the data");
-            if (onFinished) 
-                onFinished(false, path);
-            co_return;
-        }
-
-        
-        // Check free space
-        fs::path fsPath(path);
-        auto parentPath = fsPath.parent_path();
-        auto space = fs::space(parentPath);
-        if (space.available < arr.size()) {
-            ERROR("Not enough space to save the file, available: {}, needed: {}", space.available, arr.size());
-            if (onFinished) 
-                onFinished(false, path);
-            co_return;
-        }
-        
-        try {
-            std::ofstream f(path,  std::ios_base::binary | std::ios_base::trunc);
-            f.write((char*)arr.begin(), arr.size());
-            f.flush();
-            f.close();
-        } catch (std::exception& e) {
-            ERROR("Failed to save the file: {}", e.what());
-            if (onFinished) 
-                onFinished(false, path);
-            co_return;
-        }
-        
-        if (!fs::exists(path)) {
-            ERROR("Failed to save the file, it does not exist after saving");
-            if (onFinished) 
-                onFinished(false, path);
-            co_return;
-        }
-
-        if (onFinished)
-            onFinished(true, path);
-
-        co_return;
-    }
-
     void DownloadFile(std::string uri, std::string path, std::function<void(bool success, std::string path)> onFinished) {
         if (!getNyaConfig().NSFWEnabled.GetValue()){
             INFO("Getting data from uri: {}", uri.c_str());
@@ -273,11 +194,78 @@ namespace Nya::Utils {
             return;
         }
 
-        // TODO: Implement a global coro starter for Nya
-         BSML::SharedCoroutineStarter::StartCoroutine(
-            custom_types::Helpers::CoroutineHelper::New(
-             DownloadFileCoroutine(uri, path, onFinished)
-            ));
+        std::thread([uri, path, onFinished](){
+            auto response = WebUtils::Get<WebUtils::DataResponse>(
+                WebUtils::URLOptions(uri)
+            );
+
+            if (!response.IsSuccessful()) {
+                ERROR("Failed to get the data status: {}", response.curlStatus);
+                if (onFinished) {
+                    BSML::MainThreadScheduler::Schedule([path, onFinished](){ onFinished(false, path); });
+                }
+                return;
+            }
+
+            if (!response.responseData.has_value()) {
+                ERROR("Failed to get the data, no data");
+                if (onFinished) {
+                    BSML::MainThreadScheduler::Schedule([path, onFinished](){ onFinished(false, path); });
+                }
+                return;
+            }
+
+            auto data = response.responseData.value();
+            if (data.size() == 0) {
+                ERROR("Failed to get the data, data size is 0");
+                if (onFinished) {
+                    BSML::MainThreadScheduler::Schedule([path, onFinished](){ onFinished(false, path); });
+                }
+                return;
+            }
+
+            // Check free space
+            fs::path fsPath(path);
+            auto parentPath = fsPath.parent_path();
+            auto space = fs::space(parentPath);
+            if (space.available < data.size()) {
+                ERROR("Not enough space to save the file, available: {}, needed: {}", space.available, data.size());
+                if (onFinished) {
+                    BSML::MainThreadScheduler::Schedule([path, onFinished](){ onFinished(false, path); });
+                }
+                return;
+            }
+
+            try {
+                std::ofstream f(path,  std::ios_base::binary | std::ios_base::trunc);
+                f.write(reinterpret_cast<const char*>(data.data()), data.size());
+                f.flush();
+                f.close();
+            } catch (std::exception& e) {
+                ERROR("Failed to save the file: {}", e.what());
+                if (onFinished) {
+                    BSML::MainThreadScheduler::Schedule([path, onFinished](){ onFinished(false, path); });
+                }
+                return;
+            }
+            
+            if (!fs::exists(path)) {
+                ERROR("Failed to save the file, it does not exist after saving");
+                if (onFinished) {
+                    BSML::MainThreadScheduler::Schedule([path, onFinished](){
+                        onFinished(false, path);
+                    });
+                }
+                return;
+            }
+
+            if (onFinished) {
+                BSML::MainThreadScheduler::Schedule([path, onFinished](){
+                    onFinished(true, path);
+                });
+            }
+            return;
+        }).detach();
     }
 
     void SetButtonSize(UnityW<UnityEngine::UI::Button> button, UnityEngine::Vector2 size) {

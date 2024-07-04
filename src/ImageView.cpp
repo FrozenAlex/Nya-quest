@@ -13,7 +13,6 @@
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/SpriteMeshType.hpp"
 #include "HMUI/ImageView.hpp"
-#include "WebUtils.hpp"
 #include "beatsaber-hook/shared/config/rapidjson-utils.hpp"
 #include "UnityEngine/SpriteMeshType.hpp"
 
@@ -294,9 +293,7 @@ void NyaUtils::ImageView::GetImage(std::function<void(bool success)> finished = 
             
      
     }, authenticated ? "FP-Public-naEjca70OhKMtq67WpzaN8Gs" : "");
-  }
-
-           
+  }           
 }
 
 void NyaUtils::ImageView::SetErrorImage()

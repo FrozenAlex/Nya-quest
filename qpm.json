@@ -15,7 +15,7 @@
   "dependencies": [
     {
       "id": "beatsaber-hook",
-      "versionRange": "^5.1.7",
+      "versionRange": "^5.1.9",
       "additionalData": {}
     },
     {
@@ -28,7 +28,7 @@
     },
     {
       "id": "custom-types",
-      "versionRange": "^0.17.8",
+      "versionRange": "^0.17.10",
       "additionalData": {}
     },
     {
@@ -38,7 +38,7 @@
     },
     {
       "id": "libcurl",
-      "versionRange": "8.5.0",
+      "versionRange": "^8.5.0",
       "additionalData": {
         "private": true
       }
@@ -57,7 +57,12 @@
     },
     {
       "id": "bsml",
-      "versionRange": "^0.4.42",
+      "versionRange": "^0.4.43",
+      "additionalData": {}
+    },
+    {
+      "id": "web-utils",
+      "versionRange": "^0.6.6",
       "additionalData": {}
     },
     {

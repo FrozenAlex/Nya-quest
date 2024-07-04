@@ -1,6 +1,6 @@
 #include "API.hpp"
-#include "WebUtils.hpp"
 #include "main.hpp"
+#include "web-utils/shared/WebUtils.hpp"
 using namespace Nya;
 
 
@@ -260,21 +260,43 @@ std::vector<StringW> NyaAPI::get_source_list() {
     return keys;
 }
 
-// Grabs path to image from api
+/**
+ * @brief Get the path from a json api
+ * WARNING: This function runs finished not on the main thread
+ * @param source The source data
+ * @param url The url to get the data from
+ * @param timeoutInSeconds The timeout in seconds
+ * @param finished The function to run when the request is finished
+ * @param apiKey The api key to use (optional)
+ */
 void NyaAPI::get_path_from_json_api(
     SourceData* source,
     std::string url,
     float timeoutInSeconds,
     std::function<void(bool success, std::string url)> finished,
     std::string apiKey) {
-    WebUtils::GetAsync(url, 10.0, [&, finished, source](long code, std::string result){
-        if (code != 200) {
+    
+    std::thread([&, source, url, finished, apiKey] {
+        auto options = WebUtils::URLOptions(url);
+        options.timeOut = timeoutInSeconds;
+        if (apiKey != "") { options.headers.emplace("Authorization", apiKey); }
+
+        auto response = WebUtils::Get<WebUtils::JsonResponse>(
+            options
+        );
+
+        if (!response.IsSuccessful()) {
             if(finished != nullptr) finished(false, "");
             return;
         }
 
-        rapidjson::Document document;
-        document.Parse(result);
+        auto result = response.responseData.has_value();
+        if (!result) {
+            if(finished != nullptr) finished(false, "");
+            return;
+        }
+
+        auto& document = response.responseData.value();
         if(document.HasParseError() || !document.IsObject()) {
             if(finished != nullptr) finished(false, "");
             return;
@@ -289,8 +311,7 @@ void NyaAPI::get_path_from_json_api(
             if(finished != nullptr) finished(false, "");
             return;
         }
-        
-    }, nullptr, apiKey);
+    }).detach();
 }
 
 /**
