@@ -273,43 +273,37 @@ void NyaAPI::get_path_from_json_api(
     SourceData* source,
     std::string url,
     float timeoutInSeconds,
-    std::function<void(bool success, std::string url)> finished,
-    std::string apiKey) {
+    std::function<void(bool success, std::string url)> finished, std::string apiKey
+) {
+    if (finished == nullptr) {
+        return ERROR("Can't get data async without a callback to use it with");
+    }
+    if (source == nullptr) {
+        ERROR("Source is null");
+        return finished(false, "");
+    }
+
+    auto options = WebUtils::URLOptions(url);
+    options.timeOut = timeoutInSeconds;
+    if (apiKey != "") { options.headers.emplace("Authorization", apiKey); }
     
-    std::thread([&, source, url, finished, apiKey] {
-        auto options = WebUtils::URLOptions(url);
-        options.timeOut = timeoutInSeconds;
-        if (apiKey != "") { options.headers.emplace("Authorization", apiKey); }
+    std::thread([propertyName = source->propertyName, options, finished] {
+        auto response = WebUtils::Get<WebUtils::JsonResponse>(options);
 
-        auto response = WebUtils::Get<WebUtils::JsonResponse>(
-            options
-        );
-
-        if (!response.IsSuccessful()) {
-            if(finished != nullptr) finished(false, "");
-            return;
-        }
+        if (!response.IsSuccessful()) return finished(false, "");
 
         auto result = response.responseData.has_value();
-        if (!result) {
-            if(finished != nullptr) finished(false, "");
-            return;
-        }
+        if (!result) return finished(false, "");
 
         auto& document = response.responseData.value();
-        if(document.HasParseError() || !document.IsObject()) {
-            if(finished != nullptr) finished(false, "");
-            return;
-        }
+        if(document.HasParseError() || !document.IsObject()) return finished(false, "");
             
-        std::string url = "";
-        if(document.HasMember(source->propertyName))
-        {
-            url = document.FindMember(source->propertyName)->value.GetString();
-            if(finished != nullptr) finished(true, url);
+        auto itr = document.FindMember(propertyName);
+        if (itr != document.MemberEnd() && itr->value.IsString()) {
+            std::string url(itr->value.GetString(), itr->value.GetStringLength());
+            return finished(true, url);
         } else {
-            if(finished != nullptr) finished(false, "");
-            return;
+            return finished(false, "");
         }
     }).detach();
 }

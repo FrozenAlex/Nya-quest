@@ -215,7 +215,7 @@ namespace Nya::Utils {
                 return;
             }
 
-            auto data = response.responseData.value();
+            auto& data = response.responseData.value();
             if (data.size() == 0) {
                 ERROR("Failed to get the data, data size is 0");
                 if (onFinished) {
