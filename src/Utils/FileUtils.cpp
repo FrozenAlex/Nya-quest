@@ -1,9 +1,11 @@
 #include "Utils/FileUtils.hpp"
+#include "NyaConfig.hpp"
 #include "Utils/Utils.hpp"
 #include <vector>
 #include <filesystem>
 #include "System/IO/Path.hpp"
 #include "logging.hpp"
+#include "main.hpp"
 namespace fs = std::filesystem;
 
 namespace FileUtils {
@@ -88,5 +90,24 @@ namespace FileUtils {
 
     bool exists(const std::string& path) {
         return fs::exists(path);
+    }
+    std::string getImageDir(bool isNSFW) {
+        std::string path;
+        if (isNSFW) {
+            path = NyaGlobals::imagesPathNSFW;
+        } else {
+            path = NyaGlobals::imagesPathSFW;
+        }
+        if (!fs::exists(path)) {
+            INFO("Image directory does not exist, creating: {}", path);
+            createDirectoryIfNotExists(path);
+            if (!fs::exists(path)) {
+                ERROR("Failed to create image directory: {}", path);
+                return "";
+            }
+            Nya::ApplyIndexingRules();
+        }
+
+        return path;
     }
 }

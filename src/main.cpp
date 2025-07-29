@@ -125,51 +125,15 @@ MAKE_HOOK_MATCH(SceneManager_Internal_ActiveSceneChanged, &UnityEngine::SceneMan
     }   
 }
 
-void makeFolder() 
+void makeTempFolder() 
 {    
-    if (!direxists(NyaGlobals::nyaPath))
-    {
-        int makePath = mkpath(NyaGlobals::nyaPath);
-        if (makePath == -1)
-        {
-            ERROR("Failed to make Nya Folder path!");
-        }
-    }
-
-    if (!direxists(NyaGlobals::imagesPath))
-    {
-        int makePath = mkpath(NyaGlobals::imagesPath);
-        if (makePath == -1)
-        {
-            ERROR("Failed to make Images folder!");
-        }
-    }
+    // Make the temp path
     if (!direxists(NyaGlobals::tempPath))
     {
         int makePath = mkpath(NyaGlobals::tempPath);
         if (makePath == -1)
         {
-            ERROR("Failed to make Temp folder!");
-        }
-    }
-
-    if (!direxists(NyaGlobals::imagesPathSFW))
-    {
-        int makePath = mkpath(NyaGlobals::imagesPathSFW);
-        if (makePath == -1)
-        {
-            ERROR("Failed to make images folder!");
-        }
-    }
-
-    if (getNyaConfig().NSFWUI.GetValue()) {
-        if (!direxists(NyaGlobals::imagesPathNSFW))
-        {
-            int makePath = mkpath(NyaGlobals::imagesPathNSFW);
-            if (makePath == -1)
-            {
-                ERROR("Failed to make images2 folder!");
-            }
+            ERROR("Failed to make the Temp folder!");
         }
     }
 }
@@ -317,7 +281,7 @@ extern "C" __attribute__((visibility("default"))) void late_load() {
 
     try {
         // Make local folders if they do not exist
-        makeFolder();
+        makeTempFolder();
         // Sometimes when crashing, the temp folder is not deleted, so we do it here on start
         Nya::CleanTempFolder();
         Nya::ApplyIndexingRules();

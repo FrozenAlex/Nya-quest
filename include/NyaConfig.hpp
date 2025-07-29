@@ -10,14 +10,13 @@
 #include "UnityEngine/Vector4.hpp"
 #include "logging.hpp"
 
-#define NYA_PATH_FORMAT "/sdcard/ModData/{}/Mods/Nya/"
+#define NYA_MOD_PATH_FORMAT "/sdcard/ModData/{}/Mods/Nya/"
 
 namespace NyaGlobals {
-        static std::string nyaPath = fmt::format(NYA_PATH_FORMAT, modloader::get_application_id().c_str());
-        static std::string imagesPath = nyaPath + "Images/";
-        static std::string imagesPathSFW = nyaPath + "Images/sfw/";
-        static std::string imagesPathNSFW = nyaPath + "Images/nsfw/";
-        static std::string tempPath = nyaPath + "Temp/";
+        static std::string nyaPath = "/sdcard/Pictures/Nya/";
+        static std::string imagesPathSFW = nyaPath + "sfw/";
+        static std::string imagesPathNSFW = nyaPath + "nsfw/";
+        static std::string tempPath = fmt::format(NYA_MOD_PATH_FORMAT, modloader::get_application_id().c_str()) + "temp/";
 }
 
 DECLARE_JSON_STRUCT(EndpointConfig) {
