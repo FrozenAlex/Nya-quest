@@ -18,7 +18,7 @@ Nya features a floating screen, allowing Nya to be accessed outside of the gamep
 * [Animals (https://some-random-api.com)](https://some-random-api.com/)
 * [Local Files](#local-files)
 ### Local Files
-In order for local files to work there must be compatible images in the sfw / nsfw files found in Nya's folder in `ModData\com.beatgames.beatsaber\Mods\Nya\Images`.
+In order for local files to work there must be compatible images in the sfw / nsfw files found in Nya's folder in `/sdcard/Pictures/Nya/`.
 The compatible file types are PNG, JPEG, GIF.
 Images which are downloaded via Nya will also be placed in the sfw / nsfw folders.
 ## Installation
