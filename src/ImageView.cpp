@@ -89,14 +89,8 @@ void Nya::ImageView::SaveImage() {
         }
 
         // Determine and create destination directory if needed
-        if (this->isNSFW) {
-            FileUtils::createDirectoryIfNotExists(NyaGlobals::imagesPathNSFW);
-            destPath = NyaGlobals::imagesPathNSFW + this->tempName;
-        } else {
-            FileUtils::createDirectoryIfNotExists(NyaGlobals::imagesPathSFW);
-            destPath = NyaGlobals::imagesPathSFW + this->tempName;
-        }
-        
+        destPath = FileUtils::getImageDir(this->isNSFW) + this->tempName;
+
         INFO("Moving file from {} to {}", originalPath, destPath);
         FileUtils::moveFile(originalPath, destPath);
 
