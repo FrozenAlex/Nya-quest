@@ -1,6 +1,4 @@
 # Nya Quest  <img src="assets\Vanilla_Mini_Sitting.png" align="right" width="150">
-![GitHub Downloads (specific asset, latest release)](https://img.shields.io/github/downloads/frozenalex/Nya-quest/latest/Nya.qmod)
-![GitHub Downloads (specific asset, all releases)](https://img.shields.io/github/downloads/frozenalex/Nya-quest/Nya.qmod)
 
 Beat Saber Quest mod for displaying nya-tastic images from various anime themed web APIs
 
