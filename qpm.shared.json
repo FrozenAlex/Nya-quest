@@ -81,7 +81,7 @@
       },
       {
         "id": "web-utils",
-        "versionRange": "^0.6.7",
+        "versionRange": "^0.6.8",
         "additionalData": {}
       }
     ]
@@ -146,12 +146,12 @@
     {
       "dependency": {
         "id": "paper2_scotland2",
-        "versionRange": "=4.6.4",
+        "versionRange": "=4.7.0",
         "additionalData": {
-          "soLink": "https://github.com/Fernthedev/paperlog/releases/download/v4.6.4/libpaper2_scotland2.so",
+          "soLink": "https://github.com/Fernthedev/paperlog/releases/download/v4.7.0/libpaper2_scotland2.so",
           "overrideSoName": "libpaper2_scotland2.so",
-          "modLink": "https://github.com/Fernthedev/paperlog/releases/download/v4.6.4/paper2_scotland2.qmod",
-          "branchName": "version/v4_6_4",
+          "modLink": "https://github.com/Fernthedev/paperlog/releases/download/v4.7.0/paper2_scotland2.qmod",
+          "branchName": "version/v4_7_0",
           "compileOptions": {
             "systemIncludes": [
               "shared/utfcpp/source"
@@ -160,7 +160,7 @@
           "cmake": false
         }
       },
-      "version": "4.6.4"
+      "version": "4.7.0"
     },
     {
       "dependency": {
@@ -274,17 +274,17 @@
     {
       "dependency": {
         "id": "web-utils",
-        "versionRange": "=0.6.7",
+        "versionRange": "=0.6.8",
         "additionalData": {
-          "soLink": "https://github.com/RedBrumbler/WebUtils/releases/download/v0.6.7/libweb-utils.so",
-          "debugSoLink": "https://github.com/RedBrumbler/WebUtils/releases/download/v0.6.7/debug_libweb-utils.so",
+          "soLink": "https://github.com/bsq-ports/WebUtils/releases/download/v0.6.8/libweb-utils.so",
+          "debugSoLink": "https://github.com/bsq-ports/WebUtils/releases/download/v0.6.8/debug_libweb-utils.so",
           "overrideSoName": "libweb-utils.so",
-          "modLink": "https://github.com/RedBrumbler/WebUtils/releases/download/v0.6.7/WebUtils.qmod",
-          "branchName": "version/v0_6_7",
+          "modLink": "https://github.com/bsq-ports/WebUtils/releases/download/v0.6.8/WebUtils.qmod",
+          "branchName": "version/v0_6_8",
           "cmake": false
         }
       },
-      "version": "0.6.7"
+      "version": "0.6.8"
     },
     {
       "dependency": {
