@@ -3,16 +3,10 @@
 
 # Branches to get version from
 $branches = @(
-    '1.40.8',
-    '1.40.7',
-    '1.40.6',
-    '1.40.4'
+    '1.40.8'
 )
 
 # Versions of beat saber 1:1 with tags
 $versions = @(
-    '1.40.8',
-    '1.40.7',
-    '1.40.6',
-    '1.40.4'
+    '1.40.8'
 )
