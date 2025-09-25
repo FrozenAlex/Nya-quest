@@ -1,21 +1,24 @@
 #include "API.hpp"
 #include "web-utils/shared/WebUtils.hpp"
 #include "logging.hpp"
+#include "beatsaber-hook/shared/rapidjson/include/rapidjson/pointer.h"
+#include "Utils/Utils.hpp"
 
 using namespace NyaAPI;
+
 
 inline std::map<std::string, NyaAPI::SourceData> endpoint_data = {
     {"fluxpoint.dev",
         {
             "https://gallery.fluxpoint.dev/api/",
-            DataMode::Authenticated,
+            DataMode::Json,
             {
                 // Images
                 {"anime", "sfw/img/anime"},
                 {"azurlane", "sfw/img/azurlane"},
                 {"chibi", "sfw/img/chibi"},
                 {"christmas", "sfw/img/christmas"},
-                // {"ddlc", "sfw/img/ddlc"},
+                {"ddlc", "sfw/img/ddlc"},
                 {"halloween", "sfw/img/halloween"},
                 {"holo", "sfw/img/holo"},
                 {"kitsune", "sfw/img/kitsune"},
@@ -66,24 +69,24 @@ inline std::map<std::string, NyaAPI::SourceData> endpoint_data = {
                 {"cosplay", "nsfw/img/cosplay"},
                 {"cum", "nsfw/img/cum"},
                 {"feet", "nsfw/img/feet"},
-                // {"femdom", "nsfw/img/femdom"},
+                {"femdom", "nsfw/img/femdom"},
                 {"futa", "nsfw/img/futa"},
                 {"gasm", "nsfw/img/gasm"},
                 {"holo", "nsfw/img/holo"},
-                // {"kitsune", "nsfw/img/kitsune"},
+                {"kitsune", "nsfw/img/kitsune"},
                 {"lewd", "nsfw/img/lewd"},
                 {"neko", "nsfw/img/neko"},
                 {"nekopara", "nsfw/img/nekopara"},
-                // {"pantsu", "nsfw/img/pantsu"},
+                {"pantsu", "nsfw/img/pantsu"},
                 {"pantyhose", "nsfw/img/pantyhose"},
                 {"peeing", "nsfw/img/peeing"},
                 {"petplay", "nsfw/img/petplay"},
                 {"pussy", "nsfw/img/pussy"},
                 {"slimes", "nsfw/img/slimes"},
                 {"solo", "nsfw/img/solo"},
-                // {"swimsuit", "nsfw/img/swimsuit"},
-                // {"tentacle", "nsfw/img/tentacle"},
-                // {"thighs", "nsfw/img/thighs"},
+                {"swimsuit", "nsfw/img/swimsuit"},
+                {"tentacle", "nsfw/img/tentacle"},
+                {"thighs", "nsfw/img/thighs"},
                 {"trap", "nsfw/img/trap"},
                 {"yaoi", "nsfw/img/yaoi"},
                 {"yuri", "nsfw/img/yuri"},
@@ -100,19 +103,20 @@ inline std::map<std::string, NyaAPI::SourceData> endpoint_data = {
                 {"futa gif", "nsfw/gif/futa"},
                 {"handjob", "nsfw/gif/handjob"},
                 {"hentai", "nsfw/gif/hentai"},
-                // {"kitsune (not implemented yet)", "nsfw/gif/kitsune"},
+                //{"kitsune", "nsfw/gif/kitsune"},
                 {"kuni", "nsfw/gif/kuni"},
                 {"neko gif", "nsfw/gif/neko"},
                 {"pussy gif", "nsfw/gif/pussy"},
                 {"wank", "nsfw/gif/wank"},
                 {"solo gif", "nsfw/gif/solo"},
                 {"spank", "nsfw/gif/spank"},
-                // {"femdom gif", "nsfw/gif/femdom"},
+                //{"femdom gif", "nsfw/gif/femdom"},
                 {"tentacle gif", "nsfw/gif/tentacle"},
                 {"toys", "nsfw/gif/toys"},
                 {"yuri gif", "nsfw/gif/yuri"},
             },
-            "file"
+            "file",
+            "FP-Public-naEjca70OhKMtq67WpzaN8Gs"
         }
     },
     {"waifu.pics",
@@ -147,39 +151,17 @@ inline std::map<std::string, NyaAPI::SourceData> endpoint_data = {
                 {"wink", "sfw/wink"},
                 {"poke", "sfw/poke"},
                 {"dance", "sfw/dance"},
-            }, // Not including 'kill' because it's bad
+                // {"kill", "sfw/kill"}, // Not including 'kill' because it's bad
+            },
             {
                 {"neko", "nsfw/neko"},
                 {"waifu", "nsfw/waifu"},
                 {"trap", "nsfw/trap"},
                 {"blowjob", "nsfw/blowjob"},
             },
-            "url"
+            "url",
         }
     },
-    // {"Anime-Images API",
-    //     {
-    //         "https://anime-api.hisoka17.repl.co/img/",
-    //         DataMode::Json,
-    //         {
-    //             {"hug", "hug"},
-    //             {"kiss", "kiss"},
-    //             {"slap", "slap"},
-    //             {"wink", "wink"},
-    //             {"pat", "pat"},
-    //             {"kill", "kill"},
-    //             {"cuddle", "cuddle"},
-    //             {"punch", "punch"},
-    //             {"waifu", "waifu"},
-    //         },
-    //         {
-    //             {"hentai", "hentai"},
-    //             {"boobs", "nsfw/boobs"},
-    //             {"lesbian", "nsfw/lesbian"},
-    //         },
-    //         "url"
-    //     }
-    // },
     {"Bocchi",
         {
             "https://boccher.pixelboom.dev/api/",
@@ -218,12 +200,135 @@ inline std::map<std::string, NyaAPI::SourceData> endpoint_data = {
                 {"panda", "panda"},
                 {"red panda", "red_panda"},
                 {"bird", "bird"},
+                {"birb", "birb"},
                 {"koala", "koala"},
                 {"kangaroo", "kangaroo"},
-                {"raccoon", "raccoon"}
+                {"raccoon", "raccoon"},
+                {"whale", "whale"},
             },
             {},
             "image"
+        }
+    },
+    {"Animu",
+        {
+            "https://api.some-random-api.com/animu/",
+            DataMode::Json,
+            {
+                {"nom", "nom"},
+                {"poke", "poke"},
+                {"cry", "cry"},
+                {"kiss", "kiss"},
+                {"pat", "pat"},
+                {"hug", "hug"},
+                {"wink", "wink"},
+                {"face-palm", "face-palm"},
+                {"quote", "quote"},
+            },
+            {},
+            "link"
+        }
+    },
+    {"nekosia.cat",
+        {
+            "https://api.nekosia.cat/api/v1/images/",
+            DataMode::Json,
+            {
+                {"catgirl", "catgirl"},
+                {"foxgirl", "foxgirl"},
+                {"wolf girl", "wolf-girl"},
+                {"animal ears", "animal-ears"},
+                {"tail", "tail"},
+                {"tail with ribbon", "tail-with-ribbon"},
+                {"tail from under skirt", "tail-from-under-skirt"},
+                {"cute", "cute"},
+                {"cuteness is justice", "cuteness-is-justice"},
+                {"blue archive", "blue-archive"},
+                {"girl", "girl"},
+                {"young girl", "young-girl"},
+                {"maid", "maid"},
+                {"maid uniform", "maid-uniform"},
+                {"vtuber", "vtuber"},
+                {"w sitting", "w-sitting"},
+                {"lying down", "lying-down"},
+                {"hands forming a <3", "hands-forming-a-heart"},
+                {"wink", "wink"},
+                {"valentine", "valentine"},
+                {"thigh high socks", "thigh-high-socks"},
+                {"headphones", "headphones"},
+                {"knee high socks", "knee-high-socks"},
+                {"white tights", "white-tights"},
+                {"black tights", "black-tights"},
+                {"heterochromia", "heterochromia"},
+                {"uniform", "uniform"},
+                {"sailor uniform", "sailor-uniform"},
+                {"hoodie", "hoodie"},
+                {"ribbon", "ribbon"},
+                {"white hair", "white-hair"},
+                {"blue hair", "blue-hair"},
+                {"long hair", "long-hair"},
+                {"blonde", "blonde"},
+                {"blue eyes", "blue-eyes"},
+                {"purple eyes", "purple-eyes"}
+            },
+            {},
+            "image/original/url"
+        }
+    },
+    {"nekos.best",
+        {
+            "https://nekos.best/api/v2/",
+            DataMode::Json,
+            {
+                {"husbando", "husbando"},
+                {"kitsune", "kitsune"},
+                {"neko", "neko"},
+                {"waifu", "waifu"},
+                {"angry", "angry"},
+                {"baka", "baka"},
+                {"bite", "bite"},
+                {"blush", "blush"},
+                {"bored", "bored"},
+                {"cry", "cry"},
+                {"cuddle", "cuddle"},
+                {"dance", "dance"},
+                {"facepalm", "facepalm"},
+                {"feed", "feed"},
+                {"handhold", "handhold"},
+                {"handshake", "handshake"},
+                {"happy", "happy"},
+                {"highfive", "highfive"},
+                {"hug", "hug"},
+                {"kick", "kick"},
+                {"kiss", "kiss"},
+                {"laugh", "laugh"},
+                {"lurk", "lurk"},
+                {"nod", "nod"},
+                {"nom", "nom"},
+                {"nope", "nope"},
+                {"pat", "pat"},
+                {"peck", "peck"},
+                {"poke", "poke"},
+                {"pout", "pout"},
+                {"punch", "punch"},
+                {"run", "run"},
+                {"shoot", "shoot"},
+                {"shrug", "shrug"},
+                {"slap", "slap"},
+                {"sleep", "sleep"},
+                {"smile", "smile"},
+                {"smug", "smug"},
+                {"stare", "stare"},
+                {"think", "think"},
+                {"thumbsup", "thumbsup"},
+                {"tickle", "tickle"},
+                {"wave", "wave"},
+                {"wink", "wink"},
+                {"yawn", "yawn"},
+                {"yeet", "yeet"},
+            },
+            {},
+            "results/0/url"
         }
     },
     {"Local Files",
@@ -263,16 +368,16 @@ std::vector<StringW> NyaAPI::get_source_list() {
  * @brief Get the path from a json api
  * WARNING: This function runs finished not on the main thread
  * @param source The source data
- * @param url The url to get the data from
+ * @param endpoint The endpoint to use
  * @param timeoutInSeconds The timeout in seconds
  * @param finished The function to run when the request is finished
- * @param apiKey The api key to use (optional)
  */
 void NyaAPI::get_path_from_json_api(
     SourceData* source,
-    std::string url,
+    std::string endpoint,
+    bool nsfw,
     float timeoutInSeconds,
-    std::function<void(bool success, std::string url)> finished, std::string apiKey
+    std::function<void(bool success, std::string url)> finished
 ) {
     if (finished == nullptr) {
         return ERROR("Can't get data async without a callback to use it with");
@@ -282,28 +387,43 @@ void NyaAPI::get_path_from_json_api(
         return finished(false, "");
     }
 
-    auto options = WebUtils::URLOptions(url);
-    options.timeOut = timeoutInSeconds;
-    if (apiKey != "") { options.headers.emplace("Authorization", apiKey); }
-    
-    std::thread([propertyName = source->propertyName, options, finished] {
-        auto response = WebUtils::Get<WebUtils::JsonResponse>(options);
+    std::string endpointURL = source->BaseEndpoint + endpoint;
 
-        if (!response.IsSuccessful()) return finished(false, "");
+    if (!nsfw) INFO("Endpoint URL: {}", endpointURL);
 
-        auto result = response.responseData.has_value();
-        if (!result) return finished(false, "");
+    std::thread([source, endpointURL, timeoutInSeconds, finished] {
+        auto reqOptions = WebUtils::URLOptions(endpointURL);
+        reqOptions.timeOut = timeoutInSeconds;
+        if (!source->apiKey.empty()) {
+            reqOptions.headers.emplace("Authorization", source->apiKey);
+        }
+        auto response = WebUtils::Get<WebUtils::JsonResponse>(reqOptions);
+
+        if (
+            !response.IsSuccessful() || 
+            !response.responseData.has_value()
+        ) return finished(false, "");
 
         auto& document = response.responseData.value();
-        if(document.HasParseError() || !document.IsObject()) return finished(false, "");
-            
-        auto itr = document.FindMember(propertyName);
-        if (itr != document.MemberEnd() && itr->value.IsString()) {
-            std::string url(itr->value.GetString(), itr->value.GetStringLength());
-            return finished(true, url);
+        if (
+            document.HasParseError() ||
+            !document.IsObject()
+        ) return finished(false, "");
+      
+        std::string formatedPropertyName = "";
+
+        if (!source->propertyName.starts_with("/")) {
+            formatedPropertyName = "/"+ source->propertyName;
         } else {
-            return finished(false, "");
+            formatedPropertyName = source->propertyName;
         }
+
+        // https://rapidjson.org/md_doc_pointer.html
+        rapidjson::Value* current = rapidjson::Pointer(formatedPropertyName).Get(document);
+        if (current == nullptr || !current->IsString()) return finished(false, "");
+
+        std::string result(current->GetString(), current->GetStringLength());
+        return finished(true, result);
     }).detach();
 }
 
@@ -360,14 +480,9 @@ void NyaAPI::get_path_from_json_api(
     }
 
 EndpointCategory* NyaAPI::getRandomEndpoint(std::vector<EndpointCategory>* values) {
-    // If there are no values, return null
     int count = values->size();
-    if (count == 0) {
-        return nullptr;
-    }
+    if (count == 0) return nullptr;
 
-    // Get random index
-    int index = rand() % count;
-    // Return value at index
-    return &((*values)[index]); 
+    int index = Nya::Utils::random(0, count - 1);
+    return &values->at(index);
 }

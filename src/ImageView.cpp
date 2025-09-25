@@ -205,51 +205,41 @@ void Nya::ImageView::GetImage(std::function<void(bool success)> finished = nullp
       }
 
      
-  } else if (source->Mode == DataMode::Json || source->Mode == DataMode::Authenticated) {
+  } else if (source->Mode == DataMode::Json) {
+    std::string selectedEndpoint = EndpointConfigUtils::getEndpointValue(currentAPI, NSFWEnabled);
 
-    // API is authenticated
-    bool authenticated = source->Mode == DataMode::Authenticated;
-      
-    // Construct the url
-    // TODO: check if endpoint from the setting exists and make it dynamic
-
-    std::string endpointValue = EndpointConfigUtils::getEndpointValue(currentAPI, NSFWEnabled);
-    
     // Fallback to sfw if nsfw is enabled and no nsfw endpoint is found
-    if (endpointValue == "" && NSFWEnabled) {
-        endpointValue = EndpointConfigUtils::getEndpointValue(currentAPI, false);
+    if (selectedEndpoint == "" && NSFWEnabled) {
+        selectedEndpoint = EndpointConfigUtils::getEndpointValue(currentAPI, false);
     }
 
     bool nsfwEmpty = source->NsfwEndpoints.empty();
     bool sfwEmpty = source->SfwEndpoints.empty();
 
     // If the endpoint is random, get a random endpoint
-    if (endpointValue == "random") {
+    if (selectedEndpoint == "random") {
         if (NSFWEnabled) {
             if (nsfwEmpty) {
+                // Fallback to sfw since nsfw is empty
+                NSFWEnabled = false;
                 auto endpoint = NyaAPI::getRandomEndpoint(&source->SfwEndpoints);
-                if (endpoint != nullptr) endpointValue = endpoint->url;
+                if (endpoint != nullptr) selectedEndpoint = endpoint->url;
             } else {
                 auto endpoint = NyaAPI::getRandomEndpoint(&source->NsfwEndpoints);
-                if (endpoint != nullptr) endpointValue = endpoint->url;
+                if (endpoint != nullptr) selectedEndpoint = endpoint->url;
             }
         } else {
             if (sfwEmpty) {
-                // DO NOT FALLBACK TO NSFW since it is disabled
-                endpointValue = "";
+                selectedEndpoint = "";
             } else {
                 auto endpoint = NyaAPI::getRandomEndpoint(&source->SfwEndpoints);
-                if (endpoint != nullptr) endpointValue = endpoint->url;
+                if (endpoint != nullptr) selectedEndpoint = endpoint->url;
             }
         }
     }
 
-    std::string endpointURL = source->BaseEndpoint + endpointValue;
-
-    if (!NSFWEnabled) INFO("Endpoint URL: {}", endpointURL);
-    
     // Get the image url from the api
-    NyaAPI::get_path_from_json_api(source, endpointURL, 10.0f, [this, finished, NSFWEnabled](bool success, std::string url) {
+    NyaAPI::get_path_from_json_api(source, selectedEndpoint, NSFWEnabled, 10.0f, [this, finished, NSFWEnabled](bool success, std::string url) {
         // If we failed to get the image url
         if (!success) {
             // Error getting things
@@ -320,8 +310,8 @@ void Nya::ImageView::GetImage(std::function<void(bool success)> finished = nullp
         });
             
      
-    }, authenticated ? "FP-Public-naEjca70OhKMtq67WpzaN8Gs" : "");
-  }           
+    });
+  }
 }
 
 void Nya::ImageView::SetErrorImage()

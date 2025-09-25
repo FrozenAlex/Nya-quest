@@ -14,6 +14,9 @@ Nya features a floating screen, allowing Nya to be accessed outside of the gamep
 * [Waifu.Pics](https://waifu.pics/)
 * [Fluxpoint.dev](https://fluxpoint.dev/api)
 * [Animals (https://some-random-api.com)](https://some-random-api.com/)
+* [Animu (https://some-random-api.com)](https://some-random-api.com/)
+* [Nekos.Best (https://nekos.best)](https://nekos.best/)
+* [Nekosia (https://nekosia.cat)](https://nekosia.cat/)
 * [Local Files](#local-files)
 ### Local Files
 In order for local files to work there must be compatible images in the sfw / nsfw files found in Nya's folder in `/sdcard/Pictures/Nya/`.
