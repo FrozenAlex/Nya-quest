@@ -1,6 +1,7 @@
 {
+  "$schema": "https://raw.githubusercontent.com/QuestPackageManager/QPM.Package/refs/heads/main/qpm.shared.schema.json",
   "config": {
-    "version": "0.1.0",
+    "version": "0.4.0",
     "sharedDir": "shared",
     "dependenciesDir": "extern",
     "info": {
@@ -14,7 +15,10 @@
       }
     },
     "workspace": {
-      "scripts": {}
+      "scripts": {},
+      "qmodIncludeDirs": [],
+      "qmodIncludeFiles": [],
+      "qmodOutput": null
     },
     "dependencies": [
       {
@@ -66,7 +70,7 @@
       },
       {
         "id": "web-utils",
-        "versionRange": "^0.6.6",
+        "versionRange": "^0.6.8",
         "additionalData": {}
       },
       {
@@ -81,56 +85,26 @@
   "restoredDependencies": [
     {
       "dependency": {
-        "id": "web-utils",
-        "versionRange": "=0.6.6",
-        "additionalData": {
-          "soLink": "https://github.com/RedBrumbler/WebUtils/releases/download/v0.6.6/libweb-utils.so",
-          "debugSoLink": "https://github.com/RedBrumbler/WebUtils/releases/download/v0.6.6/debug_libweb-utils.so",
-          "overrideSoName": "libweb-utils.so",
-          "modLink": "https://github.com/RedBrumbler/WebUtils/releases/download/v0.6.6/WebUtils.qmod",
-          "branchName": "version/v0_6_6",
-          "cmake": false
-        }
-      },
-      "version": "0.6.6"
-    },
-    {
-      "dependency": {
-        "id": "bsml",
-        "versionRange": "=0.4.43",
-        "additionalData": {
-          "soLink": "https://github.com/RedBrumbler/Quest-BSML/releases/download/v0.4.43/libbsml.so",
-          "debugSoLink": "https://github.com/RedBrumbler/Quest-BSML/releases/download/v0.4.43/debug_libbsml.so",
-          "overrideSoName": "libbsml.so",
-          "modLink": "https://github.com/RedBrumbler/Quest-BSML/releases/download/v0.4.43/BSML.qmod",
-          "branchName": "version/v0_4_43",
-          "cmake": true
-        }
-      },
-      "version": "0.4.43"
-    },
-    {
-      "dependency": {
-        "id": "libil2cpp",
-        "versionRange": "=0.3.2",
+        "id": "bs-cordl",
+        "versionRange": "=3700.0.0",
         "additionalData": {
           "headersOnly": true,
-          "cmake": false
+          "branchName": "version/v3700_0_0",
+          "compileOptions": {
+            "includePaths": [
+              "include"
+            ],
+            "cppFeatures": [],
+            "cppFlags": [
+              "-DNEED_UNSAFE_CSHARP",
+              "-fdeclspec",
+              "-DUNITY_2021",
+              "-DHAS_CODEGEN"
+            ]
+          }
         }
       },
-      "version": "0.3.2"
-    },
-    {
-      "dependency": {
-        "id": "rapidjson-macros",
-        "versionRange": "=1.2.1",
-        "additionalData": {
-          "headersOnly": true,
-          "branchName": "version/v1_2_1",
-          "cmake": true
-        }
-      },
-      "version": "1.2.1"
+      "version": "3700.0.0"
     },
     {
       "dependency": {
@@ -149,6 +123,84 @@
     },
     {
       "dependency": {
+        "id": "fmt",
+        "versionRange": "=11.0.2",
+        "additionalData": {
+          "headersOnly": true,
+          "branchName": "version/v11_0_2",
+          "compileOptions": {
+            "systemIncludes": [
+              "fmt/include/"
+            ],
+            "cppFlags": [
+              "-DFMT_HEADER_ONLY"
+            ]
+          }
+        }
+      },
+      "version": "11.0.2"
+    },
+    {
+      "dependency": {
+        "id": "paper",
+        "versionRange": "=3.7.0",
+        "additionalData": {
+          "soLink": "https://github.com/Fernthedev/paperlog/releases/download/v3.7.0/libpaperlog.so",
+          "debugSoLink": "https://github.com/Fernthedev/paperlog/releases/download/v3.7.0/debug_libpaperlog.so",
+          "overrideSoName": "libpaperlog.so",
+          "modLink": "https://github.com/Fernthedev/paperlog/releases/download/v3.7.0/paperlog.qmod",
+          "branchName": "version/v3_7_0",
+          "compileOptions": {
+            "systemIncludes": [
+              "shared/utfcpp/source"
+            ]
+          },
+          "cmake": false
+        }
+      },
+      "version": "3.7.0"
+    },
+    {
+      "dependency": {
+        "id": "web-utils",
+        "versionRange": "=0.6.8",
+        "additionalData": {
+          "soLink": "https://github.com/bsq-ports/WebUtils/releases/download/v0.6.8/libweb-utils.so",
+          "debugSoLink": "https://github.com/bsq-ports/WebUtils/releases/download/v0.6.8/debug_libweb-utils.so",
+          "overrideSoName": "libweb-utils.so",
+          "modLink": "https://github.com/bsq-ports/WebUtils/releases/download/v0.6.8/WebUtils.qmod",
+          "branchName": "version/v0_6_8",
+          "cmake": false
+        }
+      },
+      "version": "0.6.8"
+    },
+    {
+      "dependency": {
+        "id": "scotland2",
+        "versionRange": "=0.1.6",
+        "additionalData": {
+          "soLink": "https://github.com/sc2ad/scotland2/releases/download/v0.1.6/libsl2.so",
+          "debugSoLink": "https://github.com/sc2ad/scotland2/releases/download/v0.1.6/debug_libsl2.so",
+          "overrideSoName": "libsl2.so",
+          "branchName": "version/v0_1_6"
+        }
+      },
+      "version": "0.1.6"
+    },
+    {
+      "dependency": {
+        "id": "libil2cpp",
+        "versionRange": "=0.3.2",
+        "additionalData": {
+          "headersOnly": true,
+          "cmake": false
+        }
+      },
+      "version": "0.3.2"
+    },
+    {
+      "dependency": {
         "id": "kaleb",
         "versionRange": "=0.1.9",
         "additionalData": {
@@ -163,40 +215,6 @@
         }
       },
       "version": "0.1.9"
-    },
-    {
-      "dependency": {
-        "id": "paper",
-        "versionRange": "=3.6.3",
-        "additionalData": {
-          "soLink": "https://github.com/Fernthedev/paperlog/releases/download/v3.6.3/libpaperlog.so",
-          "debugSoLink": "https://github.com/Fernthedev/paperlog/releases/download/v3.6.3/debug_libpaperlog.so",
-          "overrideSoName": "libpaperlog.so",
-          "modLink": "https://github.com/Fernthedev/paperlog/releases/download/v3.6.3/paperlog.qmod",
-          "branchName": "version/v3_6_3",
-          "compileOptions": {
-            "systemIncludes": [
-              "shared/utfcpp/source"
-            ]
-          },
-          "cmake": false
-        }
-      },
-      "version": "3.6.3"
-    },
-    {
-      "dependency": {
-        "id": "config-utils",
-        "versionRange": "=1.4.2",
-        "additionalData": {
-          "headersOnly": true,
-          "soLink": "https://github.com/darknight1050/config-utils/releases/download/v1.4.2/libconfig-utils_test.so",
-          "overrideSoName": "libconfig-utils_test.so",
-          "branchName": "version/v1_4_2",
-          "cmake": true
-        }
-      },
-      "version": "1.4.2"
     },
     {
       "dependency": {
@@ -220,26 +238,29 @@
     },
     {
       "dependency": {
-        "id": "bs-cordl",
-        "versionRange": "=3700.0.0",
+        "id": "rapidjson-macros",
+        "versionRange": "=1.2.1",
         "additionalData": {
           "headersOnly": true,
-          "branchName": "version/v3700_0_0",
-          "compileOptions": {
-            "includePaths": [
-              "include"
-            ],
-            "cppFeatures": [],
-            "cppFlags": [
-              "-DNEED_UNSAFE_CSHARP",
-              "-fdeclspec",
-              "-DUNITY_2021",
-              "-DHAS_CODEGEN"
-            ]
-          }
+          "branchName": "version/v1_2_1",
+          "cmake": true
         }
       },
-      "version": "3700.0.0"
+      "version": "1.2.1"
+    },
+    {
+      "dependency": {
+        "id": "config-utils",
+        "versionRange": "=1.4.2",
+        "additionalData": {
+          "headersOnly": true,
+          "soLink": "https://github.com/darknight1050/config-utils/releases/download/v1.4.2/libconfig-utils_test.so",
+          "overrideSoName": "libconfig-utils_test.so",
+          "branchName": "version/v1_4_2",
+          "cmake": true
+        }
+      },
+      "version": "1.4.2"
     },
     {
       "dependency": {
@@ -269,35 +290,18 @@
     },
     {
       "dependency": {
-        "id": "fmt",
-        "versionRange": "=10.0.0",
+        "id": "bsml",
+        "versionRange": "=0.4.43",
         "additionalData": {
-          "headersOnly": true,
-          "branchName": "version/v10_0_0",
-          "compileOptions": {
-            "systemIncludes": [
-              "fmt/include/"
-            ],
-            "cppFlags": [
-              "-DFMT_HEADER_ONLY"
-            ]
-          }
+          "soLink": "https://github.com/RedBrumbler/Quest-BSML/releases/download/v0.4.43/libbsml.so",
+          "debugSoLink": "https://github.com/RedBrumbler/Quest-BSML/releases/download/v0.4.43/debug_libbsml.so",
+          "overrideSoName": "libbsml.so",
+          "modLink": "https://github.com/RedBrumbler/Quest-BSML/releases/download/v0.4.43/BSML.qmod",
+          "branchName": "version/v0_4_43",
+          "cmake": true
         }
       },
-      "version": "10.0.0"
-    },
-    {
-      "dependency": {
-        "id": "scotland2",
-        "versionRange": "=0.1.4",
-        "additionalData": {
-          "soLink": "https://github.com/sc2ad/scotland2/releases/download/v0.1.4/libsl2.so",
-          "debugSoLink": "https://github.com/sc2ad/scotland2/releases/download/v0.1.4/debug_libsl2.so",
-          "overrideSoName": "libsl2.so",
-          "branchName": "version/v0_1_4"
-        }
-      },
-      "version": "0.1.4"
+      "version": "0.4.43"
     }
   ]
 }
