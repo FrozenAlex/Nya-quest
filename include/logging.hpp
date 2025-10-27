@@ -1,6 +1,6 @@
 #pragma once
 
-#include "paper2_scotland2/shared/logger.hpp"
+#include "paper/shared/logger.hpp"
 
 static constexpr auto Logger = Paper::ConstLoggerContext(MOD_ID);
 

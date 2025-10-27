@@ -19,15 +19,15 @@ namespace NyaGlobals {
         static std::string tempPath = fmt::format(NYA_MOD_PATH_FORMAT, modloader::get_application_id().c_str()) + "temp/";
 }
 
-DECLARE_JSON_STRUCT(EndpointConfig) {
+DECLARE_JSON_CLASS(EndpointConfig,
     NAMED_VALUE_OPTIONAL(std::string, sfw, "sfw");
     NAMED_VALUE_OPTIONAL(std::string, nsfw, "nsfw");
     EndpointConfig(std::optional<std::string> safe, std::optional<std::string> unsafe) : sfw(safe), nsfw(unsafe) {};
     EndpointConfig() {};
-};
+);
 
 
-DECLARE_CONFIG(NyaConfig) {
+DECLARE_CONFIG(NyaConfig,
     CONFIG_VALUE(inPause, bool, "Show in pause", true);
     CONFIG_VALUE(inMenu, bool, "Show in menu", true);
 
@@ -56,4 +56,4 @@ DECLARE_CONFIG(NyaConfig) {
     CONFIG_VALUE(menuRotation, UnityEngine::Vector3, "Menu Rotation", UnityEngine::Vector3(332.0f, 0.0f, 0.0f));
 
     CONFIG_VALUE(endpoints, StringKeyedMap<EndpointConfig>, "EndpointsConfig", {});
-};
+);

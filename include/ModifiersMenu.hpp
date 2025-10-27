@@ -8,7 +8,7 @@
 #include "ImageView.hpp"
 #include "UI/Modals/SettingsMenu.hpp"
 
-DECLARE_CLASS_CODEGEN(Nya, ModifiersMenu, UnityEngine::MonoBehaviour) {
+DECLARE_CLASS_CODEGEN(Nya, ModifiersMenu, UnityEngine::MonoBehaviour,
     DECLARE_INSTANCE_FIELD(UnityW<HMUI::ImageView>, NYA);
     DECLARE_INSTANCE_FIELD(UnityW<UnityEngine::UI::Button>, nyaButton);
     DECLARE_INSTANCE_FIELD(UnityW<Nya::ImageView>, imageView);
@@ -28,4 +28,4 @@ DECLARE_CLASS_CODEGEN(Nya, ModifiersMenu, UnityEngine::MonoBehaviour) {
     DECLARE_INSTANCE_FIELD(UnityW<UnityEngine::UI::Button>, settingsButton);
     DECLARE_INSTANCE_FIELD(UnityW<HMUI::ModalView>, settingsModal);
     DECLARE_INSTANCE_FIELD(UnityW<Nya::SettingsMenu>, settingsMenu);
-};
+);

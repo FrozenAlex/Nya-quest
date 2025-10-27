@@ -7,7 +7,7 @@
 #include "HMUI/SegmentedControlCell.hpp"
 #include "HMUI/TextSegmentedControlCell.hpp"
 
-DECLARE_CLASS_CODEGEN_INTERFACES(NyaUI, CustomTextSegmentedControlData, UnityEngine::MonoBehaviour, HMUI::SegmentedControl::IDataSource*) {
+___DECLARE_TYPE_WRAPPER_INHERITANCE(NyaUI, CustomTextSegmentedControlData, Il2CppTypeEnum::IL2CPP_TYPE_CLASS, UnityEngine::MonoBehaviour, "NyaUI", { classof(HMUI::SegmentedControl::IDataSource*) }, 0, nullptr,
     DECLARE_INSTANCE_FIELD(HMUI::SegmentedControl*, segmentedControl);
     DECLARE_INSTANCE_FIELD(HMUI::SegmentedControlCell*, firstCellPrefab);
     DECLARE_INSTANCE_FIELD(HMUI::SegmentedControlCell*, lastCellPrefab);
@@ -29,4 +29,4 @@ DECLARE_CLASS_CODEGEN_INTERFACES(NyaUI, CustomTextSegmentedControlData, UnityEng
         float padding = 2.0f;
     private:
         HMUI::TextSegmentedControlCell* InstantiateCell(UnityEngine::GameObject* prefab);
-};
+);

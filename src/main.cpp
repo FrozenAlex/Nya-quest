@@ -249,7 +249,7 @@ MAKE_HOOK_MATCH(FixedUpdateHook, &GlobalNamespace::OculusVRHelper::FixedUpdate, 
          // Source: https://developer.oculus.com/documentation/unity/unity-ovrinput/
          useButtonValue = ((useButtonValue - 1) % 2) + 1;
 
-         bool buttonPressed = GlobalNamespace::OVRInput::Get(GlobalNamespace::OVRInput_Button(useButtonValue), controllerIndex);
+         bool buttonPressed = GlobalNamespace::OVRInput::Get(GlobalNamespace::__OVRInput__Button(useButtonValue), controllerIndex);
          if(buttonPressed){
              if(!pressedEventAllreadyRun) {
                  if (Nya::GlobalEvents::onControllerNya.size() > 0) {
