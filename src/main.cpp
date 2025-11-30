@@ -22,6 +22,7 @@
 #include "Events.hpp"
 #include "UI/FlowCoordinators/NyaSettingsFlowCoordinator.hpp"
 #include <fstream>
+#include <string>
 #include "logging.hpp"
 #include "Utils/FileUtils.hpp"
 
@@ -230,6 +231,33 @@ void InitConfigOnStart(){
     }
 }
 
+// Used to migrate old
+void MigrateOldImages() {
+    try {
+        std::string oldNyaPath = fmt::format(NYA_MOD_PATH_FORMAT, modloader::get_application_id().c_str());
+        std::string oldSFWPath = oldNyaPath + "Images/sfw/";
+        std::string oldNSFWPath = oldNyaPath + "Images/nsfw/";
+
+        if (direxists(oldSFWPath)) {
+            DEBUG("Migrating old SFW images from {}", oldSFWPath);
+            std::filesystem::path sourcePath(oldSFWPath);
+            std::filesystem::path destPath(NyaGlobals::imagesPathSFW);
+            FileUtils::MoveDirectoriesRecursively(sourcePath, destPath);
+        }
+
+        if (direxists(oldNSFWPath)) {
+            DEBUG("Migrating old NSFW images from {}", oldNSFWPath);
+            std::filesystem::path sourcePath(oldNSFWPath);
+            std::filesystem::path destPath(NyaGlobals::imagesPathNSFW);
+            FileUtils::MoveDirectoriesRecursively(sourcePath, destPath);
+        }
+
+        
+    } catch (...) {
+        INFO("Failed to migrate old images, skipping...");
+    }
+}
+
 // Handling buttons
 MAKE_HOOK_MATCH(FixedUpdateHook, &GlobalNamespace::OculusVRHelper::FixedUpdate, void, GlobalNamespace::OculusVRHelper* self){
     FixedUpdateHook(self);
@@ -285,6 +313,7 @@ extern "C" __attribute__((visibility("default"))) void late_load() {
         // Sometimes when crashing, the temp folder is not deleted, so we do it here on start
         Nya::CleanTempFolder();
         Nya::ApplyIndexingRules();
+        MigrateOldImages();
     } catch (std::exception& e) {
         ERROR("Error making folders and applying indexing rules: {}", e.what());
     }

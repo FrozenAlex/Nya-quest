@@ -1,6 +1,7 @@
 #include "Utils/FileUtils.hpp"
 #include "NyaConfig.hpp"
 #include "Utils/Utils.hpp"
+#include <system_error>
 #include <vector>
 #include <filesystem>
 #include "System/IO/Path.hpp"
@@ -9,6 +10,95 @@
 namespace fs = std::filesystem;
 
 namespace FileUtils {
+
+    void MoveDirectoriesRecursively(fs::path& sourcePath, fs::path& destPath) {
+        if (!fs::exists(sourcePath)) return;
+
+        std::error_code ec;
+        fs::create_directories(destPath, ec);
+        if (ec) {
+            ERROR("Failed to create directories: {}, {}", ec.message(), destPath.string());
+            return;
+        }
+
+        // Collect all paths
+        std::vector<fs::path> filePaths;
+        for (auto& entry : fs::recursive_directory_iterator(sourcePath)) {
+            if (entry.is_regular_file()) {
+                filePaths.push_back(entry.path());
+            }
+        }
+
+        bool removeSource = true;
+
+        // Move all files
+        for (auto& entry : filePaths) {
+            auto rel = fs::relative(entry, sourcePath);
+
+            // Ensure parent directory exists
+            auto relParent = rel.parent_path();
+            if (!relParent.empty() && !fs::exists(destPath / relParent)) {
+                std::error_code ec;
+                fs::create_directories(destPath / relParent, ec);
+                if (ec) {
+                    // This is bad, we can't move the file if the parent directory doesn't exist
+                    ERROR("Failed to create parent directories: {} at {}", ec.message(), (destPath / relParent).string());
+                    removeSource = false;
+                    break;
+                }
+            }
+
+            auto target = destPath / rel;
+            std::error_code ec;
+            fs::rename(entry, target, ec);
+            if (ec) {
+                if (ec == std::errc::no_space_on_device) {
+                    ERROR("Failed to move file due to no space on device: {}", entry.string());
+                    // If we are out of space, we shouldn't remove the source directory
+                    removeSource = false;
+
+                    // It will fail anyway, so just break
+                    break;
+                }
+                if (ec == std::errc::cross_device_link) {
+                    // Different filesystems, need to copy and delete
+                    fs::copy_file(entry, target, fs::copy_options::overwrite_existing, ec);
+                    if (ec) {
+                        ERROR("Failed to copy file across devices: {}", entry.string());
+                        removeSource = false;
+                        break;
+                    }
+                    fs::remove(entry, ec);
+                    if (ec) {
+                        ERROR("Failed to remove source file after copy: {}", entry.string());
+                        removeSource = false;
+                        break;
+                    }
+                    continue;
+                }
+
+                if (ec == std::errc::file_exists) {
+                    // Target file already exists, skip moving this file
+                    // It will remove files with the same name but we don't really care
+                    continue;
+                }
+
+                if (ec == std::errc::permission_denied) {
+                    ERROR("Permission denied when moving file: {}", entry.string());
+                    removeSource = false;
+                    break;
+                }
+
+                ERROR("Failed to move {} to {}", entry.string(), target.string());
+                // If we failed to move a file, we shouldn't remove the source directory (safety first)
+                removeSource = false;
+            }
+        }
+
+        if (removeSource) {
+            fs::remove_all(sourcePath);
+        }
+    }
 
     std::string FixIlegalName(std::string_view path) {
         static const std::string allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890()[]{}%&.:,;=!-_ ";
@@ -79,6 +169,12 @@ namespace FileUtils {
     void moveFile(std::string oldPath,std::string newPath){
         if (fs::exists((std::string) oldPath)) {
             fs::rename((std::string) oldPath, (std::string) newPath);
+        }
+    }
+
+    void removeDirectory(std::string path){
+        if (fs::exists((std::string) path)) {
+            fs::remove_all((std::string) path);
         }
     }
 
