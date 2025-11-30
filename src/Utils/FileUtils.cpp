@@ -48,7 +48,13 @@ namespace FileUtils {
 
     // Gets all supported files
     std::vector<std::string> getAllFilesInFolder(const std::string& path){
-         std::vector<std::string> strings;
+        std::vector<std::string> strings;
+        
+        if (!direxists(path)) {
+            INFO("Directory {} does not exist, returning empty vector", path);
+            return strings;
+        }
+
         for (const auto & entry : std::filesystem::directory_iterator(path)) {
             if (entry.is_regular_file()) {
                 StringW path = StringW(entry.path().c_str());
@@ -91,6 +97,7 @@ namespace FileUtils {
     bool exists(const std::string& path) {
         return fs::exists(path);
     }
+
     std::string getImageDir(bool isNSFW) {
         std::string path;
         if (isNSFW) {
