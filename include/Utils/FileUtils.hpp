@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
+#include <filesystem>
 
 namespace FileUtils {
+    void MoveDirectoriesRecursively(std::filesystem::path& sourcePath, std::filesystem::path& destPath);
     bool deleteFile(std::string path);
     void moveFile(std::string oldPath,std::string newPath);
     std::string GetFileFormat(std::string path);
