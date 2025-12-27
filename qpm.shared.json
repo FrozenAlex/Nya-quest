@@ -90,13 +90,13 @@
     {
       "dependency": {
         "id": "custom-types",
-        "versionRange": "=0.18.3",
+        "versionRange": "=0.18.4",
         "additionalData": {
-          "soLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.18.3/libcustom-types.so",
-          "debugSoLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.18.3/debug_libcustom-types.so",
+          "soLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.18.4/libcustom-types.so",
+          "debugSoLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.18.4/debug_libcustom-types.so",
           "overrideSoName": "libcustom-types.so",
-          "modLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.18.3/CustomTypes.qmod",
-          "branchName": "version/v0_18_3",
+          "modLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.18.4/CustomTypes.qmod",
+          "branchName": "version/v0_18_4",
           "compileOptions": {
             "cppFlags": [
               "-Wno-invalid-offsetof"
@@ -105,7 +105,7 @@
           "cmake": true
         }
       },
-      "version": "0.18.3"
+      "version": "0.18.4"
     },
     {
       "dependency": {
@@ -260,19 +260,6 @@
     },
     {
       "dependency": {
-        "id": "scotland2",
-        "versionRange": "=0.1.6",
-        "additionalData": {
-          "soLink": "https://github.com/sc2ad/scotland2/releases/download/v0.1.6/libsl2.so",
-          "debugSoLink": "https://github.com/sc2ad/scotland2/releases/download/v0.1.6/debug_libsl2.so",
-          "overrideSoName": "libsl2.so",
-          "branchName": "version/v0_1_6"
-        }
-      },
-      "version": "0.1.6"
-    },
-    {
-      "dependency": {
         "id": "web-utils",
         "versionRange": "=0.6.8",
         "additionalData": {
@@ -301,6 +288,19 @@
         }
       },
       "version": "0.4.0"
+    },
+    {
+      "dependency": {
+        "id": "scotland2",
+        "versionRange": "=0.1.7",
+        "additionalData": {
+          "soLink": "https://github.com/sc2ad/scotland2/releases/download/v0.1.7/libsl2.so",
+          "debugSoLink": "https://github.com/sc2ad/scotland2/releases/download/v0.1.7/debug_libsl2.so",
+          "overrideSoName": "libsl2.so",
+          "branchName": "version/v0_1_7"
+        }
+      },
+      "version": "0.1.7"
     }
   ]
 }
