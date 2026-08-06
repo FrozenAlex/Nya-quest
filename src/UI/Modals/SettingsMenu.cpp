@@ -4,6 +4,8 @@
 #include "bsml/shared/BSML/MainThreadScheduler.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Layout.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Misc.hpp"
+#include "beatsaber-hook/shared/stringw.hpp"
+#include "System/String.hpp"
 
 #include "HMUI/ScrollView.hpp"
 #include "NyaFloatingUI.hpp"
@@ -277,12 +279,9 @@ void SettingsMenu::UpdateEndpointLists() {
             auto index = sfw_endpoint_urls.index_of(selected_url);
 
             // Select the endpoint
-            if (index.has_value()) {
-                auto idx = index.value();
-                if (idx >= 0) {
-                    this->sfw_endpoint->index = idx;
-                    this->sfw_endpoint->UpdateState();
-                }
+            if (index >= 0) {
+                this->sfw_endpoint->index = index;
+                this->sfw_endpoint->UpdateState();
             }
         }
     }
@@ -304,14 +303,11 @@ void SettingsMenu::UpdateEndpointLists() {
 
             // Find the index of the selected endpoint
             auto index = nsfw_endpoint_urls.index_of(selected_url);
-
-            if (index.has_value()) {
-                auto idx = index.value();
-                if (idx >= 0) {
-                    this->nsfw_endpoint->index = idx;
-                    this->nsfw_endpoint->UpdateState();
-                }
+            if (index >= 0) {
+                this->nsfw_endpoint->index = index;
+                this->nsfw_endpoint->UpdateState();
             }
+            
         }
 
         // Enable/disable the toggle
@@ -360,7 +356,7 @@ void SettingsMenu::Show() {
         // Refresh choices
         this->api_switch->UpdateChoices();
         // Select choice with id
-        this->api_switch->set_Value(StringW(API)->Clone());
+        this->api_switch->set_Value(StringW(API));
 
         this->selectedDataSourceName = API;
         this->selectedDataSource = source;
