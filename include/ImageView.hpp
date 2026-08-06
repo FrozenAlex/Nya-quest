@@ -2,6 +2,7 @@
 #pragma once
 
 #include "custom-types/shared/macros.hpp"
+#include "beatsaber-hook/shared/callback.hpp"
 
 #include "UnityEngine/MonoBehaviour.hpp"
 #include "HMUI/ImageView.hpp"
@@ -44,5 +45,5 @@ DECLARE_CLASS_CODEGEN(Nya, ImageView, UnityEngine::MonoBehaviour) {
     void SetErrorImage();
 
     // Event to sub to when image started loading, returns isLoading, meaning that the image is loading
-    UnorderedEventCallback<bool> imageLoadingChange;
+    unordered_event_callback<bool> imageLoadingChange;
 };

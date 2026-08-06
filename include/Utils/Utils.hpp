@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
 
-#include "beatsaber-hook/shared/utils/typedefs-string.hpp"
+#include "beatsaber-hook/shared/stringw.hpp"
+#include "beatsaber-hook/shared/listw.hpp"
 
 #include "UnityEngine/UI/Button.hpp"
 #include "UnityEngine/UI/Image.hpp"
@@ -12,7 +13,6 @@ namespace Nya::Utils {
     bool IsGif(std::string str);
     std::string ToLowercase(std::string str);
     ListW<StringW> vectorToList(std::vector<StringW> values);
-    std::vector<StringW> listWToVector(List<StringW>* values);
     int findStrIndexInList(ListW<StringW> values, StringW string );
     NyaUI::CustomTextSegmentedControlData* CreateTextSegmentedControl(UnityEngine::Transform* parent, UnityEngine::Vector2 anchoredPosition, UnityEngine::Vector2 sizeDelta, ArrayW<StringW> values, std::function<void(int)> onCellWithIdxClicked);
     // Kill me

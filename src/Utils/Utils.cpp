@@ -1,20 +1,13 @@
 #include "Utils/Utils.hpp"
 #include <random>
-#include "bsml/shared/BSML/SharedCoroutineStarter.hpp"
 #include "bsml/shared/BSML/Animations/AnimationStateUpdater.hpp"
-#include "System/StringComparison.hpp"
-#include "System/Uri.hpp"
 #include <fstream>
-#include "beatsaber-hook/shared/utils/il2cpp-functions.hpp"
-#include "UnityEngine/Networking/UnityWebRequest.hpp"
-#include "UnityEngine/Networking/DownloadHandler.hpp"
 #include "web-utils/shared/WebUtils.hpp"
 #include "NyaConfig.hpp"
 #include "UnityEngine/Resources.hpp"
+#include "logging.hpp"
 
-#include "custom-types/shared/coroutine.hpp"
 using namespace UnityEngine;
-using namespace UnityEngine::Networking;
 
 namespace fs = std::filesystem;
  
@@ -62,10 +55,10 @@ namespace Nya::Utils {
     
     NyaUI::CustomTextSegmentedControlData* CreateTextSegmentedControl(UnityEngine::Transform* parent, UnityEngine::Vector2 anchoredPosition, UnityEngine::Vector2 sizeDelta, ArrayW<StringW> values, std::function<void(int)> onCellWithIdxClicked) {
         // TODO: Optimize getting the template
-        static SafePtrUnity<HMUI::TextSegmentedControl> segmentedControlTemplate;
+        static safe_ptr<HMUI::TextSegmentedControl*> segmentedControlTemplate;
         if (!segmentedControlTemplate)
         {
-            segmentedControlTemplate = UnityEngine::Resources::FindObjectsOfTypeAll<HMUI::TextSegmentedControl *>()->First([](auto x)
+            segmentedControlTemplate = UnityEngine::Resources::FindObjectsOfTypeAll<HMUI::TextSegmentedControl *>().front([](auto x)
                                                                                                        {
                 // INFO: This selector could break in any new update. If you came here, try to modify the selection
                 if (x->get_name() != "TextSegmentedControl") return false;
@@ -146,17 +139,6 @@ namespace Nya::Utils {
         for (auto item : values) {list->Add(item);};
 
         return list;
-    }
-
-    /**
-     * @brief Converts listW to vector
-     * 
-     * @param values 
-     * @return List<StringW> 
-     */
-    std::vector<StringW> listWToVector(List<StringW>* values) {
-        std::vector<StringW> vector = std::vector<StringW>(values->_items);
-        return vector;
     }
 
     /**

@@ -1,14 +1,11 @@
 #pragma once
 
-#include "beatsaber-hook/shared/utils/logging.hpp"
 #include <string>
-#include <iostream>
+
 #include "config-utils/shared/config-utils.hpp"
-#include "UnityEngine/Color.hpp"
 #include "UnityEngine/Vector2.hpp"
 #include "UnityEngine/Vector3.hpp"
 #include "UnityEngine/Vector4.hpp"
-#include "logging.hpp"
 
 #define NYA_MOD_PATH_FORMAT "/sdcard/ModData/{}/Mods/Nya/"
 

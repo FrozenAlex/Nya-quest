@@ -26,8 +26,7 @@
 #include "TaskRunner.hpp"
 // beatsaber-hook is a modding framework that lets us call functions and fetch field values from in the game
 // It also allows creating objects, configuration, and importantly, hooking methods to modify their values
-#include "beatsaber-hook/shared/utils/il2cpp-functions.hpp"
-#include "beatsaber-hook/shared/utils/hooking.hpp"
+#include "beatsaber-hook/shared/hooking.hpp"
 
 
 using namespace UnityEngine;
@@ -35,7 +34,7 @@ using namespace GlobalNamespace;
 using namespace Nya;
 
 
-SafePtrUnity<Nya::NyaFloatingUI> Nya::Main::NyaFloatingUI = nullptr;
+safe_ptr<Nya::NyaFloatingUI*> Nya::Main::NyaFloatingUI = nullptr;
 
 MAKE_HOOK_MATCH(Pause, &GamePause::Pause, void, GamePause* self) {
     Pause(self);
@@ -63,7 +62,7 @@ MAKE_HOOK_MATCH(Restartbutton, &PauseMenuManager::RestartButtonPressed, void, Pa
     }
 }
 
-MAKE_HOOK_MATCH(Results, &ResultsViewController::Init, void, ResultsViewController* self, LevelCompletionResults* levelCompletionResults, IReadonlyBeatmapData* transformedBeatmapData, ByRef<::GlobalNamespace::BeatmapKey> beatmapKey, ::GlobalNamespace::BeatmapLevel* beatmapLevel, bool practice, bool newHighScore) {
+MAKE_HOOK_MATCH(Results, &ResultsViewController::Init, void, ResultsViewController* self, LevelCompletionResults* levelCompletionResults, IReadonlyBeatmapData* transformedBeatmapData, by_ref<::GlobalNamespace::BeatmapKey> beatmapKey, ::GlobalNamespace::BeatmapLevel* beatmapLevel, bool practice, bool newHighScore) {
     DEBUG("Results");
     Results(self, levelCompletionResults, transformedBeatmapData, beatmapKey, beatmapLevel, practice, newHighScore);
 }
@@ -257,9 +256,7 @@ void MigrateOldImages() {
 }
 
 // Called later on in the game loading - a good time to install function hooks
-extern "C" __attribute__((visibility("default"))) void late_load() {
-    il2cpp_functions::Init();
-    
+extern "C" __attribute__((visibility("default"))) void late_load() {    
     BSML::Init();
 
     // Should always be before any custom types can possibly be used

@@ -3,7 +3,8 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "beatsaber-hook/shared/utils/typedefs-string.hpp"
+#include "beatsaber-hook/shared/stringw.hpp"
+#include "beatsaber-hook/shared/listw.hpp"
 
 namespace NyaAPI {
 struct EndpointCategory {

@@ -9,7 +9,7 @@ inline modloader::ModInfo modInfo = {MOD_ID, VERSION, GIT_COMMIT}; // Stores the
 namespace Nya {
     class Main {
         public:
-            static SafePtrUnity<Nya::NyaFloatingUI> NyaFloatingUI;
+            static safe_ptr<Nya::NyaFloatingUI*> NyaFloatingUI;
     };
 
     // Creates/removes .nomedia based on config

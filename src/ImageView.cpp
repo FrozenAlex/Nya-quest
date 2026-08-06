@@ -21,6 +21,7 @@
 #include "NyaConfig.hpp"
 #include "EndpointConfigUtils.hpp"
 #include "API.hpp"
+#include "logging.hpp"
 
 // Necessary
 DEFINE_TYPE(Nya, ImageView);
@@ -39,7 +40,7 @@ void Nya::ImageView::ctor()
     this->autoNyaRunning = false;
     this->isLoading = false;
     // Create callback
-    this->imageLoadingChange = UnorderedEventCallback<bool>();
+    this->imageLoadingChange = unordered_event_callback<bool>();
 }
 
 // Awake

@@ -101,12 +101,12 @@ namespace Nya {
 
         // Sub to events
         if (this->imageView) {
-            this->imageView->imageLoadingChange.addCallback(&NyaFloatingUI::OnIsLoadingChange, this);
+            this->imageView->imageLoadingChange.add(&NyaFloatingUI::OnIsLoadingChange, this);
         } else {
             INFO("ImageView not found");
         }
 
-        floatingScreen->HandleReleased.addCallback(&NyaFloatingUI::updateCoordinates, this);
+        floatingScreen->HandleReleased.add(&NyaFloatingUI::updateCoordinates, this);
     }
 
     void NyaFloatingUI::SetDefaultPos () {
@@ -143,7 +143,8 @@ namespace Nya {
     }
 
     void NyaFloatingUI::onSceneChange(Nya::FloatingUIScene scene, bool reinitialize) {
-        INFO("Switched from {} to {} ", magic_enum::enum_name(this->currentScene), magic_enum::enum_name(scene));
+        // TODO: Readd this
+        // INFO("Switched from {} to {} ", magic_enum::enum_name(this->currentScene), magic_enum::enum_name(scene));
         
         // Do nothing if the scene did not change unless reinitialize is active
         if (!reinitialize && this->currentScene == scene) {
