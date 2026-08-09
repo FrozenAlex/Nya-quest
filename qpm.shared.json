@@ -49,12 +49,17 @@
       },
       {
         "id": "config-utils",
-        "versionRange": "^2.1.0",
+        "versionRange": "^3.0.0",
         "additionalData": {}
       },
       {
         "id": "custom-types",
         "versionRange": "^0.20.0",
+        "additionalData": {}
+      },
+      {
+        "id": "flamingo",
+        "versionRange": "^1.1.2",
         "additionalData": {}
       },
       {
@@ -72,6 +77,11 @@
         }
       },
       {
+        "id": "reflectcpp",
+        "versionRange": "^0.25.0",
+        "additionalData": {}
+      },
+      {
         "id": "scotland2",
         "versionRange": "^0.1.6",
         "additionalData": {
@@ -82,11 +92,6 @@
       {
         "id": "web-utils",
         "versionRange": "^0.6.8",
-        "additionalData": {}
-      },
-      {
-        "id": "flamingo",
-        "versionRange": "^1.1.2",
         "additionalData": {}
       }
     ]
@@ -229,18 +234,6 @@
     },
     {
       "dependency": {
-        "id": "rapidjson-macros",
-        "versionRange": "=3.0.0",
-        "additionalData": {
-          "headersOnly": true,
-          "branchName": "version/v3_0_0",
-          "cmake": false
-        }
-      },
-      "version": "3.0.0"
-    },
-    {
-      "dependency": {
         "id": "paper2_scotland2",
         "versionRange": "=4.8.0",
         "additionalData": {
@@ -260,15 +253,34 @@
     },
     {
       "dependency": {
+        "id": "reflectcpp",
+        "versionRange": "=0.25.0",
+        "additionalData": {
+          "soLink": "https://github.com/kodenamekrak/reflectcpp-qpm/releases/download/v0.25.0/libreflectcpp.so",
+          "debugSoLink": "https://github.com/kodenamekrak/reflectcpp-qpm/releases/download/v0.25.0/debug_libreflectcpp.so",
+          "overrideSoName": "libreflectcpp.so",
+          "modLink": "https://github.com/kodenamekrak/reflectcpp-qpm/releases/download/v0.25.0/reflectcpp.qmod",
+          "branchName": "version/v0_25_0"
+        }
+      },
+      "version": "0.25.0"
+    },
+    {
+      "dependency": {
         "id": "config-utils",
-        "versionRange": "=2.1.0",
+        "versionRange": "=3.0.0",
         "additionalData": {
           "headersOnly": true,
           "overrideSoName": "libconfig-utils_test.so",
+          "compileOptions": {
+            "cppFlags": [
+              "-DREFLECT_CPP_C_ARRAYS_OR_INHERITANCE"
+            ]
+          },
           "cmake": true
         }
       },
-      "version": "2.1.0"
+      "version": "3.0.0"
     },
     {
       "dependency": {

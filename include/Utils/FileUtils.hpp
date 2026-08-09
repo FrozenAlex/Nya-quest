@@ -14,5 +14,6 @@ namespace FileUtils {
 
     bool createDirectoryIfNotExists(const std::string& path);
     bool exists(const std::string& path);
+    bool directoryExists(const std::string& path);
     std::string getImageDir(bool isNSFW);
 }

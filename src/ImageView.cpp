@@ -8,6 +8,7 @@
 #include "HMUI/ImageView.hpp"
 
 #include "bsml/shared/BSML/MainThreadScheduler.hpp"
+#include "bsml/shared/BSML-Lite/Creation/Image.hpp"
 #include "UnityEngine/Networking/UnityWebRequest.hpp"
 #include "UnityEngine/Networking/DownloadHandlerTexture.hpp"
 #include "assets.hpp"

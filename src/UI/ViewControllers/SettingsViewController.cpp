@@ -1,6 +1,7 @@
 #include "UI/ViewControllers/SettingsViewController.hpp"
 
 
+#include "bsml/shared/BSML-Lite/Creation/Buttons.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Settings.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Layout.hpp"
 #include "NyaConfig.hpp"

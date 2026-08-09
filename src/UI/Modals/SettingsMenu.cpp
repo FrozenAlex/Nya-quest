@@ -1,5 +1,7 @@
 #include "UI/Modals/SettingsMenu.hpp"
+#include "bsml/shared/BSML-Lite/Creation/Buttons.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Misc.hpp"
+#include "bsml/shared/BSML-Lite/Creation/Settings.hpp"
 #include "UnityEngine/UI/ContentSizeFitter.hpp"
 #include "bsml/shared/BSML/MainThreadScheduler.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Layout.hpp"

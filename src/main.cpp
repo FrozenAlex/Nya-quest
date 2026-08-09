@@ -126,7 +126,7 @@ MAKE_HOOK_MATCH(SceneManager_Internal_ActiveSceneChanged, &UnityEngine::SceneMan
 void makeTempFolder() 
 {    
     // Make the temp path
-    if (!direxists(NyaGlobals::tempPath))
+    if (!FileUtils::directoryExists(NyaGlobals::tempPath))
     {
         int makePath = mkpath(NyaGlobals::tempPath);
         if (makePath == -1)
@@ -138,7 +138,7 @@ void makeTempFolder()
 
 
 void Nya::CleanTempFolder(){
-    if (direxists(NyaGlobals::tempPath))
+    if (FileUtils::directoryExists(NyaGlobals::tempPath))
     {
         std::vector<std::string> files = FileUtils::getAllFilesInFolder(NyaGlobals::tempPath);
         for (const std::string& file : files) {
@@ -149,13 +149,13 @@ void Nya::CleanTempFolder(){
 
 void Nya::ApplyIndexingRules() 
 {    
-    if (!direxists(NyaGlobals::nyaPath))
+    if (!FileUtils::directoryExists(NyaGlobals::nyaPath))
     {
         ERROR("Nya folder not found, no reason to proceed!");
         return;
     }
     // Temp folder should not be indexed
-    if (direxists(NyaGlobals::tempPath))
+    if (FileUtils::directoryExists(NyaGlobals::tempPath))
     {
         std::string tempNomedia = NyaGlobals::tempPath + ".nomedia";
         if (!fileexists(tempNomedia)) {
@@ -169,7 +169,7 @@ void Nya::ApplyIndexingRules()
     bool indexNSFW = getNyaConfig().IndexNSFW.GetValue();
 
 
-    if (direxists(NyaGlobals::imagesPathSFW)) {
+    if (FileUtils::directoryExists(NyaGlobals::imagesPathSFW)) {
         // Indexing rules for sfw
         std::string imagesSFWNomedia = NyaGlobals::imagesPathSFW + ".nomedia";
         if (indexSFW) {
@@ -189,7 +189,7 @@ void Nya::ApplyIndexingRules()
     }
     
 
-    if (direxists(NyaGlobals::imagesPathNSFW)) {
+    if (FileUtils::directoryExists(NyaGlobals::imagesPathNSFW)) {
         std::string imagesNSFWNomedia = NyaGlobals::imagesPathNSFW + ".nomedia";
         // Indexing rules for nsfw
         if (indexNSFW) {
@@ -235,14 +235,14 @@ void MigrateOldImages() {
         std::string oldSFWPath = oldNyaPath + "Images/sfw/";
         std::string oldNSFWPath = oldNyaPath + "Images/nsfw/";
 
-        if (direxists(oldSFWPath)) {
+        if (FileUtils::directoryExists(oldSFWPath)) {
             DEBUG("Migrating old SFW images from {}", oldSFWPath);
             std::filesystem::path sourcePath(oldSFWPath);
             std::filesystem::path destPath(NyaGlobals::imagesPathSFW);
             FileUtils::MoveDirectoriesRecursively(sourcePath, destPath);
         }
 
-        if (direxists(oldNSFWPath)) {
+        if (FileUtils::directoryExists(oldNSFWPath)) {
             DEBUG("Migrating old NSFW images from {}", oldNSFWPath);
             std::filesystem::path sourcePath(oldNSFWPath);
             std::filesystem::path destPath(NyaGlobals::imagesPathNSFW);

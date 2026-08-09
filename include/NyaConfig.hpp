@@ -1,11 +1,32 @@
 #pragma once
 
+#include <map>
+#include <optional>
 #include <string>
 
 #include "config-utils/shared/config-utils.hpp"
 #include "UnityEngine/Vector2.hpp"
 #include "UnityEngine/Vector3.hpp"
 #include "UnityEngine/Vector4.hpp"
+
+namespace rfl {
+    template <>
+    struct Reflector<UnityEngine::Vector3> {
+        struct ReflType {
+            float x;
+            float y;
+            float z;
+        };
+
+        static UnityEngine::Vector3 to(ReflType const& value) noexcept {
+            return {value.x, value.y, value.z};
+        }
+
+        static ReflType from(UnityEngine::Vector3 const& value) noexcept {
+            return {value.x, value.y, value.z};
+        }
+    };
+}
 
 #define NYA_MOD_PATH_FORMAT "/sdcard/ModData/{}/Mods/Nya/"
 
@@ -16,13 +37,12 @@ namespace NyaGlobals {
         static std::string tempPath = fmt::format(NYA_MOD_PATH_FORMAT, modloader::get_application_id().c_str()) + "temp/";
 }
 
-DECLARE_JSON_STRUCT(EndpointConfig) {
-    NAMED_VALUE_OPTIONAL(std::string, sfw, "sfw");
-    NAMED_VALUE_OPTIONAL(std::string, nsfw, "nsfw");
-    EndpointConfig(std::optional<std::string> safe, std::optional<std::string> unsafe) : sfw(safe), nsfw(unsafe) {};
-    EndpointConfig() {};
+struct EndpointConfig {
+    std::optional<std::string> sfw;
+    std::optional<std::string> nsfw;
 };
 
+using EndpointConfigs = std::map<std::string, EndpointConfig>;
 
 DECLARE_CONFIG(NyaConfig) {
     CONFIG_VALUE(inPause, bool, "Show in pause", true);
@@ -52,5 +72,5 @@ DECLARE_CONFIG(NyaConfig) {
     CONFIG_VALUE(menuPosition, UnityEngine::Vector3, "Menu Position", UnityEngine::Vector3(0.0f, 4.0f, 4.0f));
     CONFIG_VALUE(menuRotation, UnityEngine::Vector3, "Menu Rotation", UnityEngine::Vector3(332.0f, 0.0f, 0.0f));
 
-    CONFIG_VALUE(endpoints, StringKeyedMap<EndpointConfig>, "EndpointsConfig", {});
+    CONFIG_VALUE(endpoints, EndpointConfigs, "EndpointsConfig", {});
 };

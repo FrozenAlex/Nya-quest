@@ -140,7 +140,7 @@ namespace FileUtils {
     std::vector<std::string> getAllFilesInFolder(const std::string& path){
         std::vector<std::string> strings;
         
-        if (!direxists(path)) {
+        if (!directoryExists(path)) {
             INFO("Directory {} does not exist, returning empty vector", path);
             return strings;
         }
@@ -192,6 +192,16 @@ namespace FileUtils {
 
     bool exists(const std::string& path) {
         return fs::exists(path);
+    }
+
+    bool directoryExists(const std::string& path) {
+        std::error_code ec;
+        const bool isDirectory = fs::is_directory(path, ec);
+        if (ec) {
+            ERROR("Failed to inspect directory {}: {}", path, ec.message());
+            return false;
+        }
+        return isDirectory;
     }
 
     std::string getImageDir(bool isNSFW) {

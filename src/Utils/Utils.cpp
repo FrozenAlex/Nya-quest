@@ -1,10 +1,13 @@
 #include "Utils/Utils.hpp"
 #include <random>
+#include "beatsaber-hook/shared/safeptr.hpp"
 #include "bsml/shared/BSML/Animations/AnimationStateUpdater.hpp"
 #include <fstream>
+#include "HMUI/TextSegmentedControl.hpp"
 #include "web-utils/shared/WebUtils.hpp"
 #include "NyaConfig.hpp"
 #include "UnityEngine/Resources.hpp"
+#include "UnityEngine/UI/LayoutElement.hpp"
 #include "logging.hpp"
 
 using namespace UnityEngine;
