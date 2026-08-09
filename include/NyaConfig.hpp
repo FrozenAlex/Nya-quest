@@ -5,28 +5,7 @@
 #include <string>
 
 #include "config-utils/shared/config-utils.hpp"
-#include "UnityEngine/Vector2.hpp"
-#include "UnityEngine/Vector3.hpp"
-#include "UnityEngine/Vector4.hpp"
-
-namespace rfl {
-    template <>
-    struct Reflector<UnityEngine::Vector3> {
-        struct ReflType {
-            float x;
-            float y;
-            float z;
-        };
-
-        static UnityEngine::Vector3 to(ReflType const& value) noexcept {
-            return {value.x, value.y, value.z};
-        }
-
-        static ReflType from(UnityEngine::Vector3 const& value) noexcept {
-            return {value.x, value.y, value.z};
-        }
-    };
-}
+#include "UnityConfigTypeReflectors.hpp"
 
 #define NYA_MOD_PATH_FORMAT "/sdcard/ModData/{}/Mods/Nya/"
 

@@ -19,6 +19,8 @@
 #include "GlobalNamespace/MainFlowCoordinator.hpp"
 #include "Events.hpp"
 #include "UI/FlowCoordinators/NyaSettingsFlowCoordinator.hpp"
+#include "UI/ViewControllers/ConfigUtilsTestViewController.hpp"
+#include "ConfigUtilsTestConfig.hpp"
 #include <fstream>
 #include <string>
 #include "logging.hpp"
@@ -264,6 +266,7 @@ extern "C" __attribute__((visibility("default"))) void late_load() {
 
     // Load the config - make sure this is after il2cpp_functions::Init();
     getNyaConfig().Init(modInfo);
+    getConfigUtilsTestConfig().Init({"Nya.ConfigUtilsTest", VERSION, GIT_COMMIT});
 
     // Do config validation and modifications on start
     InitConfigOnStart();
@@ -282,6 +285,7 @@ extern "C" __attribute__((visibility("default"))) void late_load() {
 
     BSML::Register::RegisterGameplaySetupTab<Nya::ModifiersMenu*>("Nya");
     BSML::Register::RegisterSettingsMenu<Nya::UI::FlowCoordinators::NyaSettingsFlowCoordinator*>("Nya");
+    BSML::Register::RegisterSettingsMenu<Nya::UI::ViewControllers::ConfigUtilsTestViewController*>("Config Utils Test");
 
     INFO("Installing hooks...");
     INSTALL_HOOK(Logger, Pause);
