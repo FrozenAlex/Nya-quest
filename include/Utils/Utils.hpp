@@ -37,4 +37,7 @@ namespace Nya::Utils {
     /// @param image the image to remove the updater from
     /// @attention This function should only be called on the main thread
     void RemoveAnimationUpdater(UnityW<UnityEngine::UI::Image> image);
+
+    /// @brief Restart the game through the active main flow coordinator.
+    void RestartGame();
 }

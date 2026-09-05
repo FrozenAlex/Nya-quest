@@ -39,12 +39,12 @@
       },
       {
         "id": "bs-cordl",
-        "versionRange": "^4403.0.0",
+        "versionRange": "^4500.0.0",
         "additionalData": {}
       },
       {
         "id": "bsml",
-        "versionRange": "^0.5.4",
+        "versionRange": "^0.5.8",
         "additionalData": {}
       },
       {
@@ -100,10 +100,10 @@
     {
       "dependency": {
         "id": "bs-cordl",
-        "versionRange": "=4403.0.0",
+        "versionRange": "=4500.0.0",
         "additionalData": {
           "headersOnly": true,
-          "branchName": "version/v4403_0_0",
+          "branchName": "version/v4500_0_0",
           "compileOptions": {
             "includePaths": [
               "include"
@@ -118,7 +118,7 @@
           }
         }
       },
-      "version": "4403.0.0"
+      "version": "4500.0.0"
     },
     {
       "dependency": {
@@ -157,17 +157,17 @@
     {
       "dependency": {
         "id": "web-utils",
-        "versionRange": "=0.6.8",
+        "versionRange": "=0.6.9",
         "additionalData": {
-          "soLink": "https://github.com/bsq-ports/WebUtils/releases/download/v0.6.8/libweb-utils.so",
-          "debugSoLink": "https://github.com/bsq-ports/WebUtils/releases/download/v0.6.8/debug_libweb-utils.so",
+          "soLink": "https://github.com/bsq-ports/WebUtils/releases/download/v0.6.9/libweb-utils.so",
+          "debugSoLink": "https://github.com/bsq-ports/WebUtils/releases/download/v0.6.9/debug_libweb-utils.so",
           "overrideSoName": "libweb-utils.so",
-          "modLink": "https://github.com/bsq-ports/WebUtils/releases/download/v0.6.8/WebUtils.qmod",
-          "branchName": "version/v0_6_8",
+          "modLink": "https://github.com/bsq-ports/WebUtils/releases/download/v0.6.9/WebUtils.qmod",
+          "branchName": "version/v0_6_9",
           "cmake": false
         }
       },
-      "version": "0.6.8"
+      "version": "0.6.9"
     },
     {
       "dependency": {
@@ -215,13 +215,13 @@
     {
       "dependency": {
         "id": "custom-types",
-        "versionRange": "=0.20.0",
+        "versionRange": "=0.20.1",
         "additionalData": {
-          "soLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.20.0/libcustom-types.so",
-          "debugSoLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.20.0/debug_libcustom-types.so",
+          "soLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.20.1/libcustom-types.so",
+          "debugSoLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.20.1/debug_libcustom-types.so",
           "overrideSoName": "libcustom-types.so",
-          "modLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.20.0/CustomTypes.qmod",
-          "branchName": "version/v0_20_0",
+          "modLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.20.1/CustomTypes.qmod",
+          "branchName": "version/v0_20_1",
           "compileOptions": {
             "cppFlags": [
               "-Wno-invalid-offsetof"
@@ -230,7 +230,7 @@
           "cmake": true
         }
       },
-      "version": "0.20.0"
+      "version": "0.20.1"
     },
     {
       "dependency": {
@@ -297,14 +297,29 @@
     },
     {
       "dependency": {
-        "id": "beatsaber-hook",
-        "versionRange": "=8.1.0",
+        "id": "bsml",
+        "versionRange": "=0.5.8",
         "additionalData": {
-          "soLink": "https://github.com/QuestPackageManager/beatsaber-hook/releases/download/v8.1.0/libbeatsaber-hook.so",
-          "debugSoLink": "https://github.com/QuestPackageManager/beatsaber-hook/releases/download/v8.1.0/debug_libbeatsaber-hook.so",
+          "soLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.5.8/libbsml.so",
+          "debugSoLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.5.8/debug_libbsml.so",
+          "overrideSoName": "libbsml.so",
+          "modLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.5.8/BSML.qmod",
+          "branchName": "version/v0_5_8",
+          "cmake": true
+        }
+      },
+      "version": "0.5.8"
+    },
+    {
+      "dependency": {
+        "id": "beatsaber-hook",
+        "versionRange": "=8.2.1",
+        "additionalData": {
+          "soLink": "https://github.com/QuestPackageManager/beatsaber-hook/releases/download/v8.2.1/libbeatsaber-hook.so",
+          "debugSoLink": "https://github.com/QuestPackageManager/beatsaber-hook/releases/download/v8.2.1/debug_libbeatsaber-hook.so",
           "overrideSoName": "libbeatsaber-hook.so",
-          "modLink": "https://github.com/QuestPackageManager/beatsaber-hook/releases/download/v8.1.0/beatsaber-hook.qmod",
-          "branchName": "version/v8_1_0",
+          "modLink": "https://github.com/QuestPackageManager/beatsaber-hook/releases/download/v8.2.1/beatsaber-hook.qmod",
+          "branchName": "version/v8_2_1",
           "compileOptions": {
             "cppFlags": [
               "-Wno-extra-qualification"
@@ -313,22 +328,7 @@
           "cmake": true
         }
       },
-      "version": "8.1.0"
-    },
-    {
-      "dependency": {
-        "id": "bsml",
-        "versionRange": "=0.5.4",
-        "additionalData": {
-          "soLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.5.4/libbsml.so",
-          "debugSoLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.5.4/debug_libbsml.so",
-          "overrideSoName": "libbsml.so",
-          "modLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.5.4/BSML.qmod",
-          "branchName": "version/v0_5_4",
-          "cmake": true
-        }
-      },
-      "version": "0.5.4"
+      "version": "8.2.1"
     }
   ]
 }

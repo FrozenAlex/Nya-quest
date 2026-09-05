@@ -6,6 +6,8 @@
 #include "HMUI/TextSegmentedControl.hpp"
 #include "web-utils/shared/WebUtils.hpp"
 #include "NyaConfig.hpp"
+#include "GlobalNamespace/MainFlowCoordinator.hpp"
+#include "GlobalNamespace/MenuTransitionsHelper.hpp"
 #include "UnityEngine/Resources.hpp"
 #include "UnityEngine/UI/LayoutElement.hpp"
 #include "logging.hpp"
@@ -34,6 +36,28 @@ static std::unordered_set<std::string> AnimatedImageExtensions = {
 };
 
 namespace Nya::Utils {
+    void RestartGame() {
+        auto mainFlowCoordinators = UnityEngine::Resources::FindObjectsOfTypeAll<GlobalNamespace::MainFlowCoordinator*>();
+        if (!mainFlowCoordinators || mainFlowCoordinators.empty()) {
+            ERROR("MainFlowCoordinator not found!");
+            return;
+        }
+
+        auto* mainFlowCoordinator = mainFlowCoordinators.front();
+        if (!mainFlowCoordinator) {
+            ERROR("MainFlowCoordinator is null!");
+            return;
+        }
+
+        auto* helper = mainFlowCoordinator->_menuTransitionsHelper;
+        if (!helper) {
+            ERROR("MenuTransitionsHelper not found!");
+            return;
+        }
+
+        helper->RestartGame(nullptr);
+    }
+
     // Lowercase a string
     std::string ToLowercase(std::string str) {
         std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c){ return std::tolower(c); });

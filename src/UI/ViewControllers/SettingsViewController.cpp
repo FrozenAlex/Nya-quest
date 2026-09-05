@@ -7,9 +7,8 @@
 #include "NyaConfig.hpp"
 #include "main.hpp"
 #include "bsml/shared/BSML/MainThreadScheduler.hpp"
-#include "UnityEngine/Resources.hpp"
-#include "GlobalNamespace/MenuTransitionsHelper.hpp"
 #include "EndpointConfigUtils.hpp"
+#include "Utils/Utils.hpp"
 
 std::vector<std::string_view> buttonOptions = {
     "None",
@@ -180,7 +179,7 @@ void Nya::UI::ViewControllers::SettingsViewController::DidActivate(bool firstAct
                     this->nsfwModal->Show();
                 });
             });
-            if (getNyaConfig().NSFWUI.GetValue()) {
+            // if (getNyaConfig().NSFWUI.GetValue()) {
 
                 BSML::Lite::CreateUIButton(container->get_transform(), "Disable NSFW", "PracticeButton",
                 [this]() {
@@ -189,10 +188,11 @@ void Nya::UI::ViewControllers::SettingsViewController::DidActivate(bool firstAct
                         // If we are turning it off completely, we should also turn off indexing of NSFW images
                         getNyaConfig().IndexNSFW.SetValue(false);
                         Nya::ApplyIndexingRules();
-                        UnityEngine::Resources::FindObjectsOfTypeAll<GlobalNamespace::MenuTransitionsHelper*>()[0]->RestartGame(nullptr);
+
+                        Nya::Utils::RestartGame();
                     });
                 });
-            }
+            // }
         #endif
         
     }

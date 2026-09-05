@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <filesystem>
+#include <vector>
 
 namespace FileUtils {
     void MoveDirectoriesRecursively(std::filesystem::path& sourcePath, std::filesystem::path& destPath);

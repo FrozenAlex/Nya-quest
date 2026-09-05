@@ -22,7 +22,7 @@
         "pwsh ./build.ps1 -clean"
       ]
     },
-    "ndk": "^27.3.13750724",
+    "ndk": "^29.0.14206865",
     "qmodIncludeDirs": [
       "build",
       "extern/libs"
@@ -38,12 +38,12 @@
     },
     {
       "id": "bs-cordl",
-      "versionRange": "^4403.0.0",
+      "versionRange": "^4500.0.0",
       "additionalData": {}
     },
     {
       "id": "bsml",
-      "versionRange": "^0.5.4",
+      "versionRange": "^0.5.8",
       "additionalData": {}
     },
     {

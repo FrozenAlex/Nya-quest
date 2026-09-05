@@ -1,5 +1,4 @@
 #include "UI/Modals/NSFWConsent.hpp"
-#include "GlobalNamespace/MenuTransitionsHelper.hpp"
 #include "UnityEngine/Resources.hpp"
 #include "UnityEngine/RectOffset.hpp"
 #include "UnityEngine/UI/ContentSizeFitter.hpp"
@@ -13,6 +12,7 @@
 #include "bsml/shared/BSML-Lite/Creation/Text.hpp"
 #include "bsml/shared/BSML-Lite/Creation/Image.hpp"
 #include "NyaConfig.hpp"
+#include "Utils/Utils.hpp"
 
 DEFINE_TYPE(Nya::UI::Modals, NSFWConsent);
 
@@ -54,7 +54,7 @@ custom_types::Helpers::Coroutine Nya::UI::Modals::NSFWConsent::FadeoutModal(Fade
             co_yield reinterpret_cast<System::Collections::IEnumerator*>(WaitForSeconds::New_ctor(2));
             modal->Hide();
 
-            UnityEngine::Resources::FindObjectsOfTypeAll<GlobalNamespace::MenuTransitionsHelper*>()[0]->RestartGame(nullptr);
+            Nya::Utils::RestartGame();
         }
         break;
     case FadeOutContent::IncorrectMath:
