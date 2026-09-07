@@ -23,7 +23,7 @@
           "pwsh ./build.ps1 -clean"
         ]
       },
-      "ndk": "^27.3.13750724",
+      "ndk": "^29.0.14206865",
       "qmodIncludeDirs": [
         "build",
         "extern/libs"
@@ -34,12 +34,12 @@
     "dependencies": [
       {
         "id": "beatsaber-hook",
-        "versionRange": "^8.1.0",
+        "versionRange": "^8.2.0",
         "additionalData": {}
       },
       {
         "id": "bs-cordl",
-        "versionRange": "^4500.0.0",
+        "versionRange": "^4500.1.0",
         "additionalData": {}
       },
       {
@@ -71,7 +71,7 @@
       },
       {
         "id": "paper2_scotland2",
-        "versionRange": "^4.7.0",
+        "versionRange": "^4.8.0",
         "additionalData": {
           "private": true
         }
@@ -100,10 +100,10 @@
     {
       "dependency": {
         "id": "bs-cordl",
-        "versionRange": "=4500.0.0",
+        "versionRange": "=4500.1.0",
         "additionalData": {
           "headersOnly": true,
-          "branchName": "version/v4500_0_0",
+          "branchName": "version/v4500_1_0",
           "compileOptions": {
             "includePaths": [
               "include"
@@ -118,7 +118,7 @@
           }
         }
       },
-      "version": "4500.0.0"
+      "version": "4500.1.0"
     },
     {
       "dependency": {
@@ -271,7 +271,9 @@
         "versionRange": "=3.0.0",
         "additionalData": {
           "headersOnly": true,
+          "soLink": "https://github.com/darknight1050/config-utils/releases/download/v3.0.0/libconfig-utils_test.so",
           "overrideSoName": "libconfig-utils_test.so",
+          "branchName": "version/v3_0_0",
           "compileOptions": {
             "cppFlags": [
               "-DREFLECT_CPP_C_ARRAYS_OR_INHERITANCE"
