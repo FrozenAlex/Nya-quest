@@ -31,10 +31,10 @@ void Nya::UI::ViewControllers::SettingsViewController::DidActivate(bool firstAct
         this->nsfwModal = get_gameObject()->AddComponent<Nya::UI::Modals::NSFWConsent*>();
 
         auto *container = BSML::Lite::CreateScrollableSettingsContainer(get_transform());
-        // Use the scroll viewport's rect, leaving four units of padding above and below.
+        // Use the scroll viewport's rect to fill the available height.
         auto *scrollRect = container->GetComponent<BSML::ExternalComponents*>()->Get<UnityEngine::RectTransform*>();
         scrollRect->set_anchoredPosition({2.0f, 0.0f});
-        scrollRect->set_sizeDelta({0.0f, -8.0f});
+        scrollRect->set_sizeDelta({0.0f, 0.0f});
 
         BSML::Lite::CreateToggle(container->get_transform(), "Floating in Pause Menu",
             getNyaConfig().inPause.GetValue(), [](bool value) {
