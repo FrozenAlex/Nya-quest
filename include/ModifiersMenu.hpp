@@ -22,7 +22,6 @@ DECLARE_CLASS_CODEGEN(Nya, ModifiersMenu, UnityEngine::MonoBehaviour) {
     DECLARE_INSTANCE_METHOD(void, OnIsLoadingChange, bool isLoading);    
 
     DECLARE_CTOR(ctor);
-    DECLARE_DTOR(dtor);
 
     // Settings buttons and modal
     DECLARE_INSTANCE_FIELD(UnityW<UnityEngine::UI::Button>, settingsButton);

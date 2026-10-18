@@ -62,7 +62,7 @@ MAKE_HOOK_MATCH(Restartbutton, &PauseMenuManager::RestartButtonPressed, void, Pa
     }
 }
 
-MAKE_HOOK_MATCH(Results, &ResultsViewController::Init, void, ResultsViewController* self, LevelCompletionResults* levelCompletionResults, IReadonlyBeatmapData* transformedBeatmapData, by_ref<::GlobalNamespace::BeatmapKey> beatmapKey, ::GlobalNamespace::BeatmapLevel* beatmapLevel, bool practice, bool newHighScore) {
+MAKE_HOOK_MATCH(Results, &ResultsViewController::Init, void, ResultsViewController* self, LevelCompletionResults* levelCompletionResults, IReadonlyBeatmapData* transformedBeatmapData, by_ref<::GlobalNamespace::BeatmapKey const> beatmapKey, ::GlobalNamespace::BeatmapLevel* beatmapLevel, bool practice, bool newHighScore) {
     DEBUG("Results");
     Results(self, levelCompletionResults, transformedBeatmapData, beatmapKey, beatmapLevel, practice, newHighScore);
 }

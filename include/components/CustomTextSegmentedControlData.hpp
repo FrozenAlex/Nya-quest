@@ -18,7 +18,6 @@ DECLARE_CLASS_CODEGEN_INTERFACES(NyaUI, CustomTextSegmentedControlData, UnityEng
     DECLARE_OVERRIDE_METHOD_MATCH(int, NumberOfCells, &HMUI::SegmentedControl::IDataSource::NumberOfCells);
     DECLARE_OVERRIDE_METHOD_MATCH(HMUI::SegmentedControlCell*, CellForCellNumber, &HMUI::SegmentedControl::IDataSource::CellForCellNumber, int idx);
     DECLARE_CTOR(ctor);
-    DECLARE_DTOR(dtor);
     public:
         void set_texts(ArrayW<StringW> list);
         void add_text(StringW addedText);

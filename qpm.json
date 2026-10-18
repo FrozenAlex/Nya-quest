@@ -6,7 +6,7 @@
   "info": {
     "name": "Nya",
     "id": "Nya",
-    "version": "0.3.0",
+    "version": "1.1.8",
     "url": "https://github.com/FrozenAlex/Nya-quest",
     "additionalData": {
       "overrideSoName": "libNya.so",
@@ -33,17 +33,17 @@
   "dependencies": [
     {
       "id": "beatsaber-hook",
-      "versionRange": "^8.2.0",
+      "versionRange": "^9.3.0",
       "additionalData": {}
     },
     {
       "id": "bs-cordl",
-      "versionRange": "^4500.1.0",
+      "versionRange": "^4503.0.0",
       "additionalData": {}
     },
     {
       "id": "bsml",
-      "versionRange": "^0.5.8",
+      "versionRange": "^0.6.5",
       "additionalData": {}
     },
     {
@@ -53,12 +53,12 @@
     },
     {
       "id": "custom-types",
-      "versionRange": "^0.20.0",
+      "versionRange": "^0.21.2",
       "additionalData": {}
     },
     {
       "id": "flamingo",
-      "versionRange": "^1.1.2",
+      "versionRange": "^1.2.1",
       "additionalData": {}
     },
     {
@@ -82,7 +82,7 @@
     },
     {
       "id": "scotland2",
-      "versionRange": "^0.1.6",
+      "versionRange": "^0.1.7",
       "additionalData": {
         "includeQmod": false,
         "private": true
@@ -90,7 +90,7 @@
     },
     {
       "id": "web-utils",
-      "versionRange": "^0.6.8",
+      "versionRange": "^0.6.9",
       "additionalData": {}
     }
   ]

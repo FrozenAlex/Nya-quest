@@ -95,7 +95,5 @@ namespace Nya {
         });
     }
 
-    void ModifiersMenu::dtor(){
-    }
 }
 

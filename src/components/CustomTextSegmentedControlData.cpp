@@ -21,11 +21,6 @@ namespace NyaUI
         texts = ArrayW<StringW>(static_cast<il2cpp_array_size_t>(0));
     }
 
-    void CustomTextSegmentedControlData::dtor()
-    {
-        Finalize();
-    }
-
     int CustomTextSegmentedControlData::NumberOfCells()
     {
         return texts.size();
