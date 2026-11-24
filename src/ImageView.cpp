@@ -153,7 +153,7 @@ void Nya::ImageView::GetImage(std::function<void(bool success)> finished = nullp
     }
     catch(...)
     {
-        currentAPI = "waifu.pics";
+        currentAPI = getNyaConfig().API.GetDefaultValue();
         getNyaConfig().API.SetValue(currentAPI);
         source = NyaAPI::get_data_source(currentAPI);
     }

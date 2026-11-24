@@ -348,7 +348,7 @@ void SettingsMenu::Show() {
         try {
             source = NyaAPI::get_data_source(API);
         } catch (...) {
-            API = "waifu.pics";
+            API = getNyaConfig().API.GetDefaultValue();
             getNyaConfig().API.SetValue(API);
             source = NyaAPI::get_data_source(API);
         }
