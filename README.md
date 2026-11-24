@@ -11,7 +11,6 @@ Nya's settings can be accessed from either the Mod Settings panel or from within
 Nya features a floating screen, allowing Nya to be accessed outside of the gameplay setup panel. In the event that this floating screen gets stuck somewhere inaccessible it's position can be reset from mod settings panel. The position can also be reset from Nya's settings modal. 
 ### Supported Image Sources
 **Note: I don't own any of these sources so I can't guarantee the images will always be appropriate**
-* [Waifu.Pics](https://waifu.pics/)
 * [Fluxpoint.dev](https://fluxpoint.dev/api)
 * [Animals (https://some-random-api.com)](https://some-random-api.com/)
 * [Animu (https://some-random-api.com)](https://some-random-api.com/)
