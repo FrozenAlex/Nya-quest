@@ -29,7 +29,7 @@ DECLARE_CONFIG(NyaConfig) {
     CONFIG_VALUE(inPause, bool, "Show in pause", true);
     CONFIG_VALUE(inMenu, bool, "Show in menu", true);
 
-    CONFIG_VALUE(API, std::string, "Selected API", "waifu.pics");
+    CONFIG_VALUE(API, std::string, "Selected API", "fluxpoint.dev");
 
     CONFIG_VALUE(AutoNya, bool, "Auto Nya", false);
     CONFIG_VALUE(AutoNyaInGame, bool, "Auto Nya in game", false);
